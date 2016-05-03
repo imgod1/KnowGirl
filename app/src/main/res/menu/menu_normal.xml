@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_news"
+            android:icon="@drawable/icon_knowledge"
+            android:title="@string/knowledge"></item>
+        <item
+            android:id="@+id/menu_girl"
+            android:icon="@drawable/icon_girl"
+            android:title="@string/girl"></item>
+    </group>
+
+    <item android:title="@string/app">
+        <menu>
+            <item
+                android:id="@+id/menu_share"
+                android:icon="@drawable/icon_share"
+                android:title="@string/share"></item>
+            <item
+                android:id="@+id/menu_setting"
+                android:icon="@drawable/icon_setting"
+                android:title="@string/setting"></item>
+            <item
+                android:id="@+id/menu_about"
+                android:icon="@drawable/icon_about"
+                android:title="@string/about"></item>
+        </menu>
+    </item>
+</menu>
