@@ -74,17 +74,18 @@ public class TabFragment extends Fragment {
             titles.add(getString(R.string.stock_girl));
             titles.add(getString(R.string.sex_car_girl));
             titles.add(getString(R.string.sex_girl));
-            fragments.add(PictureFragment.newInstance(API.PURE_GIRL_URL));
-            fragments.add(PictureFragment.newInstance(API.PHOTO_GIRL_URL));
-            fragments.add(PictureFragment.newInstance(API.WRITE_REAL_GIRL_URL));
-            fragments.add(PictureFragment.newInstance(API.JAPAN_GIRL_URL));
-            fragments.add(PictureFragment.newInstance(API.STOCK_GIRL_URL));
-            fragments.add(PictureFragment.newInstance(API.SEX_CAR_GIRL_URL));
-            fragments.add(PictureFragment.newInstance(API.SEX_GIRL_URL));
+            fragments.add(LazyPictureFragment.newInstance(API.PURE_GIRL_URL));
+            fragments.add(LazyPictureFragment.newInstance(API.PHOTO_GIRL_URL));
+            fragments.add(LazyPictureFragment.newInstance(API.WRITE_REAL_GIRL_URL));
+            fragments.add(LazyPictureFragment.newInstance(API.JAPAN_GIRL_URL));
+            fragments.add(LazyPictureFragment.newInstance(API.STOCK_GIRL_URL));
+            fragments.add(LazyPictureFragment.newInstance(API.SEX_CAR_GIRL_URL));
+            fragments.add(LazyPictureFragment.newInstance(API.SEX_GIRL_URL));
         }
 
         fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getChildFragmentManager(), titles, fragments);
         vp_tabs.setAdapter(fragmentViewPagerAdapter);
+        vp_tabs.setOffscreenPageLimit(fragments.size());
         tabs.setupWithViewPager(vp_tabs);
     }
 

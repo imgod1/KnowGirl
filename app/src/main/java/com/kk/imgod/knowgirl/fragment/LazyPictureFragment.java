@@ -3,15 +3,13 @@ package com.kk.imgod.knowgirl.fragment;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -19,9 +17,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.kk.imgod.knowgirl.R;
-import com.kk.imgod.knowgirl.adapter.StagAdapter;
 import com.kk.imgod.knowgirl.adapter.UltimateStagAdapter;
 import com.kk.imgod.knowgirl.app.API;
+import com.kk.imgod.knowgirl.customerclass.LazyFragment;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.model.ImageResponse;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -30,18 +28,17 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 
 
 /**
  * Created by imgod on 2016/4/24.
  */
-public class PictureFragment extends BaseFragment {
+public class LazyPictureFragment extends LazyFragment {
 
 
     public static final int row = 40;
@@ -66,42 +63,28 @@ public class PictureFragment extends BaseFragment {
      * @param url 图片网址
      * @return 返回fragment
      */
-    public static PictureFragment newInstance(String url) {
-        PictureFragment pictureFragment = new PictureFragment();
+    public static LazyPictureFragment newInstance(String url) {
+        LazyPictureFragment pictureFragment = new LazyPictureFragment();
         Bundle bundle = new Bundle();
         bundle.putString(URL, url);
         pictureFragment.setArguments(bundle);
         return pictureFragment;
     }
 
-    @Override
     public int getLayoutResID() {
         return R.layout.fragment_picture;
     }
 
-    @Override
-    public void initView() {
-        url = getArguments().getString(URL);
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerview.setLayoutManager(staggeredGridLayoutManager);
-        recyclerview.enableDefaultSwipeRefresh(true);
-        recyclerview.setHasFixedSize(true);
-        imgList = new ArrayList<>();
-        ultimateStagAdapter = new UltimateStagAdapter(getActivity(), imgList);
-//        ultimateStagAdapter.setCustomLoadMoreView(LayoutInflater.from(getActivity()).inflate(R.layout.custom_bottom_progressbar, null));
-        ultimateStagAdapter.enableLoadMore(true);
-        recyclerview.reenableLoadmore();
-        recyclerview.setAdapter(ultimateStagAdapter);
-    }
-
-    @Override
     public void initValue() {
-        recyclerview.mSwipeRefreshLayout.setRefreshing(true);
-        recyclerview.setRefreshing(true);
+        recyclerview.mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
         getPicture(page);
     }
 
-    @Override
     public void initEvent() {
         recyclerview.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -179,10 +162,8 @@ public class PictureFragment extends BaseFragment {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-//                Log.e("onResponse", "getImageSize 方法执行doInBackground");
                 for (int i = 0; i < tempImgList.size(); i++) {
                     final String img_url = API.PICTURE_BASE_URL + tempImgList.get(i).getImg();
-//                    Log.e("onResponse", "getImageSize 方法执行doInBackground:" + i + "\t" + img_url);
                     Bitmap bitmap = null;
                     try {
                         bitmap = Glide.with(getActivity())
@@ -196,7 +177,8 @@ public class PictureFragment extends BaseFragment {
                         tempImgList.get(i).setImg_height(bitmap.getHeight());
 //                        imgList.add(tempImgList.get(i));
                     } catch (Exception e) {
-                        Log.e("getWidth", "doInBackground1 发生异常" + e.getMessage());
+                        tempImgList.remove(i);//发生异常的图片就移除掉
+                        Log.e("getWidth", "doInBackground1 发生异常" + e.getMessage() + ",图片网址:" + img_url);
                         errPicture++;
                     }
                 }
@@ -206,7 +188,7 @@ public class PictureFragment extends BaseFragment {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Log.e("onResponse", "getImageSize 方法执行完毕,进行notify操作,此时数据源大小:" + imgList.size());
+                Log.e("onResponse", "getImageSize 异步完毕,加载成功的图片数量:" + tempImgList.size());
                 recyclerview.setRefreshing(false);
 //                ultimateStagAdapter.notifyDataSetChanged();
                 ultimateStagAdapter.insert(tempImgList);
@@ -215,4 +197,34 @@ public class PictureFragment extends BaseFragment {
     }
 
 
+    private View parentView;
+
+    @Override
+    protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        parentView = inflater.inflate(R.layout.fragment_picture, container, false);
+        ButterKnife.bind(this, parentView);
+        return parentView;
+    }
+
+    @Override
+    protected void initData() {
+        url = getArguments().getString(URL);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerview.setLayoutManager(staggeredGridLayoutManager);
+        recyclerview.enableDefaultSwipeRefresh(true);
+        recyclerview.setHasFixedSize(true);
+        imgList = new ArrayList<>();
+        ultimateStagAdapter = new UltimateStagAdapter(getActivity(), imgList);
+//        ultimateStagAdapter.setCustomLoadMoreView(LayoutInflater.from(getActivity()).inflate(R.layout.custom_bottom_progressbar, null));
+        ultimateStagAdapter.enableLoadMore(true);
+        recyclerview.reenableLoadmore();
+        recyclerview.setAdapter(ultimateStagAdapter);
+        initValue();
+        initEvent();
+    }
+
+    @Override
+    protected void setDefaultFragmentTitle(String title) {
+
+    }
 }
