@@ -4,6 +4,11 @@ package com.kk.imgod.knowgirl.app;
  * Created by imgod on 2016/4/25.
  */
 public class API {
+    //Zhihu API
+    public static final String ZHIHU_BASE_URL = "http://news-at.zhihu.com/api/4/news/";
+    public static final String ZHIHU_NEWS_LATEST = "http://news-at.zhihu.com/api/4/news/latest";
+    public static final String ZHIHU_NEWS_BEFORE = "http://news-at.zhihu.com/api/4/news/before/";
+
     /**
      * {"description":"……","id":1,"keywords":"……","name":"性感美女","seq":1,"title":"……"},
      {"description":"……","id":2,"keywords":"……","name":"韩日美女","seq":2,"title":"……"},

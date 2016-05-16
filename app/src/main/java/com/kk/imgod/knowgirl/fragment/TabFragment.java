@@ -1,6 +1,5 @@
 package com.kk.imgod.knowgirl.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -63,7 +62,7 @@ public class TabFragment extends Fragment {
         if (type == MainActivity.KNOWLEDGE_FRAGMENT) {
             titles.add("Tab1");
             titles.add("Tab2");
-            fragments.add(TestFragment.newInstance("Tab1"));
+            fragments.add(new ZhihuFragment());
             fragments.add(TestFragment.newInstance("Tab2"));
         } else {
             tabs.setTabMode(TabLayout.MODE_SCROLLABLE);

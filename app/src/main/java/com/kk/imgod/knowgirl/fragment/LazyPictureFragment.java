@@ -38,7 +38,7 @@ import okhttp3.Call;
 /**
  * Created by imgod on 2016/4/24.
  */
-public class LazyPictureFragment extends LazyFragment {
+public class LazyPictureFragment extends BaseLazyFragment {
 
 
     public static final int row = 40;
@@ -196,15 +196,6 @@ public class LazyPictureFragment extends LazyFragment {
         }.execute();
     }
 
-
-    private View parentView;
-
-    @Override
-    protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        parentView = inflater.inflate(R.layout.fragment_picture, container, false);
-        ButterKnife.bind(this, parentView);
-        return parentView;
-    }
 
     @Override
     protected void initData() {
