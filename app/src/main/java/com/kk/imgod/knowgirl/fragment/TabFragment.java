@@ -60,8 +60,8 @@ public class TabFragment extends Fragment {
         titles = new ArrayList<>();
         fragments = new ArrayList<>();
         if (type == MainActivity.KNOWLEDGE_FRAGMENT) {
-            titles.add("Tab1");
-            titles.add("Tab2");
+            titles.add(getString(R.string.zhihu_day_news));
+            titles.add(getString(R.string.jiandan_news));
             fragments.add(new ZhihuFragment());
             fragments.add(TestFragment.newInstance("Tab2"));
         } else {

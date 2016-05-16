@@ -69,6 +69,7 @@ public class ZhihuFragment extends BaseLazyFragment {
                 recyclerview.mSwipeRefreshLayout.setRefreshing(true);
             }
         });
+
         getLastData();
 
     }

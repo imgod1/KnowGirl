@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.activity.ZhiHuDetailActivity;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class ZhihuListAdapter extends easyRegularAdapter<ZhihuStory, ZhihuListAdapter.MyViewHolder> {
     private Activity activity;
+
     public ZhihuListAdapter(Activity activity, List<ZhihuStory> list) {
         super(list);
         this.activity = activity;
@@ -32,9 +34,17 @@ public class ZhihuListAdapter extends easyRegularAdapter<ZhihuStory, ZhihuListAd
     }
 
     @Override
-    protected void withBindHolder(final MyViewHolder holder, ZhihuStory data, int position) {
-        ImageLoader.load(activity,data.getImages().get(0),holder.img_news);
+    protected void withBindHolder(final MyViewHolder holder, final ZhihuStory data, int position) {
+        ImageLoader.load(activity, data.getImages().get(0), holder.img_news);
         holder.txt_title.setText(data.getTitle());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ZhiHuDetailActivity.actionStart(activity, data);
+            }
+        });
+
+
     }
 
     @Override
@@ -45,6 +55,7 @@ public class ZhihuListAdapter extends easyRegularAdapter<ZhihuStory, ZhihuListAd
     public static class MyViewHolder extends UltimateRecyclerviewViewHolder {
         public ImageView img_news;
         public TextView txt_title;
+
         public MyViewHolder(View itemView) {
             super(itemView);
             img_news = (ImageView) itemView.findViewById(R.id.img_news);

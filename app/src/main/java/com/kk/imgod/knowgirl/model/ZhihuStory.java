@@ -1,21 +1,26 @@
 package com.kk.imgod.knowgirl.model;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * zhihu news item in list
  */
-public class ZhihuStory {
+public class ZhihuStory implements Serializable{
+
 
     /**
-     * images : ["http://pic1.zhimg.com/aef18b16a9a6dcb445d5c235784c25a8.jpg"]
+     * images : ["http://pic1.zhimg.com/027e1e60a53cebe7dea457178870d774.jpg"]
      * type : 0
-     * id : 7813824
-     * ga_prefix : 012915
-     * title : 运气好的话，说不定 3 万年就把木星挪过来
+     * id : 8310664
+     * ga_prefix : 051621
+     * title : 要说烧脑的时空穿越，这些电影都不应该错过
      */
+
     private int type;
+    private int id;
+    private String ga_prefix;
     private String title;
     private List<String> images;
 
@@ -27,7 +32,20 @@ public class ZhihuStory {
         this.type = type;
     }
 
-    public ZhihuStory() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getGa_prefix() {
+        return ga_prefix;
+    }
+
+    public void setGa_prefix(String ga_prefix) {
+        this.ga_prefix = ga_prefix;
     }
 
     public String getTitle() {
