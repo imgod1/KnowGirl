@@ -9,8 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.fragment.PictureDetailFragment;
 import com.kk.imgod.knowgirl.model.ImageBean;
+import com.kk.imgod.knowgirl.utils.Lg;
 
 import java.util.List;
 
@@ -22,9 +24,10 @@ public class PictureDetailActivity extends BaseActivity {
     private String imgUrl;
     private PictureDetailFragment pictureDetailFragment;
 
-    public static void actionStart(Activity activity, String imgurl) {
+    public static void actionStart(Activity activity, String tempImgUrl) {
         Intent intent = new Intent(activity, PictureDetailActivity.class);
-        intent.putExtra(IMGURL, imgurl);
+        intent.putExtra(IMGURL, tempImgUrl);
+        Lg.e("PictureDetailActivity", "PictureDetailActivity actionStart得到的图片为:" + tempImgUrl);
         activity.startActivity(intent);
     }
 
@@ -38,15 +41,18 @@ public class PictureDetailActivity extends BaseActivity {
     @Override
     public void initView() {
         imgUrl = getIntent().getStringExtra(IMGURL);
+        Lg.e("PictureDetailActivity", "PictureDetailActivity initView得到的图片为:" + imgUrl);
     }
 
     @Override
     public void initValue() {
-        pictureDetailFragment = PictureDetailFragment.newInstance(imgUrl);
+        pictureDetailFragment = PictureDetailFragment.newInstance(API.PICTURE_BASE_URL + imgUrl);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.flayout_picture_main, pictureDetailFragment, "pic");
+        fragmentTransaction.show(pictureDetailFragment);
         fragmentTransaction.commit();
+        Lg.e("PictureDetailActivity", "PictureDetailActivity initvalue over");
     }
 
     @Override

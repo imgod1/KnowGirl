@@ -1,13 +1,9 @@
 package com.kk.imgod.knowgirl.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.Lg;
@@ -24,7 +20,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * 修改时间：2016/4/26 16:55
  * 修改备注：
  */
-public class PictureDetailFragment extends BaseLazyFragment {
+public class PictureDetailFragment extends BaseFragment {
     private ImageView img_picture;
     private PhotoViewAttacher photoViewAttacher;
 
@@ -36,27 +32,33 @@ public class PictureDetailFragment extends BaseLazyFragment {
         PictureDetailFragment pictureDetailFragment = new PictureDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putString(IMGURL, imgurl);
+        Lg.e("PictureDetailFragment","newInstance:imgUrl:"+imgurl);
         pictureDetailFragment.setArguments(bundle);
         return pictureDetailFragment;
-    }
-
-    ;
-
-    @Override
-    protected void initData() {
-        initView();
-    }
-
-    private void initView() {
-        imgUrl = getArguments().getString(IMGURL);
-        img_picture = (ImageView) parentView.findViewById(R.id.img_picture);
-        photoViewAttacher = new PhotoViewAttacher(img_picture, true);
-        ImageLoader.load(getActivity(), imgUrl, img_picture);
-        Lg.e("PictureDetailFragment","imgUrl:"+imgUrl);
     }
 
     @Override
     public int getLayoutResID() {
         return R.layout.fragment_picture_detail;
+    }
+
+    @Override
+    public void initView() {
+        imgUrl = getArguments().getString(IMGURL);
+        img_picture = (ImageView) parentView.findViewById(R.id.img_picture);
+        photoViewAttacher = new PhotoViewAttacher(img_picture, true);
+//        ImageLoader.load(getActivity(), imgUrl, img_picture);
+        Glide.with(getActivity()).load(imgUrl).placeholder(R.drawable.item02).into(img_picture);
+        Lg.e("PictureDetailFragment","imgUrl:"+imgUrl);
+    }
+
+    @Override
+    public void initValue() {
+
+    }
+
+    @Override
+    public void initEvent() {
+
     }
 }
