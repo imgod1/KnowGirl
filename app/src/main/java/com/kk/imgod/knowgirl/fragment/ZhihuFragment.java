@@ -4,9 +4,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.activity.ZhiHuDetailActivity;
+import com.kk.imgod.knowgirl.adapter.UlimateBaseAdapter;
 import com.kk.imgod.knowgirl.adapter.ZhihuListAdapter;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.model.ZhihuResponse;
@@ -27,17 +30,10 @@ import butterknife.BindView;
 import okhttp3.Call;
 
 
-public class ZhihuFragment extends BaseLazyFragment {
+public class ZhihuFragment extends RecyclerViewFragment {
     private String willLoadDate;
-    @BindView(R.id.recyclerview)
-    UltimateRecyclerView recyclerview;
     private ZhihuListAdapter zhihuListAdapter;
     private List<ZhihuStory> zhihuStories;
-
-    @Override
-    public int getLayoutResID() {
-        return R.layout.fragment_news;
-    }
 
     @Override
     protected void initData() {
@@ -48,6 +44,15 @@ public class ZhihuFragment extends BaseLazyFragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.setAdapter(zhihuListAdapter);
         recyclerview.reenableLoadmore();
+//        zhihuListAdapter.enableLoadMore();
+//        zhihuListAdapter.setCustomLoadMoreView(View.inflate(getActivity(), R.layout.layout_loading_more, null));
+        zhihuListAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                ZhiHuDetailActivity.actionStart(getActivity(), zhihuStories.get(position));
+            }
+        });
+
         recyclerview.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -67,11 +72,9 @@ public class ZhihuFragment extends BaseLazyFragment {
             @Override
             public void run() {
                 recyclerview.mSwipeRefreshLayout.setRefreshing(true);
+                getLastData();
             }
         });
-
-        getLastData();
-
     }
 
     @Override

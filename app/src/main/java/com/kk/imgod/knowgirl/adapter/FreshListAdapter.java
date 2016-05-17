@@ -6,18 +6,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kk.imgod.knowgirl.R;
-import com.kk.imgod.knowgirl.activity.ZhiHuDetailActivity;
+import com.kk.imgod.knowgirl.model.FreshBean;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
-import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 
 import java.util.List;
 
-public class ZhihuListAdapter extends UlimateBaseAdapter<ZhihuStory, ZhihuListAdapter.MyViewHolder> {
+public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAdapter.MyViewHolder> {
     private Activity activity;
 
-    public ZhihuListAdapter(Activity activity, List<ZhihuStory> list) {
+    public FreshListAdapter(Activity activity, List<FreshBean> list) {
         super(list);
         this.activity = activity;
         setHasStableIds(true);
@@ -25,7 +24,7 @@ public class ZhihuListAdapter extends UlimateBaseAdapter<ZhihuStory, ZhihuListAd
 
     @Override
     protected int getNormalLayoutResId() {
-        return R.layout.item_news;
+        return R.layout.item_fresh;
     }
 
     @Override
@@ -34,10 +33,10 @@ public class ZhihuListAdapter extends UlimateBaseAdapter<ZhihuStory, ZhihuListAd
     }
 
     @Override
-    protected void withBindHolder(final MyViewHolder holder, final ZhihuStory data, int position) {
+    protected void withBindHolder(final MyViewHolder holder, final FreshBean data, int position) {
         super.withBindHolder(holder, data, position);
-        ImageLoader.load(activity, data.getImages().get(0), holder.img_news);
-        holder.txt_title.setText(data.getTitle());
+        ImageLoader.load(activity, data.getCustom_fields().getThumb_c().get(0), holder.img_fresh_news);
+        holder.txt_fresh_title.setText(data.getTitle());
     }
 
 
@@ -47,13 +46,13 @@ public class ZhihuListAdapter extends UlimateBaseAdapter<ZhihuStory, ZhihuListAd
     }
 
     public static class MyViewHolder extends UltimateRecyclerviewViewHolder {
-        public ImageView img_news;
-        public TextView txt_title;
+        public ImageView img_fresh_news;
+        public TextView txt_fresh_title;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            img_news = (ImageView) itemView.findViewById(R.id.img_news);
-            txt_title = (TextView) itemView.findViewById(R.id.txt_title);
+            img_fresh_news = (ImageView) itemView.findViewById(R.id.img_fresh_news);
+            txt_fresh_title = (TextView) itemView.findViewById(R.id.txt_fresh_title);
         }
     }
 

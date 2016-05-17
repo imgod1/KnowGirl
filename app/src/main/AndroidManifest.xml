@@ -30,7 +30,9 @@
         <activity android:name=".activity.SettingActivity" />
         <activity
             android:name=".activity.ZhiHuDetailActivity"
-            android:label="@string/title_activity_zhi_hu_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activity.FreshDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

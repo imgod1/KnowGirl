@@ -17,11 +17,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.activity.PictureDetailActivity;
+import com.kk.imgod.knowgirl.adapter.UlimateBaseAdapter;
 import com.kk.imgod.knowgirl.adapter.UltimateStagAdapter;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.customerclass.LazyFragment;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.model.ImageResponse;
+import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -38,14 +41,10 @@ import okhttp3.Call;
 /**
  * Created by imgod on 2016/4/24.
  */
-public class LazyPictureFragment extends BaseLazyFragment {
-
-
+public class LazyPictureFragment extends RecyclerViewFragment {
     public static final int row = 40;
     public final static String URL = "url";
     private String url;
-    @BindView(R.id.recyclerview)
-    UltimateRecyclerView recyclerview;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     private UltimateStagAdapter ultimateStagAdapter;
@@ -71,10 +70,6 @@ public class LazyPictureFragment extends BaseLazyFragment {
         return pictureFragment;
     }
 
-    public int getLayoutResID() {
-        return R.layout.fragment_picture;
-    }
-
     public void initValue() {
         recyclerview.mSwipeRefreshLayout.post(new Runnable() {
             @Override
@@ -90,7 +85,6 @@ public class LazyPictureFragment extends BaseLazyFragment {
             @Override
             public void onRefresh() {
                 Log.e("initevent", "initevent:触发了下拉刷新操作:" + url);
-                imgList.clear();
                 page = 1;
                 getPicture(page);
             }
@@ -102,6 +96,13 @@ public class LazyPictureFragment extends BaseLazyFragment {
                 Log.e("initevent", "initevent:触发了上拉加载更多操作:" + url);
             }
         });
+
+        ultimateStagAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                PictureDetailActivity.actionStart(getActivity(), imgList.get(position).getImg());
+            }
+        });
     }
 
     public void getPicture(final int temppage) {
@@ -109,7 +110,7 @@ public class LazyPictureFragment extends BaseLazyFragment {
 //            Log.e("initevent", "因为当前已经没有更多了.所以不请求网络");
 //        } else {
         String useUrl = url + temppage;
-        Log.e("pictureFragment", "请求的地址为:" + useUrl);
+        Log.e("pictureFragment", "请求图片的地址为:" + useUrl);
         requestCall = OkHttpUtils.get().url(useUrl).build();
         requestCall.execute(new StringCallback() {
             @Override
@@ -123,17 +124,11 @@ public class LazyPictureFragment extends BaseLazyFragment {
                 if (!TextUtils.isEmpty(response)) {
                     Log.e("onResponse", "onResponse:" + url + "\t" + response);
                     Log.e("onResponse", "onResponse:当前集合数量" + imgList.size());
-                    Gson gson = new Gson();
-                    ImageResponse imageResponse = gson.fromJson(response, ImageResponse.class);
+                    ImageResponse imageResponse = GsonUtils.getGson().fromJson(response, ImageResponse.class);
                     allPictureCount = imageResponse.getTotal();
                     if (imageResponse != null && imageResponse.getTngou() != null && imageResponse.getTngou().size() != 0) {
-                        page++;
                         Log.e("onResponse", "onResponse:数组大小:" + imageResponse.getTngou().size());
                         getImageSize(imageResponse.getTngou());
-//                        for (int i = 0; i < imageResponse.getTngou().size(); i++) {
-//                            imgList.add(imageResponse.getTngou().get(i));
-//                        }
-//                        ultimateStagAdapter.notifyDataSetChanged();
                     } else {
                         recyclerview.setRefreshing(false);
                         Toast.makeText(getActivity(), "没有更多图片了...", Toast.LENGTH_SHORT).show();
@@ -190,8 +185,15 @@ public class LazyPictureFragment extends BaseLazyFragment {
                 super.onPostExecute(aVoid);
                 Log.e("onResponse", "getImageSize 异步完毕,加载成功的图片数量:" + tempImgList.size());
                 recyclerview.setRefreshing(false);
-//                ultimateStagAdapter.notifyDataSetChanged();
-                ultimateStagAdapter.insert(tempImgList);
+                if (1 == page) {
+                    imgList.clear();
+                    imgList.addAll(tempImgList);
+                    ultimateStagAdapter.notifyDataSetChanged();
+                } else {
+                    ultimateStagAdapter.insert(tempImgList);
+                }
+                Log.e("onResponse", "getImageSize 异步完毕,当前页码:" + page + ",当前集合数量:" + imgList.size());
+                page++;
             }
         }.execute();
     }

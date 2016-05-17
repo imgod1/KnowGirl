@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.utils.ImageLoader;
+import com.kk.imgod.knowgirl.utils.Lg;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -22,21 +24,39 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * 修改时间：2016/4/26 16:55
  * 修改备注：
  */
-public class PictureDetailFragment extends Fragment {
-    private View parentView;
+public class PictureDetailFragment extends BaseLazyFragment {
     private ImageView img_picture;
     private PhotoViewAttacher photoViewAttacher;
 
-    @Nullable
+
+    public static final String IMGURL = "imgurl";
+    private String imgUrl;
+
+    public static PictureDetailFragment newInstance(String imgurl) {
+        PictureDetailFragment pictureDetailFragment = new PictureDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(IMGURL, imgurl);
+        pictureDetailFragment.setArguments(bundle);
+        return pictureDetailFragment;
+    }
+
+    ;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        parentView = inflater.inflate(R.layout.fragment_picture_detail, container, false);
+    protected void initData() {
         initView();
-        return parentView;
     }
 
     private void initView() {
+        imgUrl = getArguments().getString(IMGURL);
         img_picture = (ImageView) parentView.findViewById(R.id.img_picture);
         photoViewAttacher = new PhotoViewAttacher(img_picture, true);
+        ImageLoader.load(getActivity(), imgUrl, img_picture);
+        Lg.e("PictureDetailFragment","imgUrl:"+imgUrl);
+    }
+
+    @Override
+    public int getLayoutResID() {
+        return R.layout.fragment_picture_detail;
     }
 }

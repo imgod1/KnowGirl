@@ -3,15 +3,10 @@ package com.kk.imgod.knowgirl.fragment;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -19,7 +14,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.kk.imgod.knowgirl.R;
-import com.kk.imgod.knowgirl.adapter.StagAdapter;
 import com.kk.imgod.knowgirl.adapter.UltimateStagAdapter;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.model.ImageBean;
@@ -30,9 +24,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import okhttp3.Call;

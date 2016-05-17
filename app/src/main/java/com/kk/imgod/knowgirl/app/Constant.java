@@ -15,4 +15,8 @@ public class Constant {
      * 知乎列表将要加载的日期
      */
     public static String ZHIHUDATE = "zhihudate";
+    /**
+     * 煎蛋网返回数据的标志位
+     */
+    public static String OK = "ok";
 }

@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by imgod on 2016/4/25.
  */
-public class UltimateStagAdapter extends easyRegularAdapter<ImageBean, UltimateStagAdapter.MyViewHolder> {
+public class UltimateStagAdapter extends UlimateBaseAdapter<ImageBean, UltimateStagAdapter.MyViewHolder> {
     private Activity activity;
     int use_width;
     int use_height = 0;
@@ -43,6 +43,7 @@ public class UltimateStagAdapter extends easyRegularAdapter<ImageBean, UltimateS
 
     @Override
     protected void withBindHolder(final MyViewHolder holder, ImageBean data, int position) {
+        super.withBindHolder(holder,data,position);
         final String img_url = API.PICTURE_BASE_URL + data.getImg();
 //        Log.e("adapter", "img url:" + img_url + " data.getImg_height()" + data.getImg_height() + "data.getImg_width()" + data.getImg_width());
         use_height = use_width * data.getImg_height() / data.getImg_width();
