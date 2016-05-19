@@ -5,10 +5,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.kk.imgod.knowgirl.R;
-import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.Lg;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * 项目名称：other_demo
@@ -22,7 +19,6 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class PictureDetailFragment extends BaseFragment {
     private ImageView img_picture;
-    private PhotoViewAttacher photoViewAttacher;
 
 
     public static final String IMGURL = "imgurl";
@@ -40,13 +36,14 @@ public class PictureDetailFragment extends BaseFragment {
     @Override
     public int getLayoutResID() {
         return R.layout.fragment_picture_detail;
+
     }
 
     @Override
     public void initView() {
         imgUrl = getArguments().getString(IMGURL);
         img_picture = (ImageView) parentView.findViewById(R.id.img_picture);
-        photoViewAttacher = new PhotoViewAttacher(img_picture, true);
+//        photoViewAttacher = new PhotoViewAttacher(img_picture, true);
 //        ImageLoader.load(getActivity(), imgUrl, img_picture);
         Glide.with(getActivity()).load(imgUrl).placeholder(R.drawable.item02).into(img_picture);
         Lg.e("PictureDetailFragment","imgUrl:"+imgUrl);

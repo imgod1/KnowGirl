@@ -17,9 +17,11 @@ import com.kk.imgod.knowgirl.utils.Lg;
 import java.util.List;
 
 import butterknife.BindView;
+import ooo.oxo.library.widget.PullBackLayout;
 
-public class PictureDetailActivity extends BaseActivity {
-
+public class PictureDetailActivity extends BaseActivity implements PullBackLayout.Callback {
+    @BindView(R.id.flayout_picture_main)
+    PullBackLayout flayout_picture_main;
     private static final String IMGURL = "imgurl";
     private String imgUrl;
     private PictureDetailFragment pictureDetailFragment;
@@ -42,6 +44,7 @@ public class PictureDetailActivity extends BaseActivity {
     public void initView() {
         imgUrl = getIntent().getStringExtra(IMGURL);
         Lg.e("PictureDetailActivity", "PictureDetailActivity initView得到的图片为:" + imgUrl);
+        flayout_picture_main.setCallback(this);
     }
 
     @Override
@@ -60,4 +63,26 @@ public class PictureDetailActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onPullStart() {
+
+    }
+
+    @Override
+    public void onPull(float v) {
+//        flayout_picture_main.setBackgroundColor(0x2200000);
+//        flayout_picture_main.setAlpha(0xff - (int) Math.floor(0xff * v));
+        getWindow().getDecorView().getBackground().setAlpha(0xff - (int) Math.floor(0xff * v));
+        Lg.e("picturedetail", "onPull:" + v);
+    }
+
+    @Override
+    public void onPullCancel() {
+
+    }
+
+    @Override
+    public void onPullComplete() {
+        onBackPressed();
+    }
 }
