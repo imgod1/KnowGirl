@@ -92,6 +92,7 @@ public class LazyPictureFragment extends RecyclerViewFragment {
         recyclerview.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
             @Override
             public void loadMore(int itemsCount, int maxLastVisiblePosition) {
+                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
                 getPicture(page);
                 Log.e("initevent", "initevent:触发了上拉加载更多操作:" + url);
             }

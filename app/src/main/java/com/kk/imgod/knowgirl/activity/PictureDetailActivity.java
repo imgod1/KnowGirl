@@ -2,6 +2,7 @@ package com.kk.imgod.knowgirl.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -36,12 +37,15 @@ public class PictureDetailActivity extends BaseActivity implements PullBackLayou
 
     @Override
     public int getLayoutResID() {
+        setTheme(R.style.ViewerTheme_TransNav);
         return R.layout.activity_picture_detail;
     }
 
 
     @Override
     public void initView() {
+        flayout_picture_main.setBackgroundColor(Color.BLACK);
+//        getWindow().getDecorView().getBackground().setAlpha(0xff);
         imgUrl = getIntent().getStringExtra(IMGURL);
         Lg.e("PictureDetailActivity", "PictureDetailActivity initView得到的图片为:" + imgUrl);
         flayout_picture_main.setCallback(this);
@@ -70,10 +74,9 @@ public class PictureDetailActivity extends BaseActivity implements PullBackLayou
 
     @Override
     public void onPull(float v) {
-//        flayout_picture_main.setBackgroundColor(0x2200000);
 //        flayout_picture_main.setAlpha(0xff - (int) Math.floor(0xff * v));
-        getWindow().getDecorView().getBackground().setAlpha(0xff - (int) Math.floor(0xff * v));
-        Lg.e("picturedetail", "onPull:" + v);
+//        getWindow().getDecorView().getBackground().setAlpha(0xff - (int) Math.floor(0xff * v));
+        flayout_picture_main.setBackgroundColor(Color.argb(0xff - (int) Math.floor(0xff * v), 0x00, 0x00, 0x00));
     }
 
     @Override

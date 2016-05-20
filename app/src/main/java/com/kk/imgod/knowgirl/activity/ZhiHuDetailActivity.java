@@ -9,6 +9,7 @@ import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -99,9 +100,15 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                ShareUtils.shareText(ZhiHuDetailActivity.this,zhihuDetail.getShare_url());
+                ShareUtils.shareText(ZhiHuDetailActivity.this, zhihuDetail.getShare_url());
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_zhi_hu_detail, menu);
+        return true;
     }
 
     @Override
@@ -110,6 +117,9 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.action_share:
+                ShareUtils.shareText(ZhiHuDetailActivity.this, getText(R.string.zhihu_detail_share_title) + zhihuDetail.getShare_url());
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -117,6 +127,7 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
     private RequestCall requestCall;
 
     private ZhihuDetail zhihuDetail;
+
     private void getData(String id) {
         requestCall = OkHttpUtils.get().url(API.ZHIHU_BASE_URL + id).build();
         requestCall.execute(new StringCallback() {

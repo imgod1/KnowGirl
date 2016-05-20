@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.Lg;
 
 /**
@@ -28,7 +29,7 @@ public class PictureDetailFragment extends BaseFragment {
         PictureDetailFragment pictureDetailFragment = new PictureDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putString(IMGURL, imgurl);
-        Lg.e("PictureDetailFragment","newInstance:imgUrl:"+imgurl);
+        Lg.e("PictureDetailFragment", "newInstance:imgUrl:" + imgurl);
         pictureDetailFragment.setArguments(bundle);
         return pictureDetailFragment;
     }
@@ -36,7 +37,6 @@ public class PictureDetailFragment extends BaseFragment {
     @Override
     public int getLayoutResID() {
         return R.layout.fragment_picture_detail;
-
     }
 
     @Override
@@ -45,8 +45,9 @@ public class PictureDetailFragment extends BaseFragment {
         img_picture = (ImageView) parentView.findViewById(R.id.img_picture);
 //        photoViewAttacher = new PhotoViewAttacher(img_picture, true);
 //        ImageLoader.load(getActivity(), imgUrl, img_picture);
-        Glide.with(getActivity()).load(imgUrl).placeholder(R.drawable.item02).into(img_picture);
-        Lg.e("PictureDetailFragment","imgUrl:"+imgUrl);
+        ImageLoader.loadWithHolder(getActivity(), imgUrl, R.mipmap.icon_app, img_picture);
+//        Glide.with(getActivity()).load(imgUrl).placeholder(R.drawable.item02).into(img_picture);
+        Lg.e("PictureDetailFragment", "imgUrl:" + imgUrl);
     }
 
     @Override

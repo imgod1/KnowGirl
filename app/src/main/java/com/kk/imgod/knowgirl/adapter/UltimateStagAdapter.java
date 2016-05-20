@@ -43,19 +43,15 @@ public class UltimateStagAdapter extends UlimateBaseAdapter<ImageBean, UltimateS
 
     @Override
     protected void withBindHolder(final MyViewHolder holder, ImageBean data, int position) {
-        super.withBindHolder(holder,data,position);
+        super.withBindHolder(holder, data, position);
         final String img_url = API.PICTURE_BASE_URL + data.getImg();
 //        Log.e("adapter", "img url:" + img_url + " data.getImg_height()" + data.getImg_height() + "data.getImg_width()" + data.getImg_width());
         use_height = use_width * data.getImg_height() / data.getImg_width();
         ViewGroup.LayoutParams layoutParams = holder.img_stag.getLayoutParams();
-        //如果高度宽度都是固定的话,就不会闪烁
         layoutParams.height = use_height;
         layoutParams.width = use_width;
         holder.img_stag.setLayoutParams(layoutParams);
-//        if (holder.img_stag.getTag() == null) {
         ImageLoader.load(activity, img_url, holder.img_stag);
-//            holder.img_stag.setTag(img_url);
-//        }
     }
 
     @Override

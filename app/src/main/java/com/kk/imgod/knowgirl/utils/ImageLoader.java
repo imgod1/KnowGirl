@@ -20,6 +20,15 @@ public class ImageLoader {
                 .into(view);
     }
 
+    public static void loadWithHolder(Context context, String url, int imgRes, ImageView view) {
+        Glide.with(context)
+                .load(url)
+                .placeholder(imgRes)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .crossFade()
+                .into(view);
+    }
+
     public static void load(Context context, int resourceId, ImageView view) {
         Glide.with(context)
                 .load(resourceId)
