@@ -8,10 +8,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kk.imgod.knowgirl.activity.FreshDetailActivity;
+import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.adapter.FreshListAdapter;
 import com.kk.imgod.knowgirl.adapter.UlimateBaseAdapter;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
+import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.FreshBean;
 import com.kk.imgod.knowgirl.model.FreshResponse;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
@@ -83,12 +85,18 @@ public class FreshFragment extends RecyclerViewFragment {
 
     public void getFreshData(final int tempPage) {
         requestCall = OkHttpUtils.get().url(API.JIANDAN_FRESH_NEWS + tempPage).build();
-        requestCall.execute(new StringCallback() {
+        requestCall.execute(new MyStringCallBack(getActivity(), ((MainActivity) getActivity()).getMainCoordinatorLayout()) {
             @Override
             public void onError(Call call, Exception e) {
-                recyclerview.setRefreshing(false);
+                super.onError(call, e);
+                recyclerview.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerview.setRefreshing(false);
+                    }
+                }, Constant.DELAYTIME);
                 Log.e("pictureFragment", "onError:" + e.getMessage());
-                Toast.makeText(getActivity(), "onError:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
 
             @Override

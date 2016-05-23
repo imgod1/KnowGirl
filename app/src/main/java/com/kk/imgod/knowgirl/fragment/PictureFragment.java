@@ -14,8 +14,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.adapter.UltimateStagAdapter;
 import com.kk.imgod.knowgirl.app.API;
+import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.model.ImageResponse;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -120,9 +122,11 @@ public class PictureFragment extends BaseFragment {
         String useUrl = url + temppage;
         Log.e("pictureFragment", "请求的地址为:" + useUrl);
         requestCall = OkHttpUtils.get().url(useUrl).build();
-        requestCall.execute(new StringCallback() {
+        requestCall.execute(new MyStringCallBack(getActivity(), ((MainActivity) getActivity()).getMainCoordinatorLayout()) {
             @Override
             public void onError(Call call, Exception e) {
+                super.onError(call, e);
+                recyclerview.setRefreshing(false);
                 Log.e("pictureFragment", "onError:" + e.getMessage());
                 Toast.makeText(getActivity(), "onError:" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }

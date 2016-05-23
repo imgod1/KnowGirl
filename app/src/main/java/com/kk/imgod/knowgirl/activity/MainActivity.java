@@ -2,6 +2,7 @@ package com.kk.imgod.knowgirl.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +33,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     DrawerLayout dlayout_main;
     @BindView(R.id.nview_left)
     NavigationView nview_left;
+    @BindView(R.id.cLayout_main)
+    CoordinatorLayout cLayout_main;
 
     private Fragment knowledgeFragment;
     private Fragment pictureFragment;
@@ -46,12 +49,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return R.layout.activity_main;
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        SnackBarUtils.showShort(dlayout_main, R.string.press_back_twice);
+//    }
+
     @Override
     public void initView() {
         initAppBar();
         knowledgeFragment = TabFragment.newInstance(MainActivity.KNOWLEDGE_FRAGMENT);
         pictureFragment = TabFragment.newInstance(MainActivity.PICTURE_FRAGMENT);
         showFragment(KNOWLEDGE_FRAGMENT);
+
+    }
+
+    //实践证明此处不管是传递DrawLayout还是CoordinatorLayout 都可以让fragment的snackbar很好的使用
+    public CoordinatorLayout getMainCoordinatorLayout() {
+        return cLayout_main;
     }
 
     private void initAppBar() {

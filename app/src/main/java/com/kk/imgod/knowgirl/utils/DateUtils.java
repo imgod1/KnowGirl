@@ -26,4 +26,10 @@ public class DateUtils {
         formatter.setLenient(false);
         return formatter.format(date);
     }
+
+    public static String parseStandardInfoDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒", Locale.getDefault());
+        formatter.setLenient(false);
+        return formatter.format(date);
+    }
 }

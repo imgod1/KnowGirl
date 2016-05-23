@@ -8,16 +8,22 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.activity.ZhiHuDetailActivity;
 import com.kk.imgod.knowgirl.adapter.UlimateBaseAdapter;
 import com.kk.imgod.knowgirl.adapter.ZhihuListAdapter;
 import com.kk.imgod.knowgirl.app.API;
+import com.kk.imgod.knowgirl.app.Constant;
+import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ZhihuResponse;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
 import com.kk.imgod.knowgirl.utils.DateUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.Lg;
+import com.kk.imgod.knowgirl.utils.SnackBarUtils;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
+import com.squareup.haha.perflib.Main;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
@@ -44,6 +50,20 @@ public class ZhihuFragment extends RecyclerViewFragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.setAdapter(zhihuListAdapter);
         recyclerview.reenableLoadmore();
+//        recyclerview.setEmptyView(R.layout.item_news, UltimateRecyclerView.EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
+//            @Override
+//            public void onEmptyViewShow(View mView) {
+//                Lg.e("zhihufragment", "触发了setEmptyView Listener1111111111111");
+//                mView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Lg.e("zhihufragment", "触发了setEmptyView Listener222222222222222");
+//                    }
+//                });
+//            }
+//        });
+//        recyclerview.hideEmptyView();
+
 //        zhihuListAdapter.enableLoadMore();
 //        zhihuListAdapter.setCustomLoadMoreView(View.inflate(getActivity(), R.layout.layout_loading_more, null));
         zhihuListAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
@@ -86,12 +106,17 @@ public class ZhihuFragment extends RecyclerViewFragment {
 
     public void getLastData() {
         requestCall = OkHttpUtils.get().url(API.ZHIHU_NEWS_LATEST).build();
-        requestCall.execute(new StringCallback() {
+        requestCall.execute(new MyStringCallBack(getActivity(), ((MainActivity) getActivity()).getMainCoordinatorLayout()) {
             @Override
             public void onError(Call call, Exception e) {
-                recyclerview.setRefreshing(false);
+                super.onError(call, e);
+                recyclerview.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerview.setRefreshing(false);
+                    }
+                }, Constant.DELAYTIME);
                 Log.e("pictureFragment", "onError:" + e.getMessage());
-                Toast.makeText(getActivity(), "onError:" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -113,16 +138,18 @@ public class ZhihuFragment extends RecyclerViewFragment {
                 }
             }
         });
+
+
     }
 
     public void getBeforeData() {
         requestCall = OkHttpUtils.get().url(API.ZHIHU_NEWS_BEFORE + willLoadDate).build();
-        requestCall.execute(new StringCallback() {
+        requestCall.execute(new MyStringCallBack(getActivity(), ((MainActivity) getActivity()).getMainCoordinatorLayout()) {
             @Override
             public void onError(Call call, Exception e) {
+                super.onError(call, e);
                 recyclerview.setRefreshing(false);
                 Log.e("pictureFragment", "onError:" + e.getMessage());
-                Toast.makeText(getActivity(), "onError:" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -142,5 +169,4 @@ public class ZhihuFragment extends RecyclerViewFragment {
             }
         });
     }
-
 }

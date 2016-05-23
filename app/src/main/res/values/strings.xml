@@ -26,12 +26,16 @@
     <string name="set_post_feedback">提建议或反馈bug</string>
     <string name="action_about">关于</string>
     <string name="press_back_twice">真的要离开人家了嘛~</string>
+    <string name="no_service">服务器被外星人偷走了..</string>
+    <string name="no_net_work">网络被外星人切断..</string>
     <string name="setting">设置</string>
     <string name="about_app_title">关于应用</string>
     <string name="about_app_content">本应用主要是提供知识,新闻和一些美图供欣赏</string>
     <string name="qq_title">QQ:</string>
     <string name="share_to">分享到</string>
     <string name="share_app_description">这个Android项目很不错,快来和我一起玩耍吧 https://github.com/imgod1/KnowGirl</string>
+    <string name="save_img_success">妹子已保存在：</string>
+    <string name="save_img_failed">无法保存图片</string>
 
     <string name="pure_girl">清纯美女</string>
     <string name="photo_nice_girl">美女照片</string>
@@ -45,4 +49,6 @@
     <string name="action_zhihu_detail_share">该文太赞,我要分享</string>
     <string name="zhihu_day_news">知乎日报</string>
     <string name="jiandan_news">新鲜事</string>
+    <string name="goqq2chat">跳转到QQ进行反馈</string>
+    <string name="no_install_qq">当前设备没有安装QQ</string>
 </resources>

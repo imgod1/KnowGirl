@@ -12,6 +12,10 @@ package com.kk.imgod.knowgirl.app;
  */
 public class Constant {
     /**
+     * swiprefreshlayout 延迟消逝的毫秒数
+     */
+    public static final int DELAYTIME = 600;
+    /**
      * 知乎列表将要加载的日期
      */
     public static String ZHIHUDATE = "zhihudate";
