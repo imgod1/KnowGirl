@@ -33,7 +33,7 @@ public abstract class MyStringCallBack extends StringCallback {
     @Override
     public void onError(Call call, Exception e) {
         if (NetWorkUtils.isNetworkAvailable(activity)) {
-            SnackBarUtils.showShort(view, R.string.no_service);
+            SnackBarUtils.showShort(view, R.string.net_work_error);
         } else {
             SnackBarUtils.showShort(view, R.string.no_net_work);
         }

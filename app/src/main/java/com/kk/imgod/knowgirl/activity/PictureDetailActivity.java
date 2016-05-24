@@ -4,17 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.adapter.FragmentViewPagerAdapter;
 import com.kk.imgod.knowgirl.app.API;
+import com.kk.imgod.knowgirl.fragment.LazyPictureFragment;
 import com.kk.imgod.knowgirl.fragment.PictureDetailFragment;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.utils.Lg;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -23,14 +28,21 @@ import ooo.oxo.library.widget.PullBackLayout;
 public class PictureDetailActivity extends BaseActivity implements PullBackLayout.Callback {
     @BindView(R.id.flayout_picture_main)
     PullBackLayout flayout_picture_main;
-    private static final String IMGURL = "imgurl";
+    @BindView(R.id.vp_pic_detail)
+    ViewPager vp_pic_detail;
+
+    private List<Fragment> fragmentList;
+    private FragmentViewPagerAdapter fragmentViewPagerAdapter;
+    private static final String IMGPOSITION = "ImgPosition";
     private String imgUrl;
     private PictureDetailFragment pictureDetailFragment;
 
-    public static void actionStart(Activity activity, String tempImgUrl) {
+    private int position;
+
+    public static void actionStart(Activity activity, int position) {
         Intent intent = new Intent(activity, PictureDetailActivity.class);
-        intent.putExtra(IMGURL, tempImgUrl);
-        Lg.e("PictureDetailActivity", "PictureDetailActivity actionStart得到的图片为:" + tempImgUrl);
+        intent.putExtra(IMGPOSITION, position);
+        Lg.e("PictureDetailActivity", "PictureDetailActivity actionStart得到的图片为:" + position);
         activity.startActivity(intent);
     }
 
@@ -46,19 +58,29 @@ public class PictureDetailActivity extends BaseActivity implements PullBackLayou
     public void initView() {
         flayout_picture_main.setBackgroundColor(Color.BLACK);
 //        getWindow().getDecorView().getBackground().setAlpha(0xff);
-        imgUrl = getIntent().getStringExtra(IMGURL);
-        Lg.e("PictureDetailActivity", "PictureDetailActivity initView得到的图片为:" + imgUrl);
+//        imgUrl = getIntent().getStringExtra(IMGURL);
+        position = getIntent().getIntExtra(IMGPOSITION, 0);
         flayout_picture_main.setCallback(this);
+        vp_pic_detail.setOffscreenPageLimit(2);
     }
 
     @Override
     public void initValue() {
-        pictureDetailFragment = PictureDetailFragment.newInstance(API.PICTURE_BASE_URL + imgUrl);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.flayout_picture_main, pictureDetailFragment, "pic");
-        fragmentTransaction.show(pictureDetailFragment);
-        fragmentTransaction.commit();
+        fragmentList = new ArrayList<>();
+        for (int i = 0; i < LazyPictureFragment.detailImageBeanList.size(); i++) {
+            Fragment fragment = PictureDetailFragment.newInstance(API.PICTURE_BASE_URL + LazyPictureFragment.detailImageBeanList.get(i).getImg());
+            fragmentList.add(fragment);
+        }
+        fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), null, fragmentList);
+        vp_pic_detail.setAdapter(fragmentViewPagerAdapter);
+        vp_pic_detail.setCurrentItem(position);
+
+//        pictureDetailFragment = PictureDetailFragment.newInstance(API.PICTUR E_BASE_URL + imgUrl);
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.add(R.id.flayout_picture_main, pictureDetailFragment, "pic");
+//        fragmentTransaction.show(pictureDetailFragment);
+//        fragmentTransaction.commit();
         Lg.e("PictureDetailActivity", "PictureDetailActivity initvalue over");
     }
 

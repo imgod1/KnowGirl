@@ -20,6 +20,7 @@ import android.widget.ImageView;
 
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.API;
+import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.FreshBean;
 import com.kk.imgod.knowgirl.model.FreshDetail;
 import com.kk.imgod.knowgirl.model.ZhihuDetail;
@@ -111,11 +112,12 @@ public class FreshDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void getData(String id) {
         requestCall = OkHttpUtils.get().url(API.JIANDAN_FRESH_NEWS_DETAIL + id).build();
-        requestCall.execute(new StringCallback() {
+        requestCall.execute(new MyStringCallBack(FreshDetailActivity.this, flayout_content) {
             @Override
             public void onError(Call call, Exception e) {
+                super.onError(call, e);
                 Log.e("pictureFragment", "onError:" + e.getMessage());
-                SnackBarUtils.showShort(flayout_content, e.getMessage());
+                contentLoadingProgressBar.setVisibility(View.GONE);
             }
 
             @Override

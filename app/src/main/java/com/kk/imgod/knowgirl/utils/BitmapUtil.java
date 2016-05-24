@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 
+import com.kk.imgod.knowgirl.R;
+
 import java.io.ByteArrayOutputStream;
 
 /**
@@ -34,9 +36,9 @@ public class BitmapUtil {
     }
 
     public static Uri bitmapToUri(Context appContext, Bitmap bitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(appContext.getContentResolver(), bitmap, "Title", null);
+//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(appContext.getContentResolver(), bitmap, appContext.getString(R.string.knowgirl_girl), null);
         return Uri.parse(path);
     }
 

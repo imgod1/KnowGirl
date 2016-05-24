@@ -27,6 +27,7 @@
     <string name="action_about">关于</string>
     <string name="press_back_twice">真的要离开人家了嘛~</string>
     <string name="no_service">服务器被外星人偷走了..</string>
+    <string name="net_work_error">请检查网络是否有连接..</string>
     <string name="no_net_work">网络被外星人切断..</string>
     <string name="setting">设置</string>
     <string name="about_app_title">关于应用</string>
@@ -51,4 +52,5 @@
     <string name="jiandan_news">新鲜事</string>
     <string name="goqq2chat">跳转到QQ进行反馈</string>
     <string name="no_install_qq">当前设备没有安装QQ</string>
+    <string name="knowgirl_girl">知妹妹子</string>
 </resources>

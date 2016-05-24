@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.API;
+import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ZhihuDetail;
 import com.kk.imgod.knowgirl.model.ZhihuResponse;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
@@ -130,11 +131,12 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void getData(String id) {
         requestCall = OkHttpUtils.get().url(API.ZHIHU_BASE_URL + id).build();
-        requestCall.execute(new StringCallback() {
+        requestCall.execute(new MyStringCallBack(ZhiHuDetailActivity.this, flayout_content) {
             @Override
             public void onError(Call call, Exception e) {
+                super.onError(call, e);
+                contentLoadingProgressBar.setVisibility(View.GONE);
                 Log.e("pictureFragment", "onError:" + e.getMessage());
-                SnackBarUtils.showShort(flayout_content, e.getMessage());
             }
 
             @Override

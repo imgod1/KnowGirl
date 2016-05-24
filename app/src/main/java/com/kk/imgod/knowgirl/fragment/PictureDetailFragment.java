@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.Target;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.utils.AppUtils;
 import com.kk.imgod.knowgirl.utils.BitmapUtil;
+import com.kk.imgod.knowgirl.utils.BlurBuilder;
 import com.kk.imgod.knowgirl.utils.DateUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.Lg;
@@ -83,6 +84,8 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
 
     @Override
     public boolean onLongClick(View v) {
+        new BlurTask().execute(bitmap);
+
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         String[] items = {"分享到", "保存"};
@@ -104,6 +107,7 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+                img_picture.setImageBitmap(bitmap);
             }
         });
         return true;
@@ -130,6 +134,25 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
                 return;
             }
             img_picture.setImageBitmap(picture);
+        }
+    }
+
+    private class BlurTask extends AsyncTask<Bitmap, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(Bitmap... bitmaps) {
+            if (isCancelled()) {
+                return null;
+            }
+            //change the 'reuseBitmap' to true to blur the image persistently
+            return BlurBuilder.blur(bitmaps[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap blurBitmap) {
+            if (blurBitmap != null) {
+                img_picture.setImageBitmap(blurBitmap);
+            }
+
         }
     }
 

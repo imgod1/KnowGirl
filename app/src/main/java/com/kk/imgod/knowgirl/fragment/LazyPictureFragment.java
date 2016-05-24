@@ -28,6 +28,7 @@ import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.model.ImageResponse;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
+import com.kk.imgod.knowgirl.utils.Lg;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -51,6 +52,10 @@ public class LazyPictureFragment extends RecyclerViewFragment {
     StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     private UltimateStagAdapter ultimateStagAdapter;
+    /**
+     * 静态的变量来存储详情界面需要的数据
+     */
+    public static List<ImageBean> detailImageBeanList;
     private List<ImageBean> imgList;
 
     private RequestCall requestCall;
@@ -104,7 +109,8 @@ public class LazyPictureFragment extends RecyclerViewFragment {
         ultimateStagAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                PictureDetailActivity.actionStart(getActivity(), imgList.get(position).getImg());
+                detailImageBeanList = imgList;
+                PictureDetailActivity.actionStart(getActivity(), position);
             }
         });
     }
@@ -161,12 +167,15 @@ public class LazyPictureFragment extends RecyclerViewFragment {
         }
     }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        Glide.with(getContext()).pauseRequests();
-//        Log.e("onPause", "暂停加载该页图片");
-//    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        recyclerview.setRefreshing(false);
+        if (requestCall != null) {
+            requestCall.cancel();
+        }
+    }
 
     public void getImageSize(final List<ImageBean> tempImgList) {
         Log.e("onResponse", "getImageSize 方法执行:" + tempImgList.size());
