@@ -23,4 +23,5 @@ public class Constant {
      * 煎蛋网返回数据的标志位
      */
     public static String OK = "ok";
+
 }
