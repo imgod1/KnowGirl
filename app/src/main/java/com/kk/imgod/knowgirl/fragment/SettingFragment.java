@@ -59,6 +59,7 @@ public class SettingFragment extends PreferenceFragment {
                     Toast.makeText(getActivity(), "splash false", Toast.LENGTH_SHORT).show();
                 }
 
+                //sp的坑点
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                 boolean original_splash = sp.getBoolean(ORIGINAL_SPLASH, false);
 
