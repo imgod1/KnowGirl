@@ -27,6 +27,17 @@ public class DateUtils {
         return formatter.format(date);
     }
 
+    /**
+     *
+     * @param date
+     * @return yyyy-MM-dd
+     */
+    public static String parseStandardDateWith_(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        formatter.setLenient(false);
+        return formatter.format(date);
+    }
+
     public static String parseStandardInfoDate(Date date) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒", Locale.getDefault());
         formatter.setLenient(false);

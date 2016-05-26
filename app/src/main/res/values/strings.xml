@@ -19,7 +19,7 @@
     <string name="contact_me">联系我</string>
     <string name="set_clear_cache">清除缓存</string>
     <string name="set_current_cache">当前缓存为 </string>
-    <string name="original_splash">原始启动图</string>
+    <string name="original_splash">启动图设置</string>
     <string name="set_original_splash">使用网络启动图</string>
     <string name="set_check_version">检查更新</string>
     <string name="set_feedback">应用反馈</string>

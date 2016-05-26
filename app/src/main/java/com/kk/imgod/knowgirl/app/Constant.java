@@ -23,5 +23,17 @@ public class Constant {
      * 煎蛋网返回数据的标志位
      */
     public static String OK = "ok";
+    /**
+     * 开屏页缓存的日期
+     */
+    public static final String SPLASHDATE = "splashdate";
+    /**
+     * 开屏加载的图片网址
+     */
+    public static final String SPLASHIMGURL = "splashimgurl";
 
+    /**
+     * 第一次启动app
+     */
+    public static final String FIRST_START_APP = "firststartapp";
 }

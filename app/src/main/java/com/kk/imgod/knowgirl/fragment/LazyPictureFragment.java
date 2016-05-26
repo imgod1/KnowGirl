@@ -175,6 +175,7 @@ public class LazyPictureFragment extends RecyclerViewFragment {
         if (requestCall != null) {
             requestCall.cancel();
         }
+//        Glide.with(getActivity()).pauseRequests();
     }
 
     public void getImageSize(final List<ImageBean> tempImgList) {

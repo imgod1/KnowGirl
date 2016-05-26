@@ -1,6 +1,7 @@
 package com.kk.imgod.knowgirl.fragment;
 
 import android.app.AlertDialog;
+import android.app.WallpaperManager;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
@@ -11,6 +12,7 @@ import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
@@ -24,6 +26,7 @@ import com.kk.imgod.knowgirl.utils.Lg;
 import com.kk.imgod.knowgirl.utils.ShareUtils;
 import com.kk.imgod.knowgirl.utils.SnackBarUtils;
 import com.kk.imgod.knowgirl.utils.Ts;
+import com.kk.imgod.knowgirl.utils.WallpaperUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,8 +35,8 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 /**
- * 项目名称：other_demo
- * 包名称：com.example.gaokang.other_demo
+ * 项目名称：
+ * 包名称：
  * 类描述：
  * 创建人：gaokang
  * 创建时间：2016/4/26 16:55
@@ -83,12 +86,24 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap = null;
+        }
+    }
+
+    @Override
     public boolean onLongClick(View v) {
+        if (null == bitmap) {
+            SnackBarUtils.showShort(parentView, "图片还在加载中...");
+            return true;
+        }
         new BlurTask().execute(bitmap);
 
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        String[] items = {"分享到", "保存"};
+        String[] items = {"妹子不错,赏给小弟", "这妞太正,收入后宫", "哎哟不错,今晚临幸"};
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -98,6 +113,9 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
                         break;
                     case 1:
                         new SaveImageTask().execute(bitmap);
+                        break;
+                    case 2:
+                        setWallpaper(bitmap);
                         break;
                 }
             }
@@ -113,17 +131,38 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
         return true;
     }
 
+    private void setWallpaper(final Bitmap bitmap) {
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                return WallpaperUtils.setWallpaperByBitmap(getActivity(), bitmap);
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                if (aBoolean) {
+                    Ts.showShort(getActivity(), "恭喜陛下,此女子已经成功侍寝");
+                } else {
+                    Ts.showShort(getActivity(), "禀告陛下,此女子誓死不从");
+                }
+            }
+        }.execute();
+    }
+
+
     private class LoadPictureTask extends AsyncTask<Void, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(Void... voids) {
-
-            try {
-                bitmap = Glide.with(getActivity()).load(imgUrl)
-                        .asBitmap()
-                        .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                        .get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+            if (getActivity() != null) {
+                try {
+                    bitmap = Glide.with(getActivity()).load(imgUrl)
+                            .asBitmap()
+                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                            .get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
             return bitmap;
         }
@@ -158,7 +197,6 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
 
 
     private class ShareIntentTask extends AsyncTask<Bitmap, Void, Uri> {
-
         @Override
         protected Uri doInBackground(Bitmap... params) {
             if (isCancelled()) {

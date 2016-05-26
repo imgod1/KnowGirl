@@ -25,14 +25,18 @@ public class API {
     //图片接口url,page=1&rows=20&id=2
     public static final String PICTURE_URL = "http://www.tngou.net/tnfs/api/list?";
 
-    public static final String SEX_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=1&page=";
-    public static final String JAPAN_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=2&page=";
-    public static final String STOCK_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=3&page=";
-    public static final String PHOTO_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=4&page=";
-    public static final String WRITE_REAL_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=5&page=";
-    public static final String PURE_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=6&page=";
-    public static final String SEX_CAR_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=7&page=";
+    public static final String SEX_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=1&page=";
+    public static final String JAPAN_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=2&page=";
+    public static final String STOCK_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=3&page=";
+    public static final String PHOTO_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=4&page=";
+    public static final String WRITE_REAL_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=5&page=";
+    public static final String PURE_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=6&page=";
+    public static final String SEX_CAR_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=7&page=";
 
     //图片资源的基地址
     public static final String PICTURE_BASE_URL = "http://tnfs.tngou.net/image";
+
+
+    //开屏图片获取
+    public static final String BOOHEE_WELCOME_IMG = "http://bingo.boohee.com/api/v1/home/items?app_device=Android&user_key=14db31ef-872a-42e1-8ef5-86e55eb1e3ff&token=m4nqA5aNR1d7zovzMZKz&app_version=5.5.4&app_key=one&channel=tencent&phone_model=Coolpad+8297&os_version=4.4.2";
 }
