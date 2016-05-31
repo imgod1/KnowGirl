@@ -6,21 +6,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.model.FreshBean;
+import com.kk.imgod.knowgirl.model.FreshResponse;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 
 import java.util.List;
 
-public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAdapter.MyViewHolder> {
+import io.realm.RealmChangeListener;
+import io.realm.Sort;
+
+public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAdapter.MyViewHolder> implements RealmChangeListener {
     private Activity activity;
 
     public FreshListAdapter(Activity activity, List<FreshBean> list) {
         super(list);
         this.activity = activity;
         setHasStableIds(true);
+        List<FreshBean> freshBeans = MainActivity.realm.where(FreshBean.class).findAllSorted("date", Sort.DESCENDING);
+        list.addAll(freshBeans);
+        MainActivity.realm.addChangeListener(this);
     }
+
 
     @Override
     protected int getNormalLayoutResId() {
@@ -35,7 +44,7 @@ public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAda
     @Override
     protected void withBindHolder(final MyViewHolder holder, final FreshBean data, int position) {
         super.withBindHolder(holder, data, position);
-        ImageLoader.load(activity, data.getCustom_fields().getThumb_c().get(0), holder.img_fresh_news);
+        ImageLoader.load(activity, data.getCustom_fields().getThumb_c().get(0).getVal(), holder.img_fresh_news);
         holder.txt_fresh_title.setText(data.getTitle());
     }
 
@@ -43,6 +52,11 @@ public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAda
     @Override
     public long getItemId(int position) {
         return source.get(position).hashCode();
+    }
+
+    @Override
+    public void onChange(Object element) {
+        notifyDataSetChanged();
     }
 
     public static class MyViewHolder extends UltimateRecyclerviewViewHolder {

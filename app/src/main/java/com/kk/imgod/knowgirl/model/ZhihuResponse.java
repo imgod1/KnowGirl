@@ -2,6 +2,10 @@ package com.kk.imgod.knowgirl.model;
 
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * 项目名称：KnowGirl
  * 包名称：com.kk.imgod.knowgirl.model
@@ -12,10 +16,11 @@ import java.util.List;
  * 修改时间：2016-05-16 16:23
  * 修改备注：
  */
-public class ZhihuResponse {
+public class ZhihuResponse extends RealmObject{
+    @PrimaryKey
     private String date;
-    private List<ZhihuStory> stories;
-    private List<ZhihuStory> top_stories;
+    private RealmList<ZhihuStory> stories;
+    private RealmList<ZhihuStory> top_stories;
 
     public String getDate() {
         return date;
@@ -25,19 +30,19 @@ public class ZhihuResponse {
         this.date = date;
     }
 
-    public List<ZhihuStory> getStories() {
+    public RealmList<ZhihuStory> getStories() {
         return stories;
     }
 
-    public void setStories(List<ZhihuStory> stories) {
+    public void setStories(RealmList<ZhihuStory> stories) {
         this.stories = stories;
     }
 
-    public List<ZhihuStory> getTop_stories() {
+    public RealmList<ZhihuStory> getTop_stories() {
         return top_stories;
     }
 
-    public void setTop_stories(List<ZhihuStory> top_stories) {
+    public void setTop_stories(RealmList<ZhihuStory> top_stories) {
         this.top_stories = top_stories;
     }
 }

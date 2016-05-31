@@ -36,4 +36,8 @@ public class Constant {
      * 第一次启动app
      */
     public static final String FIRST_START_APP = "firststartapp";
+    /**
+     * 数据库名称
+     */
+    public static final String REALMNAME = "knowgirl.realm";
 }

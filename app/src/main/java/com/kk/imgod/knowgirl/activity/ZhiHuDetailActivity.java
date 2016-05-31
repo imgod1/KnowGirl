@@ -25,6 +25,7 @@ import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ZhihuDetail;
 import com.kk.imgod.knowgirl.model.ZhihuResponse;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
+import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.ShareUtils;
@@ -51,12 +52,13 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
     ContentLoadingProgressBar contentLoadingProgressBar;
 
     WebView webView;
-    public static final String ZHIHUSTOREY = "zhihuStorey";
+    public static final String ZHIHUSTOREYID = "zhihuStoreyId";
+    private int zhihuStoryId;
     private ZhihuStory zhihuStory;
 
-    public static void actionStart(Activity activity, ZhihuStory zhihuStory) {
+    public static void actionStart(Activity activity, int zhihuStoryId) {
         Intent intent = new Intent(activity, ZhiHuDetailActivity.class);
-        intent.putExtra(ZHIHUSTOREY, zhihuStory);
+        intent.putExtra(ZHIHUSTOREYID, zhihuStoryId);
         activity.startActivity(intent);
     }
 
@@ -67,7 +69,8 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void initView() {
-        zhihuStory = (ZhihuStory) getIntent().getSerializableExtra(ZHIHUSTOREY);
+        zhihuStoryId = getIntent().getIntExtra(ZHIHUSTOREYID, 0);
+        zhihuStory = MainActivity.realm.where(ZhihuStory.class).equalTo("id", zhihuStoryId).findFirst();
         setSupportActionBar(toolbar);
     }
 
@@ -86,7 +89,14 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
                 super.onProgressChanged(view, newProgress);
             }
         });
-        getData("" + zhihuStory.getId());
+        zhihuDetail = MainActivity.realm.where(ZhihuDetail.class).equalTo("id", zhihuStoryId).findFirst();
+        if (zhihuDetail != null) {
+            showDetail(zhihuDetail.getBody());
+            ImageLoader.load(ZhiHuDetailActivity.this, zhihuDetail.getImage(), img_detail);
+        } else {
+            getData("" + zhihuStory.getId());
+        }
+
         toolbar_layout.setTitle(zhihuStory.getTitle());
         toolbar.setTitle(zhihuStory.getTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -144,13 +154,11 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
                 Log.e("getLastData", "response:" + response);
                 if (!TextUtils.isEmpty(response)) {
                     zhihuDetail = GsonUtils.getGson().fromJson(response, ZhihuDetail.class);
-                    ImageLoader.load(ZhiHuDetailActivity.this, zhihuDetail.getImage(), img_detail);
                     if (zhihuDetail != null) {
+                        ImageLoader.load(ZhiHuDetailActivity.this, zhihuDetail.getImage(), img_detail);
                         showDetail(zhihuDetail.getBody());
-                    } else {
-                        SnackBarUtils.showShort(flayout_content, "没有得到任何数据");
+                        DBUtils.copyOrUpdateRealm(MainActivity.realm, zhihuDetail);
                     }
-
                 }
             }
         });
@@ -166,7 +174,9 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onDestroy() {
-        requestCall.cancel();
+        if (requestCall != null) {
+            requestCall.cancel();
+        }
         webView.removeAllViews();
         webView.clearHistory();
         webView = null;

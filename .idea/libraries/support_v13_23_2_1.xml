@@ -8,7 +8,6 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../../adt-bundle-windows-x86_64-20140321/sdk/extras/android/m2repository/com/android/support/support-v13/23.2.1/support-v13-23.2.1-sources.jar!/" />
-      <root url="jar://D:/android-sdk-windows/extras/android/m2repository/com/android/support/support-v13/23.2.1/support-v13-23.2.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

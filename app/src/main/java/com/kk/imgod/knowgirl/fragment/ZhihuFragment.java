@@ -17,6 +17,7 @@ import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ZhihuResponse;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
+import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.DateUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.Lg;
@@ -69,7 +70,7 @@ public class ZhihuFragment extends RecyclerViewFragment {
         zhihuListAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                ZhiHuDetailActivity.actionStart(getActivity(), zhihuStories.get(position));
+                ZhiHuDetailActivity.actionStart(getActivity(), zhihuStories.get(position).getId());
             }
         });
 
@@ -126,6 +127,7 @@ public class ZhihuFragment extends RecyclerViewFragment {
                 if (!TextUtils.isEmpty(response)) {
                     ZhihuResponse zhihuResponse = GsonUtils.getGson().fromJson(response, ZhihuResponse.class);
                     if (zhihuResponse != null) {
+                        DBUtils.copyOrUpdateRealm(MainActivity.realm, zhihuResponse);
                         willLoadDate = zhihuResponse.getDate();
                         zhihuStories.clear();
                         zhihuStories.addAll(zhihuResponse.getStories());
@@ -138,8 +140,6 @@ public class ZhihuFragment extends RecyclerViewFragment {
                 }
             }
         });
-
-
     }
 
     public void getBeforeData() {
@@ -159,6 +159,7 @@ public class ZhihuFragment extends RecyclerViewFragment {
                 if (!TextUtils.isEmpty(response)) {
                     ZhihuResponse zhihuResponse = GsonUtils.getGson().fromJson(response, ZhihuResponse.class);
                     if (zhihuResponse != null) {
+                        DBUtils.copyOrUpdateRealm(MainActivity.realm, zhihuResponse);
                         willLoadDate = zhihuResponse.getDate();
                         zhihuListAdapter.insert(zhihuResponse.getStories());
                     } else {
@@ -169,4 +170,5 @@ public class ZhihuFragment extends RecyclerViewFragment {
             }
         });
     }
+
 }

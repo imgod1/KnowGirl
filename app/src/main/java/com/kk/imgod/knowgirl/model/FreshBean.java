@@ -1,7 +1,14 @@
 package com.kk.imgod.knowgirl.model;
 
+import com.kk.imgod.knowgirl.customerclass.RealmString;
+
 import java.io.Serializable;
 import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * 项目名称：KnowGirl
@@ -13,7 +20,7 @@ import java.util.List;
  * 修改时间：2016-05-17 13:41
  * 修改备注：
  */
-public class FreshBean implements Serializable {
+public class FreshBean extends RealmObject {
 
     /**
      * id : 78861
@@ -29,6 +36,7 @@ public class FreshBean implements Serializable {
     private int id;
     private String url;
     private String title;
+    @PrimaryKey
     private String date;
     /**
      * id : 523
@@ -40,7 +48,7 @@ public class FreshBean implements Serializable {
      * url :
      * description :
      */
-
+    @Ignore
     private AuthorBean author;
     private int comment_count;
     private CustomFieldsBean custom_fields;
@@ -51,7 +59,7 @@ public class FreshBean implements Serializable {
      * description :
      * post_count : 3371
      */
-
+    @Ignore
     private List<TagsBean> tags;
 
     public int getId() {
@@ -118,7 +126,7 @@ public class FreshBean implements Serializable {
         this.tags = tags;
     }
 
-    public static class AuthorBean implements Serializable{
+    public static class AuthorBean implements Serializable {
         private int id;
         private String slug;
         private String name;
@@ -193,19 +201,7 @@ public class FreshBean implements Serializable {
         }
     }
 
-    public static class CustomFieldsBean implements Serializable{
-        private List<String> thumb_c;
-
-        public List<String> getThumb_c() {
-            return thumb_c;
-        }
-
-        public void setThumb_c(List<String> thumb_c) {
-            this.thumb_c = thumb_c;
-        }
-    }
-
-    public static class TagsBean implements Serializable{
+    public static class TagsBean implements Serializable {
         private int id;
         private String slug;
         private String title;

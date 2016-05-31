@@ -3,6 +3,9 @@ package com.kk.imgod.knowgirl.model;
 import java.io.Serializable;
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+
 /**
  * 项目名称：KnowGirl
  * 包名称：com.kk.imgod.knowgirl.model
@@ -13,7 +16,7 @@ import java.util.List;
  * 修改时间：2016-05-17 14:00
  * 修改备注：
  */
-public class FreshResponse implements Serializable {
+public class FreshResponse extends RealmObject {
 
     /**
      * status : ok
@@ -27,7 +30,7 @@ public class FreshResponse implements Serializable {
     private int count;
     private int count_total;
     private int pages;
-    private List<FreshBean> posts;
+    private RealmList<FreshBean> posts;
 
     public String getStatus() {
         return status;
@@ -65,7 +68,7 @@ public class FreshResponse implements Serializable {
         return posts;
     }
 
-    public void setPosts(List<FreshBean> posts) {
+    public void setPosts(RealmList<FreshBean> posts) {
         this.posts = posts;
     }
 }

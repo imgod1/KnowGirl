@@ -1,13 +1,19 @@
 package com.kk.imgod.knowgirl.model;
 
 
+import com.kk.imgod.knowgirl.customerclass.RealmString;
+
 import java.io.Serializable;
 import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * zhihu news item in list
  */
-public class ZhihuStory implements Serializable{
+public class ZhihuStory extends RealmObject{
 
 
     /**
@@ -18,11 +24,13 @@ public class ZhihuStory implements Serializable{
      * title : 要说烧脑的时空穿越，这些电影都不应该错过
      */
 
-    private int type;
+
+    @PrimaryKey
     private int id;
+    private int type;
     private String ga_prefix;
     private String title;
-    private List<String> images;
+    private RealmList<RealmString> images;
 
     public int getType() {
         return type;
@@ -56,11 +64,11 @@ public class ZhihuStory implements Serializable{
         this.title = title;
     }
 
-    public List<String> getImages() {
+    public RealmList<RealmString> getImages() {
         return images;
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(RealmList<RealmString> images) {
         this.images = images;
     }
 }

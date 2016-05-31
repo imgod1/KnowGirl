@@ -6,13 +6,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kk.imgod.knowgirl.R;
-import com.kk.imgod.knowgirl.activity.ZhiHuDetailActivity;
+import com.kk.imgod.knowgirl.activity.MainActivity;
+import com.kk.imgod.knowgirl.model.ZhihuResponse;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
+import com.kk.imgod.knowgirl.utils.Lg;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
-import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 
 import java.util.List;
+
+import io.realm.Sort;
 
 public class ZhihuListAdapter extends UlimateBaseAdapter<ZhihuStory, ZhihuListAdapter.MyViewHolder> {
     private Activity activity;
@@ -21,7 +24,14 @@ public class ZhihuListAdapter extends UlimateBaseAdapter<ZhihuStory, ZhihuListAd
         super(list);
         this.activity = activity;
         setHasStableIds(true);
+
+        List<ZhihuResponse> responses = ((MainActivity) activity).getRealm().where(ZhihuResponse.class).findAllSorted("date", Sort.DESCENDING);
+        for (ZhihuResponse response : responses) {
+            Lg.e("ZhihuListAdapter,add");
+            list.addAll(response.getStories());
+        }
     }
+
 
     @Override
     protected int getNormalLayoutResId() {
@@ -36,10 +46,13 @@ public class ZhihuListAdapter extends UlimateBaseAdapter<ZhihuStory, ZhihuListAd
     @Override
     protected void withBindHolder(final MyViewHolder holder, final ZhihuStory data, int position) {
         super.withBindHolder(holder, data, position);
-        ImageLoader.load(activity, data.getImages().get(0), holder.img_news);
-        holder.txt_title.setText(data.getTitle());
+        if (data != null) {
+            if (data.getImages() != null && data.getImages().size() != 0) {
+                ImageLoader.load(activity, data.getImages().get(0).getVal(), holder.img_news, R.drawable.icon_app);
+            }
+            holder.txt_title.setText(data.getTitle());
+        }
     }
-
 
     @Override
     public long getItemId(int position) {

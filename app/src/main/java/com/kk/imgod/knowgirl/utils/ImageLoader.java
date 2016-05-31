@@ -24,6 +24,14 @@ public class ImageLoader {
                 .crossFade()
                 .into(view);
     }
+    public static void load(Context context, String url, ImageView view,int placeHolder) {
+        Glide.with(context)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(placeHolder)
+                .crossFade()
+                .into(view);
+    }
 
     public static void loadWithHolder(Context context, String url, int imgRes, ImageView view) {
         Glide.with(context)
@@ -50,7 +58,7 @@ public class ImageLoader {
                 .into(view);
     }
 
-    public static void load(Context context, String url, int animationId, ImageView view) {
+    public static void load(Context context, String url,int animationId, ImageView view) {
         Glide.with(context)
                 .load(url)
                 .animate(animationId)

@@ -16,6 +16,7 @@ import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.FreshBean;
 import com.kk.imgod.knowgirl.model.FreshResponse;
+import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.Lg;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -47,7 +48,7 @@ public class FreshFragment extends RecyclerViewFragment {
             @Override
             public void onItemClick(View v, int position) {
                 //goto
-                FreshDetailActivity.actionStart(getActivity(), freshBeanList.get(position));
+                FreshDetailActivity.actionStart(getActivity(), freshBeanList.get(position).getId());
             }
         });
         recyclerview.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -106,14 +107,16 @@ public class FreshFragment extends RecyclerViewFragment {
                 if (!TextUtils.isEmpty(response)) {
                     FreshResponse freshResponse = GsonUtils.getGson().fromJson(response, FreshResponse.class);
                     if (freshResponse != null && freshResponse.getStatus().equals(Constant.OK)) {
+                        DBUtils.saveList(MainActivity.realm, freshResponse.getPosts());
                         page++;
-                        if (1 == tempPage) {
-                            freshBeanList.clear();
-                            freshBeanList.addAll(freshResponse.getPosts());
-                            freshListAdapter.notifyDataSetChanged();
-                        } else {
-                            freshListAdapter.insert(freshResponse.getPosts());
-                        }
+//                        if (1 == tempPage) {
+//                            freshBeanList.clear();
+//                            freshBeanList.addAll(freshResponse.getPosts());
+//                            freshListAdapter.notifyDataSetChanged();
+//                        } else {
+//                            freshListAdapter.insert(freshResponse.getPosts());
+//                        }
+//                        freshListAdapter.notifyDataSetChanged();
                     } else {
                         Log.e("pictureFragment", "onResponse:zhihuResponse 为 null");
                     }

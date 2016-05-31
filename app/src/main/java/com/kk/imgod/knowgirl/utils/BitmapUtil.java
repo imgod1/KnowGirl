@@ -8,10 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-
 import com.kk.imgod.knowgirl.R;
-
-import java.io.ByteArrayOutputStream;
 
 /**
  * Bitmap convert utils

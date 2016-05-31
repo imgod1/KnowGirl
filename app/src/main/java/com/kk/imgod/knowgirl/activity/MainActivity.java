@@ -17,16 +17,20 @@ import android.view.MenuItem;
 
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.API;
+import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.fragment.PictureFragment;
 import com.kk.imgod.knowgirl.fragment.TabFragment;
 import com.kk.imgod.knowgirl.utils.ShareUtils;
 import com.kk.imgod.knowgirl.utils.SnackBarUtils;
 
 import butterknife.BindView;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int KNOWLEDGE_FRAGMENT = 0x00;
     public static final int PICTURE_FRAGMENT = 0x01;
+    public static Realm realm;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.dlayout_main)
@@ -57,12 +61,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void initView() {
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(MainActivity.this).name(Constant.REALMNAME).build());
+        realm = Realm.getDefaultInstance();
         initAppBar();
         knowledgeFragment = TabFragment.newInstance(MainActivity.KNOWLEDGE_FRAGMENT);
         pictureFragment = TabFragment.newInstance(MainActivity.PICTURE_FRAGMENT);
         showFragment(KNOWLEDGE_FRAGMENT);
 
     }
+
+    public Realm getRealm() {
+        return realm;
+    }
+
 
     //实践证明此处不管是传递DrawLayout还是CoordinatorLayout 都可以让fragment的snackbar很好的使用
     public CoordinatorLayout getMainCoordinatorLayout() {

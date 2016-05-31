@@ -47,10 +47,11 @@ public class FreshDetailActivity extends BaseActivity implements View.OnClickLis
     WebView webView;
     public static final String FRESHBEAN = "freshbean";
     private FreshBean freshBean;
+    private int freshid;
 
-    public static void actionStart(Activity activity, FreshBean freshBean) {
+    public static void actionStart(Activity activity, int id) {
         Intent intent = new Intent(activity, FreshDetailActivity.class);
-        intent.putExtra(FRESHBEAN, freshBean);
+        intent.putExtra(FRESHBEAN, id);
         activity.startActivity(intent);
     }
 
@@ -61,7 +62,8 @@ public class FreshDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void initView() {
-        freshBean = (FreshBean) getIntent().getSerializableExtra(FRESHBEAN);
+        freshid = getIntent().getIntExtra(FRESHBEAN, 0);
+        freshBean = MainActivity.realm.where(FreshBean.class).equalTo("id", freshid).findFirst();
         toolbar.setTitle(freshBean.getTitle());
         setSupportActionBar(toolbar);
     }
