@@ -3,6 +3,7 @@ package com.kk.imgod.knowgirl.app;
 import android.app.Application;
 import android.content.Context;
 
+import com.bugtags.library.Bugtags;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -20,10 +21,16 @@ public class MyApp extends Application {
 
     private void initAllSdk() {
         initLeakCanary();
+        initBugTags();
     }
 
     private void initLeakCanary() {
         LeakCanary.install(this);
+    }
+
+    private void initBugTags() {
+        //在这里初始化
+        Bugtags.start(Constant.BUGTAGS_KEY, this, Bugtags.BTGInvocationEventBubble);
     }
 
     public static Context getAppContext() {

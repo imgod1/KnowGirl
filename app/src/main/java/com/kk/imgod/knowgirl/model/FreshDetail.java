@@ -2,6 +2,9 @@ package com.kk.imgod.knowgirl.model;
 
 import java.io.Serializable;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * 项目名称：KnowGirl
  * 包名称：com.kk.imgod.knowgirl.model
@@ -12,7 +15,7 @@ import java.io.Serializable;
  * 修改时间：2016-05-17 15:51
  * 修改备注：
  */
-public class FreshDetail implements Serializable {
+public class FreshDetail extends RealmObject {
 
     /**
      * status : ok
@@ -73,24 +76,25 @@ public class FreshDetail implements Serializable {
         this.previous_url = previous_url;
     }
 
-    public static class PostBean implements Serializable{
-        private int id;
-        private String content;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-    }
+//    public static class PostBean extends RealmObject{
+//        @PrimaryKey
+//        private int id;
+//        private String content;
+//
+//        public int getId() {
+//            return id;
+//        }
+//
+//        public void setId(int id) {
+//            this.id = id;
+//        }
+//
+//        public String getContent() {
+//            return content;
+//        }
+//
+//        public void setContent(String content) {
+//            this.content = content;
+//        }
+//    }
 }

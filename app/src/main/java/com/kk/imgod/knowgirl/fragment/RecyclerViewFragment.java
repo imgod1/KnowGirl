@@ -1,5 +1,10 @@
 package com.kk.imgod.knowgirl.fragment;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.kk.imgod.knowgirl.R;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 
@@ -22,5 +27,10 @@ public abstract class RecyclerViewFragment extends BaseLazyFragment {
     @Override
     public int getLayoutResID() {
         return R.layout.fragment_news;
+    }
+
+    @Override
+    protected void initData() {
+        recyclerview.setEmptyView(R.layout.empty_progressbar, UltimateRecyclerView.EMPTY_CLEAR_ALL);
     }
 }

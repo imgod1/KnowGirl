@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
@@ -16,6 +17,8 @@ import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 
 import java.util.List;
 
+import io.realm.Sort;
+
 /**
  * Created by imgod on 2016/4/25.
  */
@@ -23,11 +26,15 @@ public class UltimateStagAdapter extends UlimateBaseAdapter<ImageBean, UltimateS
     private Activity activity;
     int use_width;
     int use_height = 0;
+    int imgClassId;
 
-    public UltimateStagAdapter(Activity activity, List<ImageBean> list) {
+    public UltimateStagAdapter(Activity activity, List<ImageBean> list, int imgClassId) {
         super(list);
         this.activity = activity;
+        this.imgClassId = imgClassId;
         use_width = (ScreenUtils.getWindowsWidth(activity) - 20) / 2;
+        List<ImageBean> tempImageList = MainActivity.realm.where(ImageBean.class).equalTo("galleryclass", imgClassId).findAllSorted("id", Sort.DESCENDING);
+        list.addAll(tempImageList);
         setHasStableIds(true);
     }
 

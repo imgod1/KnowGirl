@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'realm-android'
+//应用 Bugtags 插件
+apply plugin: 'com.bugtags.library.plugin'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -14,6 +16,11 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -26,6 +33,16 @@ repositories {
     maven { url "http://dl.bintray.com/jjhesk/maven" }
 }
 
+//Bugtags 插件配置
+bugtags {
+    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
+    appKey "030f4a11559787dbd8d941b6142b9d57"  //这里是你的 appKey
+    appSecret "b08236c8f6e30dfe2705045a2fec2b5d"    //这里是你的 appSecret，管理员在设置页可以查看
+    mappingUploadEnabled true
+
+    //网络跟踪功能配置
+    trackingNetworkEnabled true
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -42,4 +59,5 @@ dependencies {
     compile 'com.zhy:okhttputils:2.3.9'
     compile 'com.google.code.gson:gson:2.5'
     compile 'com.github.oxoooo:pull-back-layout:1.0.1'
+    compile 'com.bugtags.library:bugtags-lib:latest.integration'
 }

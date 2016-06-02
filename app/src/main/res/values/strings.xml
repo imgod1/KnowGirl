@@ -15,7 +15,7 @@
     <string name="version">版本</string>
     <string name="about_me">关于作者</string>
     <string name="about_me_description">我是一个热爱Google和Android的开发者，如果你有好的idea或建议，不要犹豫，点击下方数字和我沟通吧~</string>
-    <string name="my_qq">88888888</string>
+    <string name="my_qq">970720947</string>
     <string name="contact_me">联系我</string>
     <string name="set_clear_cache">清除缓存</string>
     <string name="set_current_cache">当前缓存为 </string>
@@ -45,12 +45,15 @@
     <string name="stock_girl">丝袜美腿</string>
     <string name="sex_car_girl">性感车模</string>
     <string name="sex_girl">性感美女</string>
+    <string name="view_img_hint">向下拉图片退出浏览；长按图片可以保存到手机~</string>
     <string name="title_activity_zhi_hu_detail">ZhiHuDetailActivity</string>
-    <string name="zhihu_detail_share_title">该文太赞,强烈推荐\n</string>
+    <string name="zhihu_detail_share_title">该文太赞,强烈推荐</string>
     <string name="action_zhihu_detail_share">该文太赞,我要分享</string>
     <string name="zhihu_day_news">知乎日报</string>
     <string name="jiandan_news">新鲜事</string>
     <string name="goqq2chat">跳转到QQ进行反馈</string>
     <string name="no_install_qq">当前设备没有安装QQ</string>
     <string name="knowgirl_girl">知妹妹子</string>
+    <string name="hint">提示</string>
+    <string name="i_see">知道啦</string>
 </resources>

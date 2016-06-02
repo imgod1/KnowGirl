@@ -1,11 +1,12 @@
 package com.kk.imgod.knowgirl.model;
 
-import java.io.Serializable;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by imgod on 2016/4/25.
  */
-public class ImageBean implements Serializable {
+public class ImageBean extends RealmObject {
 
     /**
      * count : 840
@@ -22,6 +23,7 @@ public class ImageBean implements Serializable {
     private int count;
     private int fcount;
     private int galleryclass;
+    @PrimaryKey
     private int id;
     private String img;
     private int rcount;

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.FreshDetailActivity;
 import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.adapter.FreshListAdapter;
@@ -37,6 +38,7 @@ public class FreshFragment extends RecyclerViewFragment {
 
     @Override
     protected void initData() {
+        super.initData();
         recyclerview.enableDefaultSwipeRefresh(true);
         freshBeanList = new ArrayList<>();
         freshListAdapter = new FreshListAdapter(getActivity(), freshBeanList);
@@ -97,7 +99,6 @@ public class FreshFragment extends RecyclerViewFragment {
                     }
                 }, Constant.DELAYTIME);
                 Log.e("pictureFragment", "onError:" + e.getMessage());
-
             }
 
             @Override
@@ -109,13 +110,13 @@ public class FreshFragment extends RecyclerViewFragment {
                     if (freshResponse != null && freshResponse.getStatus().equals(Constant.OK)) {
                         DBUtils.saveList(MainActivity.realm, freshResponse.getPosts());
                         page++;
-//                        if (1 == tempPage) {
-//                            freshBeanList.clear();
-//                            freshBeanList.addAll(freshResponse.getPosts());
-//                            freshListAdapter.notifyDataSetChanged();
-//                        } else {
-//                            freshListAdapter.insert(freshResponse.getPosts());
-//                        }
+                        if (1 == tempPage) {
+                            freshBeanList.clear();
+                            freshBeanList.addAll(freshResponse.getPosts());
+                            freshListAdapter.notifyDataSetChanged();
+                        } else {
+                            freshListAdapter.insert(freshResponse.getPosts());
+                        }
 //                        freshListAdapter.notifyDataSetChanged();
                     } else {
                         Log.e("pictureFragment", "onResponse:zhihuResponse 为 null");

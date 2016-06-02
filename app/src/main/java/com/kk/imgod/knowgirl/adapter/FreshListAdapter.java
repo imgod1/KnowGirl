@@ -18,7 +18,7 @@ import java.util.List;
 import io.realm.RealmChangeListener;
 import io.realm.Sort;
 
-public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAdapter.MyViewHolder> implements RealmChangeListener {
+public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAdapter.MyViewHolder>   {
     private Activity activity;
 
     public FreshListAdapter(Activity activity, List<FreshBean> list) {
@@ -27,7 +27,6 @@ public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAda
         setHasStableIds(true);
         List<FreshBean> freshBeans = MainActivity.realm.where(FreshBean.class).findAllSorted("date", Sort.DESCENDING);
         list.addAll(freshBeans);
-        MainActivity.realm.addChangeListener(this);
     }
 
 
@@ -54,10 +53,11 @@ public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAda
         return source.get(position).hashCode();
     }
 
-    @Override
-    public void onChange(Object element) {
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void onChange(Object element) {
+//        notifyDataSetChanged();
+//    }
+
 
     public static class MyViewHolder extends UltimateRecyclerviewViewHolder {
         public ImageView img_fresh_news;

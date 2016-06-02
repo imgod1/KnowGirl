@@ -27,6 +27,7 @@ import com.kk.imgod.knowgirl.customerclass.LazyFragment;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.model.ImageResponse;
+import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.Lg;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -48,7 +49,9 @@ import okhttp3.Call;
 public class LazyPictureFragment extends RecyclerViewFragment {
     public static final int row = 40;
     public final static String URL = "url";
+    public final static String IMGCLASSID = "imgclassid";
     private String url;
+    private int imgClassId;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     private UltimateStagAdapter ultimateStagAdapter;
@@ -70,10 +73,11 @@ public class LazyPictureFragment extends RecyclerViewFragment {
      * @param url 图片网址
      * @return 返回fragment
      */
-    public static LazyPictureFragment newInstance(String url) {
+    public static LazyPictureFragment newInstance(String url, int imgClassId) {
         LazyPictureFragment pictureFragment = new LazyPictureFragment();
         Bundle bundle = new Bundle();
         bundle.putString(URL, url);
+        bundle.putInt(IMGCLASSID, imgClassId);
         pictureFragment.setArguments(bundle);
         return pictureFragment;
     }
@@ -211,6 +215,9 @@ public class LazyPictureFragment extends RecyclerViewFragment {
                 super.onPostExecute(aVoid);
                 Log.e("onResponse", "getImageSize 异步完毕,加载成功的图片数量:" + tempImgList.size());
                 recyclerview.setRefreshing(false);
+
+                DBUtils.saveList(MainActivity.realm, tempImgList);
+
                 if (1 == page) {
                     imgList.clear();
                     imgList.addAll(tempImgList);
@@ -227,13 +234,15 @@ public class LazyPictureFragment extends RecyclerViewFragment {
 
     @Override
     protected void initData() {
-        url = getArguments().getString(URL);
+        Bundle bundle = getArguments();
+        url = bundle.getString(URL);
+        imgClassId = bundle.getInt(IMGCLASSID, 6);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(staggeredGridLayoutManager);
         recyclerview.enableDefaultSwipeRefresh(true);
         recyclerview.setHasFixedSize(true);
         imgList = new ArrayList<>();
-        ultimateStagAdapter = new UltimateStagAdapter(getActivity(), imgList);
+        ultimateStagAdapter = new UltimateStagAdapter(getActivity(), imgList, imgClassId);
 //        ultimateStagAdapter.setCustomLoadMoreView(LayoutInflater.from(getActivity()).inflate(R.layout.custom_bottom_progressbar, null));
         ultimateStagAdapter.enableLoadMore(true);
         recyclerview.reenableLoadmore();

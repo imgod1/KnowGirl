@@ -12,6 +12,11 @@ package com.kk.imgod.knowgirl.app;
  */
 public class Constant {
     /**
+     * bugtags appkey
+     */
+    public static final String BUGTAGS_KEY = "030f4a11559787dbd8d941b6142b9d57";
+
+    /**
      * swiprefreshlayout 延迟消逝的毫秒数
      */
     public static final int DELAYTIME = 600;

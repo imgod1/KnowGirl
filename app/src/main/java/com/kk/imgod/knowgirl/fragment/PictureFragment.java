@@ -81,7 +81,7 @@ public class PictureFragment extends BaseFragment {
         recyclerview.enableDefaultSwipeRefresh(true);
         recyclerview.setHasFixedSize(true);
         imgList = new ArrayList<>();
-        ultimateStagAdapter = new UltimateStagAdapter(getActivity(), imgList);
+        ultimateStagAdapter = new UltimateStagAdapter(getActivity(), imgList,0);
 //        ultimateStagAdapter.setCustomLoadMoreView(LayoutInflater.from(getActivity()).inflate(R.layout.custom_bottom_progressbar, null));
         ultimateStagAdapter.enableLoadMore(true);
         recyclerview.reenableLoadmore();

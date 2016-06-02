@@ -23,6 +23,7 @@ import com.kk.imgod.knowgirl.utils.BlurBuilder;
 import com.kk.imgod.knowgirl.utils.DateUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.Lg;
+import com.kk.imgod.knowgirl.utils.SPUtils;
 import com.kk.imgod.knowgirl.utils.ShareUtils;
 import com.kk.imgod.knowgirl.utils.SnackBarUtils;
 import com.kk.imgod.knowgirl.utils.Ts;
@@ -44,7 +45,10 @@ import java.util.concurrent.ExecutionException;
  * 修改时间：2016/4/26 16:55
  * 修改备注：
  */
-public class PictureDetailFragment extends BaseFragment implements View.OnLongClickListener {
+public class PictureDetailFragment extends BaseFragment implements View.OnClickListener, View.OnLongClickListener {
+
+    public static final String IMAGE_HINT_FIRST = "Image_hint_first";
+
     private ImageView img_picture;
 
 
@@ -83,6 +87,7 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
     @Override
     public void initEvent() {
         img_picture.setOnLongClickListener(this);
+        img_picture.setOnClickListener(this);
     }
 
     @Override
@@ -92,6 +97,20 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
             bitmap = null;
         }
     }
+
+    private void showHint() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.hint).
+                setMessage(R.string.view_img_hint).
+                setPositiveButton(R.string.i_see, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).
+                create().show();
+    }
+
 
     @Override
     public boolean onLongClick(View v) {
@@ -148,6 +167,14 @@ public class PictureDetailFragment extends BaseFragment implements View.OnLongCl
                 }
             }
         }.execute();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if ((Boolean) SPUtils.get(getActivity(), IMAGE_HINT_FIRST, true)) {
+            showHint();
+            SPUtils.put(getActivity(), IMAGE_HINT_FIRST, false);
+        }
     }
 
 

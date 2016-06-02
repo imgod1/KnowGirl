@@ -23,8 +23,10 @@ import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.FreshBean;
 import com.kk.imgod.knowgirl.model.FreshDetail;
+import com.kk.imgod.knowgirl.model.PostBean;
 import com.kk.imgod.knowgirl.model.ZhihuDetail;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
+import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.ShareUtils;
@@ -83,7 +85,13 @@ public class FreshDetailActivity extends BaseActivity implements View.OnClickLis
                 super.onProgressChanged(view, newProgress);
             }
         });
-        getData("" + freshBean.getId());
+
+        PostBean postBean = MainActivity.realm.where(PostBean.class).equalTo("id", freshBean.getId()).findFirst();
+        if (null != postBean) {
+            showDetail(postBean.getContent());
+        } else {
+            getData("" + freshBean.getId());
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -128,6 +136,7 @@ public class FreshDetailActivity extends BaseActivity implements View.OnClickLis
                 if (!TextUtils.isEmpty(response)) {
                     freshDetail = GsonUtils.getGson().fromJson(response, FreshDetail.class);
                     if (freshDetail != null) {
+                        DBUtils.copyOrUpdateRealm(MainActivity.realm, freshDetail.getPost());
                         showDetail(freshDetail.getPost().getContent());
                     } else {
                         SnackBarUtils.showShort(flayout_content, "没有得到任何数据");
@@ -144,7 +153,9 @@ public class FreshDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onDestroy() {
-        requestCall.cancel();
+        if (null != requestCall) {
+            requestCall.cancel();
+        }
         webView.removeAllViews();
         webView.clearHistory();
         webView = null;
