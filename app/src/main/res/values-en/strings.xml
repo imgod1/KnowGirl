@@ -50,4 +50,9 @@
     <string name="japan_girl">Japan Korea Girl</string>
     <string name="i_see">ok,get it</string>
     <string name="view_img_hint">Exit browser to the pull-down image; press pictures can be saved to the phone -</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="qq_title">QQ:</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_zhi_hu_detail">ZhiHuDetailActivity</string>
 </resources>

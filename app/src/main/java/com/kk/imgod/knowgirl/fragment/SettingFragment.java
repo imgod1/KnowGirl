@@ -53,19 +53,6 @@ public class SettingFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean isSelect = (Boolean) newValue;
-                if (isSelect) {
-                    Toast.makeText(getActivity(), "splash true", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "splash false", Toast.LENGTH_SHORT).show();
-                }
-
-                //sp的坑点
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                boolean original_splash = sp.getBoolean(ORIGINAL_SPLASH, false);
-
-//                boolean original_splash = (boolean) SPUtils.get(getActivity().getApplicationContext(), "original_splash", true);
-                Lg.e("original_splash:" + original_splash);
-
                 return true;
             }
         });
@@ -74,11 +61,6 @@ public class SettingFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean isSelect = (Boolean) newValue;
-                if (isSelect) {
-                    Toast.makeText(getActivity(), "check_version true", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "check_version false", Toast.LENGTH_SHORT).show();
-                }
                 return true;
             }
         });

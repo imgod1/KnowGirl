@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 
 import com.bugtags.library.Bugtags;
 import com.kk.imgod.knowgirl.interf.initInterFace;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 
@@ -35,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity implements initInte
     protected void onResume() {
         super.onResume();
         Bugtags.onResume(this);
+        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -42,6 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity implements initInte
         super.onPause();
         //注：回调 2
         Bugtags.onPause(this);
+        MobclickAgent.onPause(this);
     }
 
     @Override

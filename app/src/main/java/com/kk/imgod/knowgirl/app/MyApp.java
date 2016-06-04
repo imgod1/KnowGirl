@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.bugtags.library.Bugtags;
 import com.squareup.leakcanary.LeakCanary;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by imgod on 2016/4/23.
@@ -22,6 +23,7 @@ public class MyApp extends Application {
     private void initAllSdk() {
         initLeakCanary();
         initBugTags();
+        initUmeng();
     }
 
     private void initLeakCanary() {
@@ -29,8 +31,12 @@ public class MyApp extends Application {
     }
 
     private void initBugTags() {
-        //在这里初始化
-        Bugtags.start(Constant.BUGTAGS_KEY, this, Bugtags.BTGInvocationEventBubble);
+        //在这里初始化 BTGInvocationEventShake:摇一摇调出反馈界面
+        Bugtags.start(Constant.BUGTAGS_KEY, this, Bugtags.BTGInvocationEventShake);
+    }
+
+    private void initUmeng() {
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
     }
 
     public static Context getAppContext() {

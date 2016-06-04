@@ -14,6 +14,17 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    productFlavors {
+        wandoujia {}
+        baidu {}
+        c360 {}
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+
+
     buildTypes {
         release {
             minifyEnabled true
@@ -26,6 +37,7 @@ android {
         }
     }
 }
+
 repositories {
     mavenCentral() // jcenter() works as well because it pulls from Maven Central
     jcenter()
@@ -60,4 +72,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.5'
     compile 'com.github.oxoooo:pull-back-layout:1.0.1'
     compile 'com.bugtags.library:bugtags-lib:latest.integration'
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

@@ -5,9 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.activity.ZhiHuDetailActivity;
 import com.kk.imgod.knowgirl.adapter.UlimateBaseAdapter;
@@ -21,19 +19,14 @@ import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.DateUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.Lg;
-import com.kk.imgod.knowgirl.utils.SnackBarUtils;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
-import com.squareup.haha.perflib.Main;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.BindView;
 import okhttp3.Call;
 
 
