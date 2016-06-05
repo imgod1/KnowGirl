@@ -108,7 +108,7 @@
    public <init> (org.json.JSONObject);
 }
 
--keep public class [您的应用包名].R$*{
+-keep public class [com.kk.imgod.knowgirl].R$*{
 public static final int *;
 }
 
@@ -116,3 +116,7 @@ public static final int *;
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+#newfragment null problem
+-keep class android.support.v7.widget.ShareActionProvider { *; }
+-keep class android.support.v7 { *; }

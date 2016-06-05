@@ -97,7 +97,7 @@ public class SettingFragment extends PreferenceFragment {
     }
 
     private void goQQ2Chat() {
-        String url = "mqqwpa://im/chat?chat_type=wpa&uin=88888888";
+        String url = "mqqwpa://im/chat?chat_type=wpa&uin="+getString(R.string.my_qq);
         try {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         } catch (Exception e) {

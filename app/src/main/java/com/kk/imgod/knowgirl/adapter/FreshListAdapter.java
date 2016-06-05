@@ -18,7 +18,7 @@ import java.util.List;
 import io.realm.RealmChangeListener;
 import io.realm.Sort;
 
-public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAdapter.MyViewHolder>   {
+public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAdapter.MyViewHolder> {
     private Activity activity;
 
     public FreshListAdapter(Activity activity, List<FreshBean> list) {
@@ -43,7 +43,7 @@ public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAda
     @Override
     protected void withBindHolder(final MyViewHolder holder, final FreshBean data, int position) {
         super.withBindHolder(holder, data, position);
-        ImageLoader.load(activity, data.getCustom_fields().getThumb_c().get(0).getVal(), holder.img_fresh_news);
+        ImageLoader.load(activity, data.getCustom_fields().getThumb_c().get(0).getVal(), holder.img_fresh_news, R.drawable.icon_app);
         holder.txt_fresh_title.setText(data.getTitle());
     }
 

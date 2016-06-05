@@ -1,11 +1,19 @@
 package com.kk.imgod.knowgirl.fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.transition.ChangeImageTransform;
+import android.transition.Transition;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
+import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.activity.ZhiHuDetailActivity;
 import com.kk.imgod.knowgirl.adapter.UlimateBaseAdapter;
@@ -63,7 +71,9 @@ public class ZhihuFragment extends RecyclerViewFragment {
         zhihuListAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                ZhiHuDetailActivity.actionStart(getActivity(), zhihuStories.get(position).getId());
+                View imgView = v.findViewById(R.id.img_news);
+                startDetailActivity(imgView, position);
+//                ZhiHuDetailActivity.actionStart(getActivity(), zhihuStories.get(position).getId());
             }
         });
 
@@ -95,6 +105,28 @@ public class ZhihuFragment extends RecyclerViewFragment {
     protected void setDefaultFragmentTitle(String title) {
 
     }
+
+    /**
+     * 跳转到详情界面
+     *
+     * @param view
+     * @param position
+     */
+    private void startDetailActivity(View view, int position) {
+        Intent intent = new Intent(getActivity(), ZhiHuDetailActivity.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Transition transition = new ChangeImageTransform();
+            transition.setDuration(3000);
+            getActivity().getWindow().setExitTransition(transition);
+            ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), Pair.create((View) view, "big_img"));
+            Bundle bundle = activityOptions.toBundle();
+            intent.putExtra(ZhiHuDetailActivity.ZHIHUSTOREYID, zhihuStories.get(position).getId());
+            startActivity(intent, bundle);
+        } else {
+            ZhiHuDetailActivity.actionStart(getActivity(), zhihuStories.get(position).getId());
+        }
+    }
+
 
     private RequestCall requestCall;
 
