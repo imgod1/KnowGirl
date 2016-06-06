@@ -3,6 +3,8 @@ package com.kk.imgod.knowgirl.utils;
 
 import android.util.Log;
 
+import com.kk.imgod.knowgirl.BuildConfig;
+
 /**
  * Log统一管理�?
  * 
