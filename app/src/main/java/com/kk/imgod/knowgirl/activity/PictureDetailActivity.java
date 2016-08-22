@@ -15,6 +15,7 @@ import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.adapter.FragmentViewPagerAdapter;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.fragment.LazyPictureFragment;
+import com.kk.imgod.knowgirl.fragment.LazyPictureFragment1;
 import com.kk.imgod.knowgirl.fragment.PictureDetailFragment;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.utils.Lg;
@@ -67,8 +68,9 @@ public class PictureDetailActivity extends BaseActivity implements PullBackLayou
     @Override
     public void initValue() {
         fragmentList = new ArrayList<>();
-        for (int i = 0; i < LazyPictureFragment.detailImageBeanList.size(); i++) {
-            Fragment fragment = PictureDetailFragment.newInstance(API.PICTURE_BASE_URL + LazyPictureFragment.detailImageBeanList.get(i).getImg());
+        for (int i = 0; i < LazyPictureFragment1.detailImageBeanList.size(); i++) {
+            ImageBean imageBean = LazyPictureFragment1.detailImageBeanList.get(i);
+            Fragment fragment = PictureDetailFragment.newInstance(API.PICTURE_BASE_URL + imageBean.getImg());
             fragmentList.add(fragment);
         }
         fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), null, fragmentList);

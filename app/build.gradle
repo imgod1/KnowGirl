@@ -94,4 +94,5 @@ dependencies {
     compile 'com.github.oxoooo:pull-back-layout:1.0.1'
     compile 'com.bugtags.library:bugtags-lib:latest.integration'
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.zhy:base-rvadapter:3.0.3'
 }
