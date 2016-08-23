@@ -12,9 +12,11 @@ import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.utils.AppUtils;
@@ -50,7 +52,7 @@ public class PictureDetailFragment extends BaseFragment implements View.OnClickL
     public static final String IMAGE_HINT_FIRST = "Image_hint_first";
 
     private ImageView img_picture;
-
+    private ProgressBar progress_bar;
 
     public static final String IMGURL = "imgurl";
     private String imgUrl;
@@ -74,7 +76,7 @@ public class PictureDetailFragment extends BaseFragment implements View.OnClickL
     public void initView() {
         imgUrl = getArguments().getString(IMGURL);
         img_picture = (ImageView) parentView.findViewById(R.id.img_picture);
-
+        progress_bar = (ProgressBar) parentView.findViewById(R.id.progress_bar);
 //        ImageLoader.loadWithHolder(getActivity(), imgUrl, R.mipmap.icon_app, img_picture);
         new LoadPictureTask().execute();
     }
@@ -185,6 +187,7 @@ public class PictureDetailFragment extends BaseFragment implements View.OnClickL
                 try {
                     bitmap = Glide.with(getActivity()).load(imgUrl)
                             .asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                             .get();
                 } catch (InterruptedException | ExecutionException e) {
@@ -196,10 +199,14 @@ public class PictureDetailFragment extends BaseFragment implements View.OnClickL
 
         @Override
         protected void onPostExecute(Bitmap picture) {
+            progress_bar.setVisibility(View.GONE);
             if (isCancelled()) {
                 return;
             }
-            img_picture.setImageBitmap(picture);
+            if (null != picture) {
+                img_picture.setImageBitmap(picture);
+            }
+
         }
     }
 

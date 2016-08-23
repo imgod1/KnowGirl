@@ -1,6 +1,7 @@
 package com.kk.imgod.knowgirl.fragment;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.model.ImageResponse;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
+import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.Lg;
 import com.kk.imgod.knowgirl.utils.ScreenUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -119,19 +121,6 @@ public class LazyPictureFragment1 extends BaseLazyFragment {
         loadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-
-//                if(allPictureCount==-1) {//第一次的时候
-//                    showLoadingMoreView();
-//                    Lg.e("test", "setOnLoadMoreListener loadmore:" + page);
-//                    getPicture(page);
-//                    return;
-//                }
-//
-//                if(imgList.size()<allPictureCount) {
-//                    if(hasLoadedPicCount>6) {
-//
-//                    }
-//                }
                 if (allPictureCount == -1 || (imgList.size() < allPictureCount && hasLoadedPicCount > 5)) {
                     showLoadingMoreView();
                     Lg.e("test", "setOnLoadMoreListener loadmore:" + page);
@@ -168,8 +157,33 @@ public class LazyPictureFragment1 extends BaseLazyFragment {
 
         pictureAdapter = new CommonAdapter<ImageBean>(getActivity(), R.layout.item_stag, imgList) {
             @Override
-            protected void convert(final ViewHolder holder, ImageBean imageBean, int position) {
+            protected void convert(final ViewHolder holder, final ImageBean imageBean, final int position) {
+                ImageView img_stag = holder.getView(R.id.img_stag);
                 final String img_url = API.PICTURE_BASE_URL + imageBean.getImg();
+                if (imageBean.getImg_height() == 0 || imageBean.getImg_width() == 0) {//没有尺寸信息的话就给一个固定的尺寸
+                    ViewGroup.LayoutParams layoutParams = img_stag.getLayoutParams();
+                    layoutParams.width = use_width;
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeResource(getResources(), R.drawable.splash, options);
+                    int use_height = use_width * options.outHeight / options.outWidth;
+                    layoutParams.height = use_height;
+                    Lg.e("test", "加载splash:height:" + use_height);
+                    img_stag.setLayoutParams(layoutParams);
+                    img_stag.setImageResource(R.drawable.splash);
+
+                } else {//有尺寸信息的话,那就直接计算并设置
+                    ViewGroup.LayoutParams layoutParams = img_stag.getLayoutParams();
+                    layoutParams.width = use_width;
+                    int use_height = use_width * imageBean.getImg_height() / imageBean.getImg_width();
+                    layoutParams.height = use_height;
+                    Lg.e("test", "已经有尺寸信息:" + position + "height::" + use_height);
+                    img_stag.setLayoutParams(layoutParams);
+                    ImageLoader.load(getActivity(), img_url, img_stag);
+                }
+
+
+                //加载图片
                 Glide.with(getActivity())//activty
                         .load(img_url)
                         .asBitmap()
@@ -177,17 +191,19 @@ public class LazyPictureFragment1 extends BaseLazyFragment {
                         .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
                             @Override
                             public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
-                                // Do something with bitmap here.
-                                bitmap.getHeight(); //获取bitmap信息，可赋值给外部变量操作，也可在此时行操作。
-                                bitmap.getWidth();
-                                ImageView img_stag = holder.getView(R.id.img_stag);
-                                int use_height = use_width * bitmap.getHeight() / bitmap.getWidth();
-                                ViewGroup.LayoutParams layoutParams = img_stag.getLayoutParams();
-                                layoutParams.height = use_height;
-                                layoutParams.width = use_width;
-                                img_stag.setLayoutParams(layoutParams);
-                                img_stag.setImageBitmap(bitmap);
-                                hasLoadedPicCount++;
+                                if (position > -1 && position < imgList.size()) {
+                                    imgList.get(position).setImg_height(bitmap.getHeight());
+                                    imgList.get(position).setImg_width(bitmap.getWidth());
+                                    ImageView img_stag = holder.getView(R.id.img_stag);
+                                    int use_height = use_width * bitmap.getHeight() / bitmap.getWidth();
+                                    ViewGroup.LayoutParams layoutParams = img_stag.getLayoutParams();
+                                    layoutParams.height = use_height;
+                                    layoutParams.width = use_width;
+                                    img_stag.setLayoutParams(layoutParams);
+                                    img_stag.setImageBitmap(bitmap);
+                                    notifyItemChanged(position);
+                                    hasLoadedPicCount++;
+                                }
                             }
                         });
             }
@@ -219,13 +235,8 @@ public class LazyPictureFragment1 extends BaseLazyFragment {
         }
     }
 
-    private boolean isLoading = false;
 
     public void getPicture(final int temppage) {
-        if (isLoading) {
-            return;
-        }
-        isLoading = true;
         hasLoadedPicCount = 0;
         String useUrl = url + page;
         Log.e("pictureFragment", "请求图片的地址为:" + useUrl);
@@ -234,7 +245,6 @@ public class LazyPictureFragment1 extends BaseLazyFragment {
             @Override
             public void onError(Call call, Exception e) {
                 super.onError(call, e);
-                isLoading = false;
                 swipe_refresh_layout.setRefreshing(false);
                 hideLoadingMoreView();
                 Log.e("pictureFragment", "onError:" + e.getMessage());
@@ -242,7 +252,6 @@ public class LazyPictureFragment1 extends BaseLazyFragment {
 
             @Override
             public void onResponse(String response) {
-                isLoading = false;
                 swipe_refresh_layout.setRefreshing(false);
                 hideLoadingMoreView();
                 if (!TextUtils.isEmpty(response)) {
