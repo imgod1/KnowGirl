@@ -1,12 +1,9 @@
 package com.kk.imgod.knowgirl.fragment;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 
 import com.kk.imgod.knowgirl.R;
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 
 import butterknife.BindView;
 
@@ -21,16 +18,26 @@ import butterknife.BindView;
  * 修改备注：
  */
 public abstract class RecyclerViewFragment extends BaseLazyFragment {
+    @BindView(R.id.srl_main)
+    SwipeRefreshLayout srl_main;
     @BindView(R.id.recyclerview)
-    UltimateRecyclerView recyclerview;
+    RecyclerView recyclerview;
 
     @Override
     public int getLayoutResID() {
-        return R.layout.fragment_news;
+        return R.layout.fragment_recyclerview;
     }
 
     @Override
     protected void initData() {
-        recyclerview.setEmptyView(R.layout.empty_progressbar, UltimateRecyclerView.EMPTY_CLEAR_ALL);
+        //设置刷新时动画的颜色，可以设置4个
+        srl_main.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
+    }
+    /**
+     *展示或者隐藏刷新视图
+     * @param isShow
+     */
+    public void showOrHideRefresh(boolean isShow) {
+        srl_main.setRefreshing(isShow);
     }
 }

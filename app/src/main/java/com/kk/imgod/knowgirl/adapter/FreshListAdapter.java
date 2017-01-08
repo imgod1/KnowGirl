@@ -8,14 +8,11 @@ import android.widget.TextView;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.model.FreshBean;
-import com.kk.imgod.knowgirl.model.FreshResponse;
-import com.kk.imgod.knowgirl.model.ZhihuStory;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 
 import java.util.List;
 
-import io.realm.RealmChangeListener;
 import io.realm.Sort;
 
 public class FreshListAdapter extends UlimateBaseAdapter<FreshBean, FreshListAdapter.MyViewHolder> {

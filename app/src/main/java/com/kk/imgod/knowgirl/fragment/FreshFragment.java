@@ -2,10 +2,12 @@ package com.kk.imgod.knowgirl.fragment;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.FreshDetailActivity;
@@ -19,10 +21,13 @@ import com.kk.imgod.knowgirl.model.FreshBean;
 import com.kk.imgod.knowgirl.model.FreshResponse;
 import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
+import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.Lg;
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
 
 import java.util.ArrayList;
@@ -33,27 +38,48 @@ import okhttp3.Call;
 
 public class FreshFragment extends RecyclerViewFragment {
     private int page = 1;
-    private FreshListAdapter freshListAdapter;
-    private List<FreshBean> freshBeanList;
-
+    private List<FreshBean> freshBeanList = new ArrayList<>();
+    private CommonAdapter<FreshBean> freshAdapter;
     @Override
     protected void initData() {
         super.initData();
-        recyclerview.enableDefaultSwipeRefresh(true);
-        freshBeanList = new ArrayList<>();
-        freshListAdapter = new FreshListAdapter(getActivity(), freshBeanList);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerview.setAdapter(freshListAdapter);
-        recyclerview.reenableLoadmore();
-        recyclerview.mRecyclerView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_INSET);
-        freshListAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                //goto
-                FreshDetailActivity.actionStart(getActivity(), freshBeanList.get(position).getId());
-            }
-        });
-        recyclerview.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        initAdapter();
+        initEvent();
+//        freshListAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View v, int position) {
+//                //goto
+//                FreshDetailActivity.actionStart(getActivity(), freshBeanList.get(position).getId());
+//            }
+//        });
+//        recyclerview.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                Lg.e("FreshFragment", "触发了下拉刷新操作");
+//                page = 1;
+//                getFreshData(page);
+//            }
+//        });
+
+//        recyclerview.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
+//            @Override
+//            public void loadMore(int itemsCount, int maxLastVisiblePosition) {
+//                Lg.e("FreshFragment", "触发了上拉加载更多操作");
+//                getFreshData(page);
+//            }
+//        });
+//        recyclerview.mSwipeRefreshLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
+//                getFreshData(page);
+//            }
+//        });
+
+    }
+
+    private void initEvent() {
+        srl_main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 Lg.e("FreshFragment", "触发了下拉刷新操作");
@@ -61,21 +87,42 @@ public class FreshFragment extends RecyclerViewFragment {
                 getFreshData(page);
             }
         });
+    }
 
-        recyclerview.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
+    private void initAdapter() {
+        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        freshAdapter = new CommonAdapter<FreshBean>(getActivity(), R.layout.item_fresh,freshBeanList) {
             @Override
-            public void loadMore(int itemsCount, int maxLastVisiblePosition) {
+            protected void convert(ViewHolder holder, FreshBean freshBean, int position) {
+                ImageView img_fresh_news = holder.getView(R.id.img_fresh_news);
+                TextView txt_fresh_title = holder.getView(R.id.txt_fresh_title);
+                ImageLoader.load(getActivity(), freshBean.getCustom_fields().getThumb_c().get(0).getVal(), img_fresh_news, R.drawable.icon_app);
+                txt_fresh_title.setText(freshBean.getTitle());
+            }
+        };
+
+        freshAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                FreshDetailActivity.actionStart(getActivity(), freshBeanList.get(position).getId());
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
+
+        LoadMoreWrapper loadMoreWrapper = new LoadMoreWrapper(freshAdapter);
+        loadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
                 Lg.e("FreshFragment", "触发了上拉加载更多操作");
                 getFreshData(page);
             }
         });
-        recyclerview.mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
-                getFreshData(page);
-            }
-        });
+
+        recyclerview.setAdapter(loadMoreWrapper);
 
     }
 
@@ -95,7 +142,7 @@ public class FreshFragment extends RecyclerViewFragment {
                 recyclerview.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        recyclerview.setRefreshing(false);
+                        showOrHideRefresh(false);
                     }
                 }, Constant.DELAYTIME);
                 Log.e("pictureFragment", "onError:" + e.getMessage());
@@ -103,7 +150,7 @@ public class FreshFragment extends RecyclerViewFragment {
 
             @Override
             public void onResponse(String response) {
-                recyclerview.setRefreshing(false);
+                showOrHideRefresh(false);
                 Log.e("getLastData", "response:" + response);
                 if (!TextUtils.isEmpty(response)) {
                     FreshResponse freshResponse = GsonUtils.getGson().fromJson(response, FreshResponse.class);
@@ -113,11 +160,8 @@ public class FreshFragment extends RecyclerViewFragment {
                         if (1 == tempPage) {
                             freshBeanList.clear();
                             freshBeanList.addAll(freshResponse.getPosts());
-                            freshListAdapter.notifyDataSetChanged();
-                        } else {
-                            freshListAdapter.insert(freshResponse.getPosts());
                         }
-//                        freshListAdapter.notifyDataSetChanged();
+                        recyclerview.getAdapter().notifyDataSetChanged();
                     } else {
                         Log.e("pictureFragment", "onResponse:zhihuResponse 为 null");
                     }

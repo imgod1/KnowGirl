@@ -83,32 +83,32 @@ public class LazyPictureFragment extends RecyclerViewFragment {
     }
 
     public void initValue() {
-        recyclerview.mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
+//        recyclerview.mSwipeRefreshLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
+//            }
+//        });
         getPicture(page);
     }
 
     public void initEvent() {
-        recyclerview.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.e("initevent", "initevent:触发了下拉刷新操作:" + url);
-                page = 1;
-                getPicture(page);
-            }
-        });
-        recyclerview.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
-            @Override
-            public void loadMore(int itemsCount, int maxLastVisiblePosition) {
-                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
-                getPicture(page);
-                Log.e("initevent", "initevent:触发了上拉加载更多操作:" + url);
-            }
-        });
+//        recyclerview.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                Log.e("initevent", "initevent:触发了下拉刷新操作:" + url);
+//                page = 1;
+//                getPicture(page);
+//            }
+//        });
+//        recyclerview.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
+//            @Override
+//            public void loadMore(int itemsCount, int maxLastVisiblePosition) {
+//                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
+//                getPicture(page);
+//                Log.e("initevent", "initevent:触发了上拉加载更多操作:" + url);
+//            }
+//        });
 
         ultimateStagAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
             @Override
@@ -133,7 +133,7 @@ public class LazyPictureFragment extends RecyclerViewFragment {
                 recyclerview.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        recyclerview.setRefreshing(false);
+//                        recyclerview.setRefreshing(false);
                     }
                 }, Constant.DELAYTIME);
                 Log.e("pictureFragment", "onError:" + e.getMessage());
@@ -150,7 +150,7 @@ public class LazyPictureFragment extends RecyclerViewFragment {
                         Log.e("onResponse", "onResponse:数组大小:" + imageResponse.getTngou().size());
                         getImageSize(imageResponse.getTngou());
                     } else {
-                        recyclerview.setRefreshing(false);
+//                        recyclerview.setRefreshing(false);
                         Toast.makeText(getActivity(), "没有更多图片了...", Toast.LENGTH_SHORT).show();
                         ultimateStagAdapter.enableLoadMore(false);
 //                            ultimateStagAdapter.getCustomLoadMoreView().setVisibility(View.GONE);
@@ -175,7 +175,7 @@ public class LazyPictureFragment extends RecyclerViewFragment {
     @Override
     public void onPause() {
         super.onPause();
-        recyclerview.setRefreshing(false);
+//        recyclerview.setRefreshing(false);
         if (requestCall != null) {
             requestCall.cancel();
         }
@@ -214,7 +214,7 @@ public class LazyPictureFragment extends RecyclerViewFragment {
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 Log.e("onResponse", "getImageSize 异步完毕,加载成功的图片数量:" + tempImgList.size());
-                recyclerview.setRefreshing(false);
+//                recyclerview.setRefreshing(false);
 
                 DBUtils.saveList(MainActivity.realm, tempImgList);
 
@@ -239,13 +239,13 @@ public class LazyPictureFragment extends RecyclerViewFragment {
         imgClassId = bundle.getInt(IMGCLASSID, 6);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(staggeredGridLayoutManager);
-        recyclerview.enableDefaultSwipeRefresh(true);
+//        recyclerview.enableDefaultSwipeRefresh(true);
         recyclerview.setHasFixedSize(true);
         imgList = new ArrayList<>();
         ultimateStagAdapter = new UltimateStagAdapter(getActivity(), imgList, imgClassId);
 //        ultimateStagAdapter.setCustomLoadMoreView(LayoutInflater.from(getActivity()).inflate(R.layout.custom_bottom_progressbar, null));
         ultimateStagAdapter.enableLoadMore(true);
-        recyclerview.reenableLoadmore();
+//        recyclerview.reenableLoadmore();
         recyclerview.setAdapter(ultimateStagAdapter);
         initValue();
         initEvent();
