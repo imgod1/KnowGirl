@@ -31,8 +31,8 @@ public class ImageBean extends RealmObject {
     private long time;
     private String title;
 
-    private int img_width = 1;
-    private int img_height = 1;
+    private int img_width;
+    private int img_height;
 
     public int getImg_width() {
         return img_width;

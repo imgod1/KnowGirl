@@ -25,13 +25,13 @@ public class API {
     //图片接口url,page=1&rows=20&id=2
     public static final String PICTURE_URL = "http://www.tngou.net/tnfs/api/list?";
 
-    public static final String SEX_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=1&page=";
-    public static final String JAPAN_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=2&page=";
-    public static final String STOCK_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=3&page=";
-    public static final String PHOTO_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=4&page=";
-    public static final String WRITE_REAL_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=5&page=";
-    public static final String PURE_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=6&page=";
-    public static final String SEX_CAR_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=8&id=7&page=";
+    public static final String SEX_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=1&page=";
+    public static final String JAPAN_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=2&page=";
+    public static final String STOCK_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=3&page=";
+    public static final String PHOTO_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=4&page=";
+    public static final String WRITE_REAL_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=5&page=";
+    public static final String PURE_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=6&page=";
+    public static final String SEX_CAR_GIRL_URL = "http://www.tngou.net/tnfs/api/list?rows=10&id=7&page=";
 
     //图片资源的基地址
     public static final String PICTURE_BASE_URL = "http://tnfs.tngou.net/image";

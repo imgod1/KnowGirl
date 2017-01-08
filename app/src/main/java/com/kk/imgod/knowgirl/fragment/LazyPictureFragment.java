@@ -148,7 +148,12 @@ public class LazyPictureFragment extends RecyclerViewFragment {
                     allPictureCount = imageResponse.getTotal();
                     if (imageResponse != null && imageResponse.getTngou() != null && imageResponse.getTngou().size() != 0) {
                         Log.e("onResponse", "onResponse:数组大小:" + imageResponse.getTngou().size());
-                        getImageSize(imageResponse.getTngou());
+//                        getImageSize(imageResponse.getTngou());
+                        if (temppage == 1) {
+                            imgList.clear();
+                        }
+                        imgList.addAll(imageResponse.getTngou());
+                        ultimateStagAdapter.notifyDataSetChanged();
                     } else {
 //                        recyclerview.setRefreshing(false);
                         Toast.makeText(getActivity(), "没有更多图片了...", Toast.LENGTH_SHORT).show();

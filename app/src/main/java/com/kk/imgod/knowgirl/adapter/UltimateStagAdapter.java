@@ -1,11 +1,17 @@
 package com.kk.imgod.knowgirl.adapter;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.app.API;
@@ -51,14 +57,36 @@ public class UltimateStagAdapter extends UlimateBaseAdapter<ImageBean, UltimateS
     @Override
     protected void withBindHolder(final MyViewHolder holder, ImageBean data, int position) {
         super.withBindHolder(holder, data, position);
-        final String img_url = API.PICTURE_BASE_URL + data.getImg();
+
 //        Log.e("adapter", "img url:" + img_url + " data.getImg_height()" + data.getImg_height() + "data.getImg_width()" + data.getImg_width());
-        use_height = use_width * data.getImg_height() / data.getImg_width();
-        ViewGroup.LayoutParams layoutParams = holder.img_stag.getLayoutParams();
-        layoutParams.height = use_height;
-        layoutParams.width = use_width;
-        holder.img_stag.setLayoutParams(layoutParams);
-        ImageLoader.load(activity, img_url, holder.img_stag);
+//        use_height = use_width * data.getImg_height() / data.getImg_width();
+//        ViewGroup.LayoutParams layoutParams = holder.img_stag.getLayoutParams();
+//        layoutParams.height = use_height;
+//        layoutParams.width = use_width;
+//        holder.img_stag.setLayoutParams(layoutParams);
+//        ImageLoader.load(activity, img_url, holder.img_stag);
+        //---------------
+        final String img_url = API.PICTURE_BASE_URL + data.getImg();
+        Glide.with(activity)//activty
+                .load(img_url)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+                        // Do something with bitmap here.
+                        bitmap.getHeight(); //获取bitmap信息，可赋值给外部变量操作，也可在此时行操作。
+                        bitmap.getWidth();
+
+                        use_height = use_width * bitmap.getHeight() / bitmap.getWidth();
+                        ViewGroup.LayoutParams layoutParams = holder.img_stag.getLayoutParams();
+                        layoutParams.height = use_height;
+                        layoutParams.width = use_width;
+                        holder.img_stag.setLayoutParams(layoutParams);
+//                        Glide.with(activity).load(bitmap).into(holder.img_stag);
+                        holder.img_stag.setImageBitmap(bitmap);
+                    }
+                });
     }
 
     @Override

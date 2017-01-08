@@ -70,13 +70,13 @@ public class TabFragment extends BaseFragment {
             titles.add(getString(R.string.stock_girl));
             titles.add(getString(R.string.sex_car_girl));
             titles.add(getString(R.string.sex_girl));
-            fragments.add(LazyPictureFragment.newInstance(API.PURE_GIRL_URL, 6));
-            fragments.add(LazyPictureFragment.newInstance(API.PHOTO_GIRL_URL, 4));
-            fragments.add(LazyPictureFragment.newInstance(API.WRITE_REAL_GIRL_URL, 5));
-            fragments.add(LazyPictureFragment.newInstance(API.JAPAN_GIRL_URL, 2));
-            fragments.add(LazyPictureFragment.newInstance(API.STOCK_GIRL_URL, 3));
-            fragments.add(LazyPictureFragment.newInstance(API.SEX_CAR_GIRL_URL, 7));
-            fragments.add(LazyPictureFragment.newInstance(API.SEX_GIRL_URL, 1));
+            fragments.add(LazyPictureFragment1.newInstance(API.PURE_GIRL_URL, 6));
+            fragments.add(LazyPictureFragment1.newInstance(API.PHOTO_GIRL_URL, 4));
+            fragments.add(LazyPictureFragment1.newInstance(API.WRITE_REAL_GIRL_URL, 5));
+            fragments.add(LazyPictureFragment1.newInstance(API.JAPAN_GIRL_URL, 2));
+            fragments.add(LazyPictureFragment1.newInstance(API.STOCK_GIRL_URL, 3));
+            fragments.add(LazyPictureFragment1.newInstance(API.SEX_CAR_GIRL_URL, 7));
+            fragments.add(LazyPictureFragment1.newInstance(API.SEX_GIRL_URL, 1));
         }
 
         fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getChildFragmentManager(), titles, fragments);
