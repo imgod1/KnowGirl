@@ -4,7 +4,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,8 +11,6 @@ import android.widget.TextView;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.FreshDetailActivity;
 import com.kk.imgod.knowgirl.activity.MainActivity;
-import com.kk.imgod.knowgirl.adapter.FreshListAdapter;
-import com.kk.imgod.knowgirl.adapter.UlimateBaseAdapter;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
@@ -22,7 +19,6 @@ import com.kk.imgod.knowgirl.model.FreshResponse;
 import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
-import com.kk.imgod.knowgirl.utils.Lg;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -39,50 +35,17 @@ import okhttp3.Call;
 public class FreshFragment extends RecyclerViewFragment {
     private int page = 1;
     private List<FreshBean> freshBeanList = new ArrayList<>();
-    private CommonAdapter<FreshBean> freshAdapter;
     @Override
     protected void initData() {
         super.initData();
         initAdapter();
         initEvent();
-//        freshListAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View v, int position) {
-//                //goto
-//                FreshDetailActivity.actionStart(getActivity(), freshBeanList.get(position).getId());
-//            }
-//        });
-//        recyclerview.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                Lg.e("FreshFragment", "触发了下拉刷新操作");
-//                page = 1;
-//                getFreshData(page);
-//            }
-//        });
-
-//        recyclerview.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
-//            @Override
-//            public void loadMore(int itemsCount, int maxLastVisiblePosition) {
-//                Lg.e("FreshFragment", "触发了上拉加载更多操作");
-//                getFreshData(page);
-//            }
-//        });
-//        recyclerview.mSwipeRefreshLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
-//                getFreshData(page);
-//            }
-//        });
-
     }
 
     private void initEvent() {
         srl_main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Lg.e("FreshFragment", "触发了下拉刷新操作");
                 page = 1;
                 getFreshData(page);
             }
@@ -91,7 +54,7 @@ public class FreshFragment extends RecyclerViewFragment {
 
     private void initAdapter() {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        freshAdapter = new CommonAdapter<FreshBean>(getActivity(), R.layout.item_fresh,freshBeanList) {
+        CommonAdapter<FreshBean>  freshAdapter = new CommonAdapter<FreshBean>(getActivity(), R.layout.item_fresh,freshBeanList) {
             @Override
             protected void convert(ViewHolder holder, FreshBean freshBean, int position) {
                 ImageView img_fresh_news = holder.getView(R.id.img_fresh_news);
@@ -117,11 +80,10 @@ public class FreshFragment extends RecyclerViewFragment {
         loadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                Lg.e("FreshFragment", "触发了上拉加载更多操作");
                 getFreshData(page);
             }
         });
-
+        loadMoreWrapper.setLoadMoreView(R.layout.layout_loading_more);
         recyclerview.setAdapter(loadMoreWrapper);
 
     }
@@ -145,25 +107,21 @@ public class FreshFragment extends RecyclerViewFragment {
                         showOrHideRefresh(false);
                     }
                 }, Constant.DELAYTIME);
-                Log.e("pictureFragment", "onError:" + e.getMessage());
             }
 
             @Override
             public void onResponse(String response) {
                 showOrHideRefresh(false);
-                Log.e("getLastData", "response:" + response);
                 if (!TextUtils.isEmpty(response)) {
                     FreshResponse freshResponse = GsonUtils.getGson().fromJson(response, FreshResponse.class);
                     if (freshResponse != null && freshResponse.getStatus().equals(Constant.OK)) {
                         DBUtils.saveList(MainActivity.realm, freshResponse.getPosts());
-                        page++;
                         if (1 == tempPage) {
                             freshBeanList.clear();
-                            freshBeanList.addAll(freshResponse.getPosts());
                         }
+                        freshBeanList.addAll(freshResponse.getPosts());
                         recyclerview.getAdapter().notifyDataSetChanged();
-                    } else {
-                        Log.e("pictureFragment", "onResponse:zhihuResponse 为 null");
+                        page++;
                     }
                 }
             }
@@ -171,4 +129,11 @@ public class FreshFragment extends RecyclerViewFragment {
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(null!=requestCall){
+            requestCall.cancel();
+        }
+    }
 }

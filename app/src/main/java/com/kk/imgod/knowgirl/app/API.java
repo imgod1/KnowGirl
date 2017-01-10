@@ -10,7 +10,7 @@ public class API {
     public static final String ZHIHU_NEWS_BEFORE = "http://news-at.zhihu.com/api/4/news/before/";
 
     //Fresh things API
-    public static final String JIANDAN_FRESH_NEWS = "http://jandan.net/?oxwlxojflwblxbsapi=get_recent_posts&include=url,date,tags,author,title,comment_count,custom_fields&custom_fields=thumb_c,views&dev=1&page=";
+    public static final String JIANDAN_FRESH_NEWS = "http://i.jandan.net/?oxwlxojflwblxbsapi=get_recent_posts&include=url,date,tags,author,title,comment_count,custom_fields&custom_fields=thumb_c,views&dev=1&page=";
     public static final String JIANDAN_FRESH_NEWS_DETAIL = "http://i.jandan.net/?oxwlxojflwblxbsapi=get_post&include=content&id=";
 
     /**

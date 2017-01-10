@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.transition.ChangeImageTransform;
 import android.transition.Transition;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
@@ -54,19 +53,6 @@ public class ZhihuFragment extends RecyclerViewFragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         initAdapter();
         initEvent();
-//        recyclerview.setEmptyView(R.layout.item_news, UltimateRecyclerView.EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
-//            @Override
-//            public void onEmptyViewShow(View mView) {
-//                Lg.e("zhihufragment", "触发了setEmptyView Listener1111111111111");
-//                mView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Lg.e("zhihufragment", "触发了setEmptyView Listener222222222222222");
-//                    }
-//                });
-//            }
-//        });
-//        recyclerview.hideEmptyView();
     }
 
     private void initEvent() {
@@ -128,8 +114,8 @@ public class ZhihuFragment extends RecyclerViewFragment {
     /**
      * 跳转到详情界面
      *
-     * @param view
-     * @param position
+     * @param view 共享元素视图
+     * @param position 下标
      */
     private void startDetailActivity(View view, int position) {
         Intent intent = new Intent(getActivity(), ZhiHuDetailActivity.class);
@@ -161,13 +147,11 @@ public class ZhihuFragment extends RecyclerViewFragment {
                         srl_main.setRefreshing(false);
                     }
                 }, Constant.DELAYTIME);
-                Log.e("pictureFragment", "onError:" + e.getMessage());
             }
 
             @Override
             public void onResponse(String response) {
                 srl_main.setRefreshing(false);
-                Log.e("getLastData", "response:" + response);
                 if (!TextUtils.isEmpty(response)) {
                     ZhihuResponse zhihuResponse = GsonUtils.getGson().fromJson(response, ZhihuResponse.class);
                     if (zhihuResponse != null) {
@@ -175,11 +159,7 @@ public class ZhihuFragment extends RecyclerViewFragment {
                         willLoadDate = zhihuResponse.getDate();
                         zhihuStories.clear();
                         zhihuStories.addAll(zhihuResponse.getStories());
-//                        zhihuListAdapter.notifyDataSetChanged();
-//                        zhihuListAdapter.insert(zhihuResponse.getStories());
                         recyclerview.getAdapter().notifyDataSetChanged();
-                    } else {
-                        Log.e("pictureFragment", "onResponse:zhihuResponse 为 null");
                     }
 
                 }
@@ -194,13 +174,11 @@ public class ZhihuFragment extends RecyclerViewFragment {
             public void onError(Call call, Exception e) {
                 super.onError(call, e);
                 showOrHideRefresh(false);
-                Log.e("pictureFragment", "onError:" + e.getMessage());
             }
 
             @Override
             public void onResponse(String response) {
               showOrHideRefresh(false);
-                Log.e("getLastData", "response:" + response);
                 if (!TextUtils.isEmpty(response)) {
                     ZhihuResponse zhihuResponse = GsonUtils.getGson().fromJson(response, ZhihuResponse.class);
                     if (zhihuResponse != null) {
@@ -208,8 +186,6 @@ public class ZhihuFragment extends RecyclerViewFragment {
                         zhihuStories.addAll(zhihuResponse.getStories());
                         willLoadDate = zhihuResponse.getDate();
                         recyclerview.getAdapter().notifyDataSetChanged();
-                    } else {
-                        Log.e("pictureFragment", "onResponse:zhihuResponse 为 null");
                     }
                 }
             }
