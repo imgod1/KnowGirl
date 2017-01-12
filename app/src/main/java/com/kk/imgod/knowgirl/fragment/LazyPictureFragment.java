@@ -1,45 +1,51 @@
 package com.kk.imgod.knowgirl.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.animation.ViewPropertyAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
-import com.google.gson.Gson;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.activity.PictureDetailActivity;
-import com.kk.imgod.knowgirl.adapter.UlimateBaseAdapter;
-import com.kk.imgod.knowgirl.adapter.UltimateStagAdapter;
+import com.kk.imgod.knowgirl.anim.ScaleInAnimation;
+import com.kk.imgod.knowgirl.anim.SlideInBottomAnimation;
 import com.kk.imgod.knowgirl.app.API;
-import com.kk.imgod.knowgirl.app.Constant;
-import com.kk.imgod.knowgirl.customerclass.LazyFragment;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ImageBean;
-import com.kk.imgod.knowgirl.model.ImageResponse;
 import com.kk.imgod.knowgirl.utils.DBUtils;
-import com.kk.imgod.knowgirl.utils.GsonUtils;
+import com.kk.imgod.knowgirl.utils.ImageLoader;
+import com.kk.imgod.knowgirl.utils.JsoupUtils;
 import com.kk.imgod.knowgirl.utils.Lg;
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.kk.imgod.knowgirl.utils.ScreenUtils;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import okhttp3.Call;
 
 
@@ -47,125 +53,61 @@ import okhttp3.Call;
  * Created by imgod on 2016/4/24.
  */
 public class LazyPictureFragment extends RecyclerViewFragment {
-    public static final int row = 40;
-    public final static String URL = "url";
     public final static String IMGCLASSID = "imgclassid";
-    private String url;
-    private int imgClassId;
+    private String imgclassid;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
 
-    private UltimateStagAdapter ultimateStagAdapter;
-    /**
-     * 静态的变量来存储详情界面需要的数据
-     */
-    public static List<ImageBean> detailImageBeanList;
+    private CommonAdapter pictureAdapter;
+    LoadMoreWrapper loadMoreWrapper;
     private List<ImageBean> imgList;
 
     private RequestCall requestCall;
-    //服务器上的图片总数
-    private int allPictureCount;
-    //缓存图片尺寸的时候,发生异常的图片数量
-    private int errPicture;
     //当前的页码
     private int page = 1;
 
     /**
-     * @param url 图片网址
-     * @return 返回fragment
+     * @param imgClassId 图片类别
+     * @return
      */
-    public static LazyPictureFragment newInstance(String url, int imgClassId) {
+    public static LazyPictureFragment newInstance(int imgClassId) {
         LazyPictureFragment pictureFragment = new LazyPictureFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(URL, url);
-        bundle.putInt(IMGCLASSID, imgClassId);
+        bundle.putString(IMGCLASSID, "" + imgClassId);
         pictureFragment.setArguments(bundle);
         return pictureFragment;
     }
 
     public void initValue() {
-//        recyclerview.mSwipeRefreshLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
-//            }
-//        });
-        getPicture(page);
     }
 
     public void initEvent() {
-//        recyclerview.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                Log.e("initevent", "initevent:触发了下拉刷新操作:" + url);
-//                page = 1;
-//                getPicture(page);
-//            }
-//        });
-//        recyclerview.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
-//            @Override
-//            public void loadMore(int itemsCount, int maxLastVisiblePosition) {
-//                recyclerview.mSwipeRefreshLayout.setRefreshing(true);
-//                getPicture(page);
-//                Log.e("initevent", "initevent:触发了上拉加载更多操作:" + url);
-//            }
-//        });
-
-        ultimateStagAdapter.setOnItemClickListener(new UlimateBaseAdapter.OnItemClickListener() {
+        srl_main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onItemClick(View v, int position) {
-                detailImageBeanList = imgList;
+            public void onRefresh() {
+                page = 1;
+                getPicture(page);
+            }
+        });
+        pictureAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                PictureDetailActivity.detailImageBeanList = imgList;
                 PictureDetailActivity.actionStart(getActivity(), position);
             }
-        });
-    }
-
-    public void getPicture(final int temppage) {
-//        if (!ultimateStagAdapter.enableLoadMore()) {
-//            Log.e("initevent", "因为当前已经没有更多了.所以不请求网络");
-//        } else {
-        String useUrl = url + temppage;
-        Log.e("pictureFragment", "请求图片的地址为:" + useUrl);
-        requestCall = OkHttpUtils.get().url(useUrl).build();
-        requestCall.execute(new MyStringCallBack(getActivity(), ((MainActivity) getActivity()).getMainCoordinatorLayout()) {
-            @Override
-            public void onError(Call call, Exception e) {
-                super.onError(call, e);
-                recyclerview.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-//                        recyclerview.setRefreshing(false);
-                    }
-                }, Constant.DELAYTIME);
-                Log.e("pictureFragment", "onError:" + e.getMessage());
-            }
 
             @Override
-            public void onResponse(String response) {
-                if (!TextUtils.isEmpty(response)) {
-                    Log.e("onResponse", "onResponse:" + url + "\t" + response);
-                    Log.e("onResponse", "onResponse:当前集合数量" + imgList.size());
-                    ImageResponse imageResponse = GsonUtils.getGson().fromJson(response, ImageResponse.class);
-                    allPictureCount = imageResponse.getTotal();
-                    if (imageResponse != null && imageResponse.getTngou() != null && imageResponse.getTngou().size() != 0) {
-                        Log.e("onResponse", "onResponse:数组大小:" + imageResponse.getTngou().size());
-//                        getImageSize(imageResponse.getTngou());
-                        if (temppage == 1) {
-                            imgList.clear();
-                        }
-                        imgList.addAll(imageResponse.getTngou());
-                        ultimateStagAdapter.notifyDataSetChanged();
-                    } else {
-//                        recyclerview.setRefreshing(false);
-                        Toast.makeText(getActivity(), "没有更多图片了...", Toast.LENGTH_SHORT).show();
-                        ultimateStagAdapter.enableLoadMore(false);
-//                            ultimateStagAdapter.getCustomLoadMoreView().setVisibility(View.GONE);
-                    }
-
-                }
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
             }
         });
-//        }
 
+        //设置加载更多的监听
+        loadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getPicture(page);
+            }
+        });
     }
 
     @Override
@@ -177,87 +119,145 @@ public class LazyPictureFragment extends RecyclerViewFragment {
     }
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-//        recyclerview.setRefreshing(false);
-        if (requestCall != null) {
-            requestCall.cancel();
-        }
-//        Glide.with(getActivity()).pauseRequests();
-    }
+    private int use_width;//瀑布流真实的宽度
+    private int use_height;//瀑布流真实的高度
+    private View loadMoreView;//加载更多的view
 
-    public void getImageSize(final List<ImageBean> tempImgList) {
-        Log.e("onResponse", "getImageSize 方法执行:" + tempImgList.size());
-        new AsyncTask<Void, Void, Void>() {
+    private void initAdapter() {
+        use_width = (ScreenUtils.getWindowsWidth(getActivity()) - 20) / 2;
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerview.setLayoutManager(staggeredGridLayoutManager);
+        imgList = new ArrayList<>();
+
+        //先从数据库取一下数据
+//        List<ImageBean> tempImageList = MainActivity.realm.where(ImageBean.class).equalTo("cid", imgclassid).findAllSorted("id", Sort.DESCENDING);
+//        imgList.addAll(tempImageList);
+
+        pictureAdapter = new CommonAdapter<ImageBean>(getActivity(), R.layout.item_stag, imgList) {
             @Override
-            protected Void doInBackground(Void... params) {
-                for (int i = 0; i < tempImgList.size(); i++) {
-                    final String img_url = API.PICTURE_BASE_URL + tempImgList.get(i).getImg();
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = Glide.with(getActivity())
-                                .load(img_url)
-                                .asBitmap()
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
-//                        Log.e("getWidth", "" + bitmap.getWidth());
-//                        Log.e("getHeight", "" + bitmap.getHeight());
-                        tempImgList.get(i).setImg_width(bitmap.getWidth());
-                        tempImgList.get(i).setImg_height(bitmap.getHeight());
-//                        imgList.add(tempImgList.get(i));
-                    } catch (Exception e) {
-                        tempImgList.remove(i);//发生异常的图片就移除掉
-                        Log.e("getWidth", "doInBackground1 发生异常" + e.getMessage() + ",图片网址:" + img_url);
-                        errPicture++;
-                    }
+            protected void convert(final ViewHolder holder, final ImageBean imageBean, final int position) {
+                ImageView img_stag = holder.getView(R.id.img_stag);
+                final String img_url = imageBean.getImg();
+                if (imageBean.getImg_height() == 0 || imageBean.getImg_width() == 0) {//没有尺寸信息的话就给一个固定的尺寸
+                    ViewGroup.LayoutParams layoutParams = img_stag.getLayoutParams();
+                    layoutParams.width = use_width;
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeResource(getResources(), R.drawable.splash, options);
+                    int use_height = use_width * options.outHeight / options.outWidth;
+                    layoutParams.height = use_height;
+                    Lg.e("test", "加载splash:height:" + use_height);
+                    img_stag.setLayoutParams(layoutParams);
+                    img_stag.setImageResource(R.drawable.splash);
+
+                    //加载图片
+                    Glide.with(getActivity())//activty
+                            .load(img_url)
+                            .asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
+                                @Override
+                                public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+                                    if (position > -1 && position < imgList.size()) {
+                                        ImageBean tempBean = imgList.get(position);
+                                        tempBean.setImg_height(bitmap.getHeight());
+                                        tempBean.setImg_width(bitmap.getWidth());
+                                        DBUtils.copyOrUpdateRealm(MainActivity.realm, tempBean);//存储起来
+                                        ImageView img_stag = holder.getView(R.id.img_stag);
+                                        int use_height = use_width * bitmap.getHeight() / bitmap.getWidth();
+                                        ViewGroup.LayoutParams layoutParams = img_stag.getLayoutParams();
+                                        layoutParams.height = use_height;
+                                        layoutParams.width = use_width;
+                                        img_stag.setLayoutParams(layoutParams);
+                                        img_stag.setImageBitmap(bitmap);
+                                        notifyItemChanged(position);
+                                    }
+                                }
+                            });
+                } else {//有尺寸信息的话,那就直接计算并设置
+                    ViewGroup.LayoutParams layoutParams = img_stag.getLayoutParams();
+                    layoutParams.width = use_width;
+                    int use_height = use_width * imageBean.getImg_height() / imageBean.getImg_width();
+                    layoutParams.height = use_height;
+                    Lg.e("test", "已经有尺寸信息:" + position + "height::" + use_height);
+                    img_stag.setLayoutParams(layoutParams);
+                    ImageLoader.load(getActivity(), img_url, img_stag);
                 }
-                return null;
+
+                ScaleInAnimation scaleInAnimation = new ScaleInAnimation();
+                Animator[] animators = scaleInAnimation.getAnimators(img_stag);
+                animators[0].start();
             }
+        };
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                Log.e("onResponse", "getImageSize 异步完毕,加载成功的图片数量:" + tempImgList.size());
-//                recyclerview.setRefreshing(false);
-
-                DBUtils.saveList(MainActivity.realm, tempImgList);
-
-                if (1 == page) {
-                    imgList.clear();
-                    imgList.addAll(tempImgList);
-                    ultimateStagAdapter.notifyDataSetChanged();
-                } else {
-                    ultimateStagAdapter.insert(tempImgList);
-                }
-                Log.e("onResponse", "getImageSize 异步完毕,当前页码:" + page + ",当前集合数量:" + imgList.size());
-                page++;
-            }
-        }.execute();
+        loadMoreWrapper = new LoadMoreWrapper(pictureAdapter);
+        loadMoreView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_loading_more, recyclerview, false);
+        loadMoreWrapper.setLoadMoreView(loadMoreView);
+        recyclerview.setAdapter(loadMoreWrapper);
     }
-
 
     @Override
     protected void initData() {
+        super.initData();
         Bundle bundle = getArguments();
-        url = bundle.getString(URL);
-        imgClassId = bundle.getInt(IMGCLASSID, 6);
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerview.setLayoutManager(staggeredGridLayoutManager);
-//        recyclerview.enableDefaultSwipeRefresh(true);
-        recyclerview.setHasFixedSize(true);
-        imgList = new ArrayList<>();
-        ultimateStagAdapter = new UltimateStagAdapter(getActivity(), imgList, imgClassId);
-//        ultimateStagAdapter.setCustomLoadMoreView(LayoutInflater.from(getActivity()).inflate(R.layout.custom_bottom_progressbar, null));
-        ultimateStagAdapter.enableLoadMore(true);
-//        recyclerview.reenableLoadmore();
-        recyclerview.setAdapter(ultimateStagAdapter);
+        imgclassid = bundle.getString(IMGCLASSID);
+        initAdapter();
         initValue();
         initEvent();
     }
 
-    @Override
-    protected void setDefaultFragmentTitle(String title) {
+    /**
+     * 显示加载的view
+     */
+    private void showLoadingMoreView() {
+        if (null != loadMoreView) {
+            loadMoreView.setVisibility(View.VISIBLE);
+        }
+    }
 
+    /**
+     * 隐藏加载的view
+     */
+    private void hideLoadingMoreView() {
+        if (null != loadMoreView) {
+            loadMoreView.setVisibility(View.GONE);
+        }
+    }
+
+
+    public void getPicture(final int temppage) {
+        final String useUrl = API.DBMEIZI_BASE_URL + imgclassid + "&pager_offset=" + temppage;
+        Log.e("pictureFragment", "请求图片的地址为:" + useUrl);
+        requestCall = OkHttpUtils.get().url(useUrl).build();
+        requestCall.execute(new MyStringCallBack(getActivity(), ((MainActivity) getActivity()).getMainCoordinatorLayout()) {
+            @Override
+            public void onError(Call call, Exception e) {
+                super.onError(call, e);
+                srl_main.setRefreshing(false);
+                hideLoadingMoreView();
+                Log.e("pictureFragment", "onError:" + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String response) {
+                srl_main.setRefreshing(false);
+                hideLoadingMoreView();
+                if (!TextUtils.isEmpty(response)) {
+                    Log.e("onResponse", "onResponse:" + useUrl + "\t" + response);
+                    if (page == 1) {
+                        imgList.clear();
+                    }
+                    List<ImageBean> tempImageList = JsoupUtils.getImgBeanListFromHtml(response, imgclassid);
+//                    DBUtils.saveList(MainActivity.realm, tempImageList);
+                    imgList.addAll(tempImageList);
+                    if (page == 1) {
+                        recyclerview.getAdapter().notifyDataSetChanged();
+                    } else {
+                        recyclerview.getAdapter().notifyItemRangeInserted(imgList.size() - tempImageList.size(), tempImageList.size());
+                    }
+                    page++;
+                }
+            }
+        });
     }
 }

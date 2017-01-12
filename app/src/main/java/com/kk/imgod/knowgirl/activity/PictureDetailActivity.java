@@ -3,19 +3,11 @@ package com.kk.imgod.knowgirl.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.LinearLayout;
 
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.adapter.FragmentViewPagerAdapter;
-import com.kk.imgod.knowgirl.app.API;
-import com.kk.imgod.knowgirl.fragment.LazyPictureFragment;
-import com.kk.imgod.knowgirl.fragment.LazyPictureFragment1;
 import com.kk.imgod.knowgirl.fragment.PictureDetailFragment;
 import com.kk.imgod.knowgirl.model.ImageBean;
 import com.kk.imgod.knowgirl.utils.Lg;
@@ -27,6 +19,10 @@ import butterknife.BindView;
 import ooo.oxo.library.widget.PullBackLayout;
 
 public class PictureDetailActivity extends BaseActivity implements PullBackLayout.Callback {
+    /**
+     * 静态的变量来存储详情界面需要的数据
+     */
+    public static List<ImageBean> detailImageBeanList;
     @BindView(R.id.flayout_picture_main)
     PullBackLayout flayout_picture_main;
     @BindView(R.id.vp_pic_detail)
@@ -68,9 +64,9 @@ public class PictureDetailActivity extends BaseActivity implements PullBackLayou
     @Override
     public void initValue() {
         fragmentList = new ArrayList<>();
-        for (int i = 0; i < LazyPictureFragment1.detailImageBeanList.size(); i++) {
-            ImageBean imageBean = LazyPictureFragment1.detailImageBeanList.get(i);
-            Fragment fragment = PictureDetailFragment.newInstance(API.PICTURE_BASE_URL + imageBean.getImg());
+        for (int i = 0; i < PictureDetailActivity.detailImageBeanList.size(); i++) {
+            ImageBean imageBean = PictureDetailActivity.detailImageBeanList.get(i);
+            Fragment fragment = PictureDetailFragment.newInstance(imageBean.getImg());
             fragmentList.add(fragment);
         }
         fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), null, fragmentList);
