@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.adapter.FragmentViewPagerAdapter;
+import com.kk.imgod.knowgirl.app.API;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,19 +64,17 @@ public class TabFragment extends BaseFragment {
         } else {
             tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
             titles.add(getString(R.string.pure_girl));
-            titles.add(getString(R.string.photo_nice_girl));
-            titles.add(getString(R.string.write_real_girl));
-            titles.add(getString(R.string.japan_girl));
-            titles.add(getString(R.string.stock_girl));
-            titles.add(getString(R.string.sex_car_girl));
-            titles.add(getString(R.string.sex_girl));
-            fragments.add(LazyPictureFragment.newInstance(4));
-            fragments.add(LazyPictureFragment.newInstance(3));
-            fragments.add(LazyPictureFragment.newInstance(2));
-            fragments.add(LazyPictureFragment.newInstance(1));
-            fragments.add(LazyPictureFragment.newInstance(3));
-            fragments.add(LazyPictureFragment.newInstance(2));
-            fragments.add(LazyPictureFragment.newInstance(1));
+            titles.add(getString(R.string.nice_leg));
+            titles.add(getString(R.string.sex_stock));
+            titles.add(getString(R.string.big_breast));
+            titles.add(getString(R.string.big_hip));
+            titles.add(getString(R.string.blend));
+            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_NICE));
+            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_LEG));
+            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_STOCK));
+            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_BIG_BREAST));
+            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_HIP));
+            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_QIPA));
         }
 
         fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getChildFragmentManager(), titles, fragments);

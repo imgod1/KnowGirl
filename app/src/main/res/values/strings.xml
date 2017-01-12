@@ -39,12 +39,11 @@
     <string name="save_img_failed">无法保存图片</string>
 
     <string name="pure_girl">清纯美女</string>
-    <string name="photo_nice_girl">美女照片</string>
-    <string name="write_real_girl">美女写真</string>
-    <string name="japan_girl">日韩美女</string>
-    <string name="stock_girl">丝袜美腿</string>
-    <string name="sex_car_girl">性感车模</string>
-    <string name="sex_girl">性感美女</string>
+    <string name="nice_leg">修长美腿</string>
+    <string name="big_breast">波涛汹涌</string>
+    <string name="blend">奇葩自拍</string>
+    <string name="big_hip">悬崖翘臀</string>
+    <string name="sex_stock">诱惑丝袜</string>
     <string name="view_img_hint">向下拉图片退出浏览；长按图片可以保存到手机~</string>
     <string name="title_activity_zhi_hu_detail">ZhiHuDetailActivity</string>
     <string name="zhihu_detail_share_title">该文太赞,强烈推荐</string>
