@@ -38,6 +38,15 @@ import com.zhy.http.okhttp.request.RequestCall;
 import butterknife.BindView;
 import okhttp3.Call;
 
+/**
+ * 项目名称：KnowGirl
+ * 类描述：煎蛋详情界面
+ * 创建人：imgod
+ * 创建时间：2016/4/24 16:20
+ * 修改人：imgod
+ * 修改时间：2016/4/24 16:20
+ * 修改备注：
+ */
 public class FreshDetailActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.toolbar)
     Toolbar toolbar;

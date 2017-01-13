@@ -1,10 +1,10 @@
 package com.kk.imgod.knowgirl.fragment;
 
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.customerclass.WrapContentLinearLayoutManager;
 
 import butterknife.BindView;
 
@@ -33,13 +33,15 @@ public abstract class RecyclerViewFragment extends BaseLazyFragment {
     protected void initData() {
         //设置刷新时动画的颜色，可以设置4个
         srl_main.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
-//        recyclerview.setItemAnimator();
+        WrapContentLinearLayoutManager wrapContentLinearLayoutManager = new WrapContentLinearLayoutManager(getContext());
+        recyclerview.setLayoutManager(wrapContentLinearLayoutManager);
+        recyclerview.setHasFixedSize(true);
     }
 
     /**
      * 展示或者隐藏刷新视图
      *
-     * @param isShow
+     * @param isShow 展示或者隐藏刷新视图
      */
     public void showOrHideRefresh(boolean isShow) {
         srl_main.setRefreshing(isShow);

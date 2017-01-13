@@ -13,7 +13,14 @@ import com.umeng.analytics.MobclickAgent;
 import butterknife.ButterKnife;
 
 /**
- * Created by imgod on 2016/4/23.
+ * 项目名称：KnowGirl
+ * 类描述：基类Activity
+ * 创建人：imgod
+ * 创建时间：2016/4/23 16:38
+ * 修改人：imgod
+ * 修改时间：2016/4/23 16:38
+ * 修改备注：
+ * @version
  */
 public abstract class BaseActivity extends AppCompatActivity implements initInterFace {
 

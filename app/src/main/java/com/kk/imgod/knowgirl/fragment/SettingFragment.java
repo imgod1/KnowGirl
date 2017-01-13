@@ -2,24 +2,18 @@ package com.kk.imgod.knowgirl.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.app.MyApp;
 import com.kk.imgod.knowgirl.utils.DataCleanManager;
-import com.kk.imgod.knowgirl.utils.FileUtil;
 import com.kk.imgod.knowgirl.utils.Lg;
-import com.kk.imgod.knowgirl.utils.SPUtils;
 import com.kk.imgod.knowgirl.utils.Ts;
 
 public class SettingFragment extends PreferenceFragment {

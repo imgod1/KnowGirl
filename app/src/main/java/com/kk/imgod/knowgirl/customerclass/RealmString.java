@@ -1,7 +1,5 @@
 package com.kk.imgod.knowgirl.customerclass;
 
-import java.io.Serializable;
-
 import io.realm.RealmObject;
 
 /**

@@ -55,4 +55,7 @@
     <string name="knowgirl_girl">知妹妹子</string>
     <string name="hint">提示</string>
     <string name="i_see">知道啦</string>
+    <string name="girl_share">妹子不错,赏给小弟(分享)</string>
+    <string name="girl_save">这妞太正,收入后宫(保存)</string>
+    <string name="girl_set_wallpaper">哎哟不错,今晚临幸(设为壁纸)</string>
 </resources>

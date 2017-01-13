@@ -1,7 +1,6 @@
 package com.kk.imgod.knowgirl.activity;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,34 +8,25 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.Target;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
-import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.fragment.SettingFragment;
 import com.kk.imgod.knowgirl.model.BooHeeModel;
-import com.kk.imgod.knowgirl.model.ImageBean;
-import com.kk.imgod.knowgirl.model.ZhihuDetail;
 import com.kk.imgod.knowgirl.utils.DateUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.Lg;
 import com.kk.imgod.knowgirl.utils.NetWorkUtils;
 import com.kk.imgod.knowgirl.utils.SPUtils;
-import com.kk.imgod.knowgirl.utils.SnackBarUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
 
 import java.lang.ref.WeakReference;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import okhttp3.Call;

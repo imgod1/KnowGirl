@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 项目名称：other_demo
  * 包名称：com.example.gaokang.other_demo
- * 类描述：
+ * 类描述：FragmentViewPagerAdapter
  * 创建人：gaokang
  * 创建时间：2016/4/26 14:34
  * 修改人：gaokang

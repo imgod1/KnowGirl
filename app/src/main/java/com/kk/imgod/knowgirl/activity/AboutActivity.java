@@ -2,9 +2,6 @@ package com.kk.imgod.knowgirl.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +13,15 @@ import com.kk.imgod.knowgirl.utils.QQUtils;
 
 import butterknife.BindView;
 
+/**
+ * 项目名称：KnowGirl
+ * 类描述：关于界面
+ * 创建人：imgod
+ * 创建时间：2016/4/24 16:20
+ * 修改人：imgod
+ * 修改时间：2016/4/24 16:20
+ * 修改备注：
+ */
 public class AboutActivity extends BaseActivity {
 
     @BindView(R.id.txt_qq)
@@ -54,8 +60,10 @@ public class AboutActivity extends BaseActivity {
     @Override
     public void initView() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        txt_qq.setText(getString(R.string.qq_title) + getString(R.string.my_qq));
-        versionName.setText(getString(R.string.version) + AppUtils.getVersionName(getApplicationContext()));
+        String qqTitle = getString(R.string.qq_title) + getString(R.string.my_qq);
+        txt_qq.setText(qqTitle);
+        String versionTitle = getString(R.string.version) + AppUtils.getVersionName(getApplicationContext());
+        versionName.setText(versionTitle);
     }
 
     @Override

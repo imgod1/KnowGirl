@@ -24,7 +24,6 @@
     <string name="no_net_work">Network is cut off aliens.</string>
     <string name="no_service">Servers are aliens stole ..</string>
     <string name="original_splash">splash setting</string>
-    <string name="photo_nice_girl">photos girl</string>
     <string name="press_back_twice">Really want to leave the world yet -</string>
     <string name="pure_girl">Pure beauty</string>
     <string name="save_img_failed">Unable to save image</string>
@@ -36,18 +35,13 @@
     <string name="set_original_splash">Using a network boot FIG.</string>
     <string name="set_post_feedback">Suggestions or feedback bug</string>
     <string name="setting">Settings</string>
-    <string name="sex_car_girl">Sexy Cars</string>
-    <string name="sex_girl">Flirty</string>
     <string name="share">share it</string>
     <string name="share_app_description">The Android project is very good, come and play with me right https://github.com/imgod1/KnowGirl</string>
     <string name="share_to">share to</string>
-    <string name="stock_girl">Pantyhose Legs</string>
     <string name="version">version</string>
-    <string name="write_real_girl">Beauty photo</string>
     <string name="zhihu_day_news">ZhiHu Daily</string>
     <string name="zhihu_detail_share_title">In this paper, too praised, highly recommended</string>
     <string name="hint">hint</string>
-    <string name="japan_girl">Japan Korea Girl</string>
     <string name="i_see">ok,get it</string>
     <string name="view_img_hint">Exit browser to the pull-down image; press pictures can be saved to the phone -</string>
     <string name="dummy_button">Dummy Button</string>
@@ -55,4 +49,12 @@
     <string name="qq_title">QQ:</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_zhi_hu_detail">ZhiHuDetailActivity</string>
+    <string name="girl_save">save to sd</string>
+    <string name="girl_set_wallpaper">set wallpaper</string>
+    <string name="girl_share">share</string>
+    <string name="nice_leg">Nice Leg</string>
+    <string name="sex_stock">Sex Stock</string>
+    <string name="big_breast">Big Breast</string>
+    <string name="big_hip">Big Hip</string>
+    <string name="blend">Blend</string>
 </resources>

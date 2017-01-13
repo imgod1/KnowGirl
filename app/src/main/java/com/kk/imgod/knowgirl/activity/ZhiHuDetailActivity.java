@@ -4,39 +4,40 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.ZhihuDetail;
-import com.kk.imgod.knowgirl.model.ZhihuResponse;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
 import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.ShareUtils;
-import com.kk.imgod.knowgirl.utils.SnackBarUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
 
 import butterknife.BindView;
 import okhttp3.Call;
-
+/**
+ * 项目名称：KnowGirl
+ * 类描述：知乎日报详情
+ * 创建人：imgod
+ * 创建时间：2016/4/24 16:20
+ * 修改人：imgod
+ * 修改时间：2016/4/24 16:20
+ * 修改备注：
+ */
 public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -146,12 +147,10 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
             public void onError(Call call, Exception e) {
                 super.onError(call, e);
                 contentLoadingProgressBar.setVisibility(View.GONE);
-                Log.e("pictureFragment", "onError:" + e.getMessage());
             }
 
             @Override
             public void onResponse(String response) {
-                Log.e("getLastData", "response:" + response);
                 if (!TextUtils.isEmpty(response)) {
                     zhihuDetail = GsonUtils.getGson().fromJson(response, ZhihuDetail.class);
                     if (zhihuDetail != null) {

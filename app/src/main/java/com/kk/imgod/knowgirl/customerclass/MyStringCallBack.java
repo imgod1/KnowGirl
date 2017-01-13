@@ -2,7 +2,6 @@ package com.kk.imgod.knowgirl.customerclass;
 
 import android.app.Activity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.utils.NetWorkUtils;
@@ -14,7 +13,7 @@ import okhttp3.Call;
 /**
  * 项目名称：KnowGirl
  * 包名称：com.kk.imgod.knowgirl.customerclass
- * 类描述：
+ * 类描述：网络请求的回调
  * 创建人：gaokang
  * 创建时间：2016-05-23 9:53
  * 修改人：gaokang

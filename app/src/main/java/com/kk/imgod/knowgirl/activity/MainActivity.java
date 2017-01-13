@@ -24,6 +24,15 @@ import butterknife.BindView;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
+/**
+ * 项目名称：KnowGirl
+ * 类描述：主界面
+ * 创建人：imgod
+ * 创建时间：2016/4/24 16:20
+ * 修改人：imgod
+ * 修改时间：2016/4/24 16:20
+ * 修改备注：
+ */
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int KNOWLEDGE_FRAGMENT = 0x00;
     public static final int PICTURE_FRAGMENT = 0x01;
@@ -49,12 +58,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public int getLayoutResID() {
         return R.layout.activity_main;
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        SnackBarUtils.showShort(dlayout_main, R.string.press_back_twice);
-//    }
 
     @Override
     public void initView() {
@@ -203,4 +206,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (null != realm) {
+            realm.close();
+        }
+        if (null != PictureDetailActivity.detailImageBeanList) {
+            PictureDetailActivity.detailImageBeanList.clear();
+            PictureDetailActivity.detailImageBeanList = null;
+        }
+    }
 }

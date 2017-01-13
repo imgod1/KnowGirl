@@ -18,7 +18,7 @@ import butterknife.BindView;
 /**
  * 项目名称：other_demo
  * 包名称：com.example.gaokang.other_demo
- * 类描述：
+ * 类描述：TabFragment
  * 创建人：gaokang
  * 创建时间：2016/4/26 15:27
  * 修改人：gaokang
@@ -30,12 +30,8 @@ public class TabFragment extends BaseFragment {
     TabLayout tabs;
     @BindView(R.id.vp_tabs)
     ViewPager vp_tabs;
-    private List<String> titles;
-    private List<Fragment> fragments;
-    private FragmentViewPagerAdapter fragmentViewPagerAdapter;
 
     public static String TYPE = "type";
-    private int type;
 
     public static TabFragment newInstance(int type) {
         TabFragment tabFragment = new TabFragment();
@@ -53,9 +49,9 @@ public class TabFragment extends BaseFragment {
 
     @Override
     public void initValue() {
-        type = getArguments().getInt(TYPE, 0x00);
-        titles = new ArrayList<>();
-        fragments = new ArrayList<>();
+        int type = getArguments().getInt(TYPE, 0x00);
+        List<String> titles = new ArrayList<>();
+        List<Fragment> fragments = new ArrayList<>();
         if (type == MainActivity.KNOWLEDGE_FRAGMENT) {
             titles.add(getString(R.string.zhihu_day_news));
             titles.add(getString(R.string.jiandan_news));
@@ -77,7 +73,7 @@ public class TabFragment extends BaseFragment {
             fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_QIPA));
         }
 
-        fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getChildFragmentManager(), titles, fragments);
+        FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getChildFragmentManager(), titles, fragments);
         vp_tabs.setAdapter(fragmentViewPagerAdapter);
         vp_tabs.setOffscreenPageLimit(fragments.size());
         tabs.setupWithViewPager(vp_tabs);

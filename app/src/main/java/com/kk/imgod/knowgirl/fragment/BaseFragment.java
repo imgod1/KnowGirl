@@ -11,7 +11,13 @@ import com.kk.imgod.knowgirl.interf.initInterFace;
 import butterknife.ButterKnife;
 
 /**
- * Created by imgod on 2016/4/24.
+ * 项目名称：KnowGirl
+ * 类描述fragment基类
+ * 创建人：imgod
+ * 创建时间：2016/4/24 16:32
+ * 修改人：imgod
+ * 修改时间：2016/4/24 16:32
+ * 修改备注：
  */
 public abstract class BaseFragment extends Fragment implements initInterFace {
     public View parentView;

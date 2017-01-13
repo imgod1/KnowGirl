@@ -1,11 +1,11 @@
 package com.kk.imgod.knowgirl.fragment;
 
+import android.animation.Animator;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.transition.ChangeImageTransform;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.activity.ZhiHuDetailActivity;
+import com.kk.imgod.knowgirl.anim.SlideInLeftAnimation;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
@@ -38,19 +39,30 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.Sort;
 import okhttp3.Call;
 
+/**
+ * 项目名称：KnowGirl
+ * 类描述：知乎日报
+ * 创建人：imgod
+ * 创建时间：2016/4/24 16:20
+ * 修改人：imgod
+ * 修改时间：2016/4/24 16:20
+ * 修改备注：
+ */
 public class ZhihuFragment extends RecyclerViewFragment {
     private String willLoadDate;
     private List<ZhihuStory> zhihuStories;
-    private CommonAdapter<ZhihuStory> zhiHuAdapter;
 
     @Override
     protected void initData() {
         super.initData();
         willLoadDate = DateUtils.parseStandardDate(new Date());
         zhihuStories = new ArrayList<>();
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //先取数据库
+        List<ZhihuStory> tempList = MainActivity.realm.where(ZhihuStory.class).findAllSorted("id", Sort.DESCENDING);
+        zhihuStories.addAll(tempList);
         initAdapter();
         initEvent();
     }
@@ -65,7 +77,7 @@ public class ZhihuFragment extends RecyclerViewFragment {
     }
 
     private void initAdapter() {
-        zhiHuAdapter = new CommonAdapter<ZhihuStory>(getActivity(),R.layout.item_news,zhihuStories) {
+        CommonAdapter<ZhihuStory> zhiHuAdapter = new CommonAdapter<ZhihuStory>(getActivity(), R.layout.item_news, zhihuStories) {
             @Override
             protected void convert(ViewHolder holder, ZhihuStory zhihuStory, int position) {
                 ImageView img_news = holder.getView(R.id.img_news);
@@ -76,6 +88,10 @@ public class ZhihuFragment extends RecyclerViewFragment {
                     }
                     txt_title.setText(zhihuStory.getTitle());
                 }
+                View view = holder.getConvertView();
+                SlideInLeftAnimation slideInLeftAnimation = new SlideInLeftAnimation();
+                Animator[] animators = slideInLeftAnimation.getAnimators(view);
+                animators[0].start();
             }
         };
 
@@ -114,7 +130,7 @@ public class ZhihuFragment extends RecyclerViewFragment {
     /**
      * 跳转到详情界面
      *
-     * @param view 共享元素视图
+     * @param view     共享元素视图
      * @param position 下标
      */
     private void startDetailActivity(View view, int position) {
@@ -158,7 +174,11 @@ public class ZhihuFragment extends RecyclerViewFragment {
                         DBUtils.copyOrUpdateRealm(MainActivity.realm, zhihuResponse);
                         willLoadDate = zhihuResponse.getDate();
                         zhihuStories.clear();
-                        zhihuStories.addAll(zhihuResponse.getStories());
+                        //数据保存
+                        List<ZhihuStory> tempList = zhihuResponse.getStories();
+                        DBUtils.saveList(MainActivity.realm, tempList);
+                        //更新视图
+                        zhihuStories.addAll(tempList);
                         recyclerview.getAdapter().notifyDataSetChanged();
                     }
 
@@ -178,18 +198,26 @@ public class ZhihuFragment extends RecyclerViewFragment {
 
             @Override
             public void onResponse(String response) {
-              showOrHideRefresh(false);
+                showOrHideRefresh(false);
                 if (!TextUtils.isEmpty(response)) {
                     ZhihuResponse zhihuResponse = GsonUtils.getGson().fromJson(response, ZhihuResponse.class);
                     if (zhihuResponse != null) {
-                        DBUtils.copyOrUpdateRealm(MainActivity.realm, zhihuResponse);
-                        zhihuStories.addAll(zhihuResponse.getStories());
+                        List<ZhihuStory> tempList = zhihuResponse.getStories();
+                        DBUtils.saveList(MainActivity.realm, tempList);
+                        zhihuStories.addAll(tempList);
                         willLoadDate = zhihuResponse.getDate();
-                        recyclerview.getAdapter().notifyDataSetChanged();
+                        recyclerview.getAdapter().notifyItemRangeChanged(zhihuStories.size() - tempList.size(), tempList.size());
                     }
                 }
             }
         });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (null != requestCall) {
+            requestCall.cancel();
+        }
+    }
 }

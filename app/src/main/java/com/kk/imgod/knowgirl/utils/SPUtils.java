@@ -68,7 +68,7 @@ public class SPUtils {
             return sp.getLong(key, (Long) defaultObject);
         }
 
-        return null;
+        return "";
     }
 
     /**

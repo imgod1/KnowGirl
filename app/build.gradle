@@ -105,5 +105,4 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     //从网页抓取数据用到的工具
     compile 'org.jsoup:jsoup:1.10.2'
-    compile 'com.hkm.ui:ultimaterecyclerview:0.5.0'
 }

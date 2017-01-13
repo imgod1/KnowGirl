@@ -1,7 +1,6 @@
 package com.kk.imgod.knowgirl.fragment;
 
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.FreshDetailActivity;
 import com.kk.imgod.knowgirl.activity.MainActivity;
+import com.kk.imgod.knowgirl.anim.SlideInRightAnimation;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
@@ -29,15 +29,20 @@ import com.zhy.http.okhttp.request.RequestCall;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Sort;
 import okhttp3.Call;
 
 
 public class FreshFragment extends RecyclerViewFragment {
     private int page = 1;
     private List<FreshBean> freshBeanList = new ArrayList<>();
+
     @Override
     protected void initData() {
         super.initData();
+        List<FreshBean> tempList = MainActivity.realm.where(FreshBean.class).findAllSorted("date", Sort.DESCENDING);
+        freshBeanList.addAll(tempList);
+        recyclerview.setVerticalScrollBarEnabled(true);
         initAdapter();
         initEvent();
     }
@@ -53,14 +58,17 @@ public class FreshFragment extends RecyclerViewFragment {
     }
 
     private void initAdapter() {
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        CommonAdapter<FreshBean>  freshAdapter = new CommonAdapter<FreshBean>(getActivity(), R.layout.item_fresh,freshBeanList) {
+        CommonAdapter<FreshBean> freshAdapter = new CommonAdapter<FreshBean>(getActivity(), R.layout.item_fresh, freshBeanList) {
             @Override
             protected void convert(ViewHolder holder, FreshBean freshBean, int position) {
                 ImageView img_fresh_news = holder.getView(R.id.img_fresh_news);
                 TextView txt_fresh_title = holder.getView(R.id.txt_fresh_title);
                 ImageLoader.load(getActivity(), freshBean.getCustom_fields().getThumb_c().get(0).getVal(), img_fresh_news, R.drawable.icon_app);
                 txt_fresh_title.setText(freshBean.getTitle());
+                //动画
+                View view = holder.getConvertView();
+                SlideInRightAnimation slideInRightAnimation = new SlideInRightAnimation();
+                slideInRightAnimation.getAnimators(view)[0].start();
             }
         };
 
@@ -119,8 +127,15 @@ public class FreshFragment extends RecyclerViewFragment {
                         if (1 == tempPage) {
                             freshBeanList.clear();
                         }
-                        freshBeanList.addAll(freshResponse.getPosts());
-                        recyclerview.getAdapter().notifyDataSetChanged();
+                        List<FreshBean> tempList = freshResponse.getPosts();
+                        //数据保存
+                        DBUtils.saveList(MainActivity.realm, tempList);
+                        freshBeanList.addAll(tempList);
+                        if (1 == tempPage) {
+                            recyclerview.getAdapter().notifyItemRangeChanged(freshBeanList.size() - tempList.size(), tempList.size());
+                        } else {
+                            recyclerview.getAdapter().notifyItemRangeChanged(freshBeanList.size() - tempList.size(), tempList.size());
+                        }
                         page++;
                     }
                 }
@@ -132,7 +147,7 @@ public class FreshFragment extends RecyclerViewFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(null!=requestCall){
+        if (null != requestCall) {
             requestCall.cancel();
         }
     }

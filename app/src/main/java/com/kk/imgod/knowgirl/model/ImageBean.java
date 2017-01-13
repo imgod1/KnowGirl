@@ -18,6 +18,13 @@ public class ImageBean extends RealmObject {
     private int img_width;
     private int img_height;
 
+    public ImageBean() {
+    }
+
+    public ImageBean(int id) {
+        this.id = id;
+    }
+
     public String getCid() {
         return cid;
     }

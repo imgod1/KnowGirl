@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.app.MyApp;
 import com.kk.imgod.knowgirl.utils.AppUtils;
 import com.kk.imgod.knowgirl.utils.BitmapUtil;
 import com.kk.imgod.knowgirl.utils.BlurBuilder;
@@ -124,7 +125,7 @@ public class PictureDetailFragment extends BaseFragment implements View.OnClickL
 
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        String[] items = {"妹子不错,赏给小弟", "这妞太正,收入后宫", "哎哟不错,今晚临幸"};
+        String[] items = {getString(R.string.girl_share), getString(R.string.girl_save), getString(R.string.girl_set_wallpaper)};
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -173,7 +174,7 @@ public class PictureDetailFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        if ((Boolean) SPUtils.get(getActivity(), IMAGE_HINT_FIRST, true)) {
+        if ((Boolean) SPUtils.get(MyApp.getAppContext(), IMAGE_HINT_FIRST, Boolean.TRUE)) {
             showHint();
             SPUtils.put(getActivity(), IMAGE_HINT_FIRST, false);
         }
