@@ -22,4 +22,8 @@ public class API {
     public static final int DBMEIZI_TYPE_STOCK = 7;//丝袜
     //开屏图片获取
     public static final String BOOHEE_WELCOME_IMG = "http://bingo.boohee.com/api/v1/home/items?app_device=Android&user_key=14db31ef-872a-42e1-8ef5-86e55eb1e3ff&token=m4nqA5aNR1d7zovzMZKz&app_version=5.5.4&app_key=one&channel=tencent&phone_model=Coolpad+8297&os_version=4.4.2";
+    //检查版本更新的url
+    public static final String CHECK_APP_VERSION_URL = "http://ojt0l04lb.bkt.clouddn.com/knowirl_version.json";
+    //检查版本下载的url 需要在后面追加app名字 渠道号 以及版本号
+    public static final String DOWNLOAD_APP_VERSION_URL = "http://ojt0l04lb.bkt.clouddn.com/";
 }

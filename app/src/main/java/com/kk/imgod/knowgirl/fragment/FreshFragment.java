@@ -42,9 +42,11 @@ public class FreshFragment extends RecyclerViewFragment {
         super.initData();
         List<FreshBean> tempList = MainActivity.realm.where(FreshBean.class).findAllSorted("date", Sort.DESCENDING);
         freshBeanList.addAll(tempList);
-        recyclerview.setVerticalScrollBarEnabled(true);
         initAdapter();
         initEvent();
+        //加载最新数据
+        page = 1;
+        getFreshData(page);
     }
 
     private void initEvent() {
@@ -132,7 +134,7 @@ public class FreshFragment extends RecyclerViewFragment {
                         DBUtils.saveList(MainActivity.realm, tempList);
                         freshBeanList.addAll(tempList);
                         if (1 == tempPage) {
-                            recyclerview.getAdapter().notifyItemRangeChanged(freshBeanList.size() - tempList.size(), tempList.size());
+                            recyclerview.getAdapter().notifyDataSetChanged();
                         } else {
                             recyclerview.getAdapter().notifyItemRangeChanged(freshBeanList.size() - tempList.size(), tempList.size());
                         }

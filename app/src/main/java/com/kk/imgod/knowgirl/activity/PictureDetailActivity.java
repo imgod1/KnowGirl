@@ -16,6 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import ooo.oxo.library.widget.PullBackLayout;
+
 /**
  * 项目名称：KnowGirl
  * 类描述：图片详情界面
@@ -96,6 +97,10 @@ public class PictureDetailActivity extends BaseActivity implements PullBackLayou
 
     @Override
     public void onPullComplete() {
-        onBackPressed();
+        //activity style明明禁用了动画效果.但是在flyme os上依然有动画
+        //那么只好.如果是滑动退出那就设置动画效果为不存在的0,如果是点击了back 键,那就跟随系统吧
+        finish();
+        overridePendingTransition(0, 0);
     }
+
 }

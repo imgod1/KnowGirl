@@ -95,13 +95,16 @@
 -keep public class * implements java.io.Serializable {*;}
 
 # ProGuard configurations for Bugtags
--keepattributes LineNumberTable,SourceFile
+  -keepattributes LineNumberTable,SourceFile
 
--keep class com.bugtags.library.** {*;}
--dontwarn org.apache.http.**
--dontwarn android.net.http.AndroidHttpClient
--dontwarn com.bugtags.library.**
-# End Bugtags
+  -keep class com.bugtags.library.** {*;}
+  -dontwarn com.bugtags.library.**
+  -keep class io.bugtags.** {*;}
+  -dontwarn io.bugtags.**
+  -dontwarn org.apache.http.**
+  -dontwarn android.net.http.AndroidHttpClient
+
+  # End Bugtags
 
 #umeng
 -keepclassmembers class * {

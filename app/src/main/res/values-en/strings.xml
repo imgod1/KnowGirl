@@ -57,4 +57,9 @@
     <string name="big_breast">Big Breast</string>
     <string name="big_hip">Big Hip</string>
     <string name="blend">Blend</string>
+    <string name="apk_download_success">Install package file has been downloaded, installed?</string>
+    <string name="app_have_new_version">Is there a new version, is it updated?</string>
+    <string name="download_file_error">File download failed. Please check the network</string>
+    <string name="download_progress">Download Progress</string>
+    <string name="remind">Remind</string>
 </resources>

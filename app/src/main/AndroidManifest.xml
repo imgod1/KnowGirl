@@ -45,7 +45,7 @@
         <activity
             android:name=".activity.PictureDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ViewerTheme.TransNav" />
+            android:theme="@style/ViewerTheme.TransNav.NoAni" />
         <activity android:name=".activity.SettingActivity" />
         <activity
             android:name=".activity.ZhiHuDetailActivity"

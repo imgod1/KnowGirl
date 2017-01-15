@@ -65,6 +65,7 @@ public class ZhihuFragment extends RecyclerViewFragment {
         zhihuStories.addAll(tempList);
         initAdapter();
         initEvent();
+        getLastData();
     }
 
     private void initEvent() {
@@ -206,7 +207,7 @@ public class ZhihuFragment extends RecyclerViewFragment {
                         DBUtils.saveList(MainActivity.realm, tempList);
                         zhihuStories.addAll(tempList);
                         willLoadDate = zhihuResponse.getDate();
-                        recyclerview.getAdapter().notifyItemRangeChanged(zhihuStories.size() - tempList.size(), tempList.size());
+                        recyclerview.getAdapter().notifyItemRangeInserted(zhihuStories.size() - tempList.size(), tempList.size());
                     }
                 }
             }

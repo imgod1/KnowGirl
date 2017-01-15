@@ -45,4 +45,12 @@ public class Constant {
      * 数据库名称
      */
     public static final String REALMNAME = "knowgirl.realm";
+    /**
+     * 安装包保存在磁盘上的名字,后续版本需要拼接 完整名字:knowgirl_qq_v1.0.apk
+     */
+    public static final String APK_NAME = "knowgirl";
+    /**
+     * 安装包的后缀名字
+     */
+    public static final String APK_FILE_TYPE = ".apk";
 }

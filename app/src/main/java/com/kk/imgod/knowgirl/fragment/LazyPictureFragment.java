@@ -79,6 +79,8 @@ public class LazyPictureFragment extends RecyclerViewFragment {
     }
 
     public void initValue() {
+        page = 1;
+        getPicture(page);
     }
 
     public void initEvent() {
@@ -133,7 +135,16 @@ public class LazyPictureFragment extends RecyclerViewFragment {
 
     private void initAdapter() {
         use_width = (ScreenUtils.getWindowsWidth(getActivity()) - 20) / 2;
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL) {
+            @Override
+            public void collectAdjacentPrefetchPositions(int dx, int dy, RecyclerView.State state, LayoutPrefetchRegistry layoutPrefetchRegistry) {
+                try {
+                    super.collectAdjacentPrefetchPositions(dx, dy, state, layoutPrefetchRegistry);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         recyclerview.setLayoutManager(staggeredGridLayoutManager);
         imgList = new ArrayList<>();
 
