@@ -20,6 +20,12 @@ public class Constant {
      * swiprefreshlayout 延迟消逝的毫秒数
      */
     public static final int DELAYTIME = 600;
+
+    /**
+     * 一天包含的毫秒数
+     */
+    public static final long DAY_MILL_SECONDS = 86400000;
+
     /**
      * 知乎列表将要加载的日期
      */

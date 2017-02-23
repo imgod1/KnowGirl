@@ -55,8 +55,8 @@ public class TabFragment extends BaseFragment {
         if (type == MainActivity.KNOWLEDGE_FRAGMENT) {
             titles.add(getString(R.string.zhihu_day_news));
             titles.add(getString(R.string.jiandan_news));
-            fragments.add(new ZhihuFragment());
-            fragments.add(new FreshFragment());
+            fragments.add(new ZhihuFragmentLazy());
+            fragments.add(new FreshFragmentLazy());
         } else {
             tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
             titles.add(getString(R.string.pure_girl));
@@ -65,12 +65,12 @@ public class TabFragment extends BaseFragment {
             titles.add(getString(R.string.big_breast));
             titles.add(getString(R.string.big_hip));
             titles.add(getString(R.string.blend));
-            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_NICE));
-            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_LEG));
-            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_STOCK));
-            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_BIG_BREAST));
-            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_HIP));
-            fragments.add(LazyPictureFragment.newInstance(API.DBMEIZI_TYPE_QIPA));
+            fragments.add(LazyPictureFragmentLazy.newInstance(API.DBMEIZI_TYPE_NICE));
+            fragments.add(LazyPictureFragmentLazy.newInstance(API.DBMEIZI_TYPE_LEG));
+            fragments.add(LazyPictureFragmentLazy.newInstance(API.DBMEIZI_TYPE_STOCK));
+            fragments.add(LazyPictureFragmentLazy.newInstance(API.DBMEIZI_TYPE_BIG_BREAST));
+            fragments.add(LazyPictureFragmentLazy.newInstance(API.DBMEIZI_TYPE_HIP));
+            fragments.add(LazyPictureFragmentLazy.newInstance(API.DBMEIZI_TYPE_QIPA));
         }
 
         FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getChildFragmentManager(), titles, fragments);

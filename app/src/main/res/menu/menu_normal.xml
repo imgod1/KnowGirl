@@ -7,6 +7,10 @@
             android:icon="@drawable/icon_knowledge"
             android:title="@string/knowledge"></item>
         <item
+            android:id="@+id/menu_satin"
+            android:icon="@drawable/icon_knowledge"
+            android:title="@string/satin"></item>
+        <item
             android:id="@+id/menu_girl"
             android:icon="@drawable/icon_girl"
             android:title="@string/girl"></item>

@@ -5,6 +5,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="knowledge">知识</string>
+    <string name="satin">段子</string>
     <string name="girl">妹子</string>
     <string name="app">应用</string>
     <string name="share">分享</string>
@@ -63,4 +64,5 @@
     <string name="app_have_new_version">有新版本啦,是否更新?</string>
     <string name="remind">提示</string>
     <string name="download_progress">下载进度</string>
+    <string name="refresh_satin">知妹已经帮你替换了一波.好笑记得分享^_^</string>
 </resources>

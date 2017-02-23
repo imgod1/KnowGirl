@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,29 +14,23 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.google.gson.Gson;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
+import com.kk.imgod.knowgirl.fragment.SatinFragment;
 import com.kk.imgod.knowgirl.fragment.SettingFragment;
 import com.kk.imgod.knowgirl.fragment.TabFragment;
 import com.kk.imgod.knowgirl.model.AppVersion;
-import com.kk.imgod.knowgirl.model.ZhihuDetail;
 import com.kk.imgod.knowgirl.utils.AppUtils;
-import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.DialogUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
-import com.kk.imgod.knowgirl.utils.ImageLoader;
 import com.kk.imgod.knowgirl.utils.IntentUtils;
-import com.kk.imgod.knowgirl.utils.Lg;
 import com.kk.imgod.knowgirl.utils.SPUtils;
 import com.kk.imgod.knowgirl.utils.ShareUtils;
 import com.kk.imgod.knowgirl.utils.SnackBarUtils;
@@ -61,8 +56,8 @@ import okhttp3.Call;
  * 修改备注：
  */
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
-    public static final int KNOWLEDGE_FRAGMENT = 0x00;
-    public static final int PICTURE_FRAGMENT = 0x01;
+    public static final int KNOWLEDGE_FRAGMENT = 0x00;//知乎日报
+    public static final int PICTURE_FRAGMENT = 0x01;//美图
     public static Realm realm;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -75,6 +70,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private Fragment knowledgeFragment;
     private Fragment pictureFragment;
+    private Fragment satinFragment;
 
     public static void actionStart(Activity activity) {
         Intent intent = new Intent(activity, MainActivity.class);
@@ -92,9 +88,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         realm = Realm.getDefaultInstance();
         initAppBar();
         knowledgeFragment = TabFragment.newInstance(MainActivity.KNOWLEDGE_FRAGMENT);
-        pictureFragment = TabFragment.newInstance(MainActivity.PICTURE_FRAGMENT);
-        showFragment(KNOWLEDGE_FRAGMENT);
-
+        showCurrentFragment(knowledgeFragment);
     }
 
     public Realm getRealm() {
@@ -133,14 +127,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         dlayout_main.closeDrawer(GravityCompat.START);
         switch (item.getItemId()) {
             case R.id.menu_news:
-                showFragment(KNOWLEDGE_FRAGMENT);
+                if (null == knowledgeFragment) {
+                    knowledgeFragment = TabFragment.newInstance(MainActivity.KNOWLEDGE_FRAGMENT);
+                }
+                showCurrentFragment(knowledgeFragment);
+                break;
+            case R.id.menu_satin:
+                if (null == satinFragment) {
+                    satinFragment = SatinFragment.newInstance();
+                }
+                showCurrentFragment(satinFragment);
                 break;
             case R.id.menu_girl:
-                showFragment(PICTURE_FRAGMENT);
+                if (null == pictureFragment) {
+                    pictureFragment = TabFragment.newInstance(MainActivity.PICTURE_FRAGMENT);
+                }
+                showCurrentFragment(pictureFragment);
                 break;
             case R.id.menu_share:
                 ShareUtils.shareText(mActivity, getString(R.string.share_app_description));
@@ -155,43 +161,38 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
+    private void showCurrentFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        hideAllFragment(fragmentTransaction);
+        Add2ShowFragment(fragmentTransaction, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void Add2ShowFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
+        if (fragment.isAdded()) {
+            fragmentTransaction.show(fragment);
+        } else {
+            fragmentTransaction.add(R.id.flayout_content, fragment);
+        }
+    }
+
+    private void hideAllFragment(FragmentTransaction fragmentTransaction) {
+        hideFragment(fragmentTransaction, knowledgeFragment);
+        hideFragment(fragmentTransaction, pictureFragment);
+        hideFragment(fragmentTransaction, satinFragment);
+    }
+
     /**
-     * @param type 0:新闻知识界面 1:图片界面
+     * 隐藏某个fragment
+     *
+     * @param fragmentTransaction 事务
+     * @param fragment            隐藏的fragment
      */
-    private void showFragment(int type) {
-        if (type == KNOWLEDGE_FRAGMENT) {
-            showKnowlodgeFragment();
-        } else {
-            showPictureFragment();
+    private void hideFragment(FragmentTransaction fragmentTransaction, Fragment fragment) {
+        if (null != fragment && fragment.isAdded()) {
+            fragmentTransaction.hide(fragment);
         }
-    }
-
-    private void showKnowlodgeFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (pictureFragment.isAdded()) {
-            fragmentTransaction.hide(pictureFragment);
-        }
-        if (knowledgeFragment.isAdded()) {
-            fragmentTransaction.show(knowledgeFragment);
-        } else {
-            fragmentTransaction.add(R.id.flayout_content, knowledgeFragment);
-        }
-        fragmentTransaction.commit();
-    }
-
-    private void showPictureFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (knowledgeFragment.isAdded()) {
-            fragmentTransaction.hide(knowledgeFragment);
-        }
-        if (pictureFragment.isAdded()) {
-            fragmentTransaction.show(pictureFragment);
-        } else {
-            fragmentTransaction.add(R.id.flayout_content, pictureFragment);
-        }
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -371,7 +372,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     /**
      * 更新对话框进度
      *
-     * @param progress
+     * @param progress 进度
      */
     private void updateProgressDialog(int progress) {
         if (null != progressDialog && progressDialog.isShowing()) {

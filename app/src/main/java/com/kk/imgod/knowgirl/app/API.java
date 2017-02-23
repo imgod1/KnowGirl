@@ -26,4 +26,9 @@ public class API {
     public static final String CHECK_APP_VERSION_URL = "http://ojt0l04lb.bkt.clouddn.com/knowirl_version.json";
     //检查版本下载的url 需要在后面追加app名字 渠道号 以及版本号
     public static final String DOWNLOAD_APP_VERSION_URL = "http://ojt0l04lb.bkt.clouddn.com/";
+
+    /**
+     * 段子URL
+     */
+    public static final String SATIN_URL = "http://napi.uc.cn/3/classes/topic/lists/%E6%AE%B5%E5%AD%90?_app_id=hottopic&_size=10&_fetch=1&_fetch_incrs=1&_fetch_total=1&_select=like_start%2Cdislike_start%2Ctitle%2Ctag%2Cmedia_data%2Clist_info%2Ccontent%2Cavatar%2Cuser_name%2Cis_hot%2Chot_comment%2Ccomment_total%2Coriginal%2Ctv_duration&_max_pos=";
 }

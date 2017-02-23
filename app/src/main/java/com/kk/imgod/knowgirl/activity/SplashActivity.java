@@ -34,12 +34,7 @@ import okhttp3.Call;
 public class SplashActivity extends BaseActivity {
     @BindView(R.id.img_splash)
     ImageView img_splash;
-    //http://tnfs.tngou.net/img/ext/160415/797873b2b7095918bc3c6beb24780042.jpg
-    private String imgurl = "http://up.boohee.cn/house/u/one/wallpaper/319_big.jpg";
-    private boolean original_splash = true;
     public static final int SPLASH_SHOW_TIME = 2000;
-    private String splash_date;
-    private SplashHandler splashHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,10 +48,10 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        splashHandler = new SplashHandler(mActivity);
-        original_splash = (boolean) SPUtils.getValueFromDefaulatSP(mActivity, SettingFragment.ORIGINAL_SPLASH, Boolean.TRUE);
+        SplashHandler splashHandler = new SplashHandler(mActivity);
+        boolean original_splash = (boolean) SPUtils.getValueFromDefaulatSP(mActivity, SettingFragment.ORIGINAL_SPLASH, Boolean.TRUE);
         if (original_splash) {
-            imgurl = (String) SPUtils.get(mActivity, Constant.SPLASHIMGURL, "");
+            String imgurl = (String) SPUtils.get(mActivity, Constant.SPLASHIMGURL, "");
             if (TextUtils.isEmpty(imgurl)) {
                 ImageLoader.load(mActivity, R.drawable.splash, R.anim.splash_anim, img_splash);
             } else {
@@ -74,19 +69,18 @@ public class SplashActivity extends BaseActivity {
      * 计算看需要不需要加载下次的启动图
      */
     private void calcSplash() {
-        splash_date = (String) SPUtils.get(mActivity, Constant.SPLASHDATE, "");
+        String splash_date = (String) SPUtils.get(mActivity, Constant.SPLASHDATE, "");
         String nowDate = DateUtils.parseStandardDateWith_(new Date());
         if (!splash_date.equals(nowDate)) {
             getBooheeImgAndSave();
-        } else {
         }
     }
 
     private void getBooheeImgAndSave() {
         if (NetWorkUtils.isNetworkAvailable(mActivity)) {
             getData();
-        }  else {
-            Lg.e(mActivity.getClass().getSimpleName(),"没有网络,不去获取图片数据");
+        } else {
+            Lg.e(mActivity.getClass().getSimpleName(), "没有网络,不去获取图片数据");
         }
     }
 
@@ -104,7 +98,6 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.e("getLastData", "getData response:" + response);
                 if (!TextUtils.isEmpty(response)) {
                     booHeeModel = GsonUtils.getGson().fromJson(response, BooHeeModel.class);
                     if (booHeeModel != null) {
@@ -159,14 +152,13 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        return;
     }
 
     public static class SplashHandler extends Handler {
         WeakReference<Activity> weakReferenceActivity;
 
-        public SplashHandler(Activity activity) {
-            weakReferenceActivity = new WeakReference<Activity>(activity);
+        SplashHandler(Activity activity) {
+            weakReferenceActivity = new WeakReference<>(activity);
         }
 
         @Override

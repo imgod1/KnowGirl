@@ -33,7 +33,7 @@ import io.realm.Sort;
 import okhttp3.Call;
 
 
-public class FreshFragment extends RecyclerViewFragment {
+public class FreshFragmentLazy extends LazyRecyclerViewFragment {
     private int page = 1;
     private List<FreshBean> freshBeanList = new ArrayList<>();
 

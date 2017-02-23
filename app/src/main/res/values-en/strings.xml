@@ -62,4 +62,6 @@
     <string name="download_file_error">File download failed. Please check the network</string>
     <string name="download_progress">Download Progress</string>
     <string name="remind">Remind</string>
+    <string name="refresh_satin">Girl has helped you replace a wave^_^</string>
+    <string name="satin">Stain</string>
 </resources>

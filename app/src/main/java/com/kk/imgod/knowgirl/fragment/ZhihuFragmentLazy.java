@@ -51,7 +51,7 @@ import okhttp3.Call;
  * 修改时间：2016/4/24 16:20
  * 修改备注：
  */
-public class ZhihuFragment extends RecyclerViewFragment {
+public class ZhihuFragmentLazy extends LazyRecyclerViewFragment {
     private String willLoadDate;
     private List<ZhihuStory> zhihuStories;
 
