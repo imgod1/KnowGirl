@@ -8,7 +8,7 @@
             android:title="@string/knowledge"></item>
         <item
             android:id="@+id/menu_satin"
-            android:icon="@drawable/icon_knowledge"
+            android:icon="@drawable/icon_satin"
             android:title="@string/satin"></item>
         <item
             android:id="@+id/menu_girl"
