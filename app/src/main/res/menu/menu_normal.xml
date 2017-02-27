@@ -14,6 +14,10 @@
             android:id="@+id/menu_girl"
             android:icon="@drawable/icon_girl"
             android:title="@string/girl"></item>
+        <item
+            android:id="@+id/menu_gif"
+            android:icon="@drawable/icon_gif"
+            android:title="@string/bx_gif"></item>
     </group>
 
     <item android:title="@string/app">
