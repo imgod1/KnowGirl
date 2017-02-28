@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ooo.oxo.library.widget.PullBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/flayout_picture_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_pic_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:text="1/51"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/txt_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="20dp"
+            android:text="gif简介"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+
+</ooo.oxo.library.widget.PullBackLayout>

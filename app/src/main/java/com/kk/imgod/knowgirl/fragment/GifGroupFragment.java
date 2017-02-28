@@ -1,6 +1,5 @@
 package com.kk.imgod.knowgirl.fragment;
 
-import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -15,21 +14,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.activity.GifDetailActivity;
 import com.kk.imgod.knowgirl.activity.MainActivity;
 import com.kk.imgod.knowgirl.activity.PictureDetailActivity;
-import com.kk.imgod.knowgirl.anim.ScaleInAnimation;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
-import com.kk.imgod.knowgirl.model.ImageBean;
+import com.kk.imgod.knowgirl.model.GifGroupBean;
+import com.kk.imgod.knowgirl.model.GifGroupResponse;
 import com.kk.imgod.knowgirl.utils.DBUtils;
+import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
-import com.kk.imgod.knowgirl.utils.JsoupUtils;
+import com.kk.imgod.knowgirl.utils.Lg;
 import com.kk.imgod.knowgirl.utils.ScreenUtils;
+import com.kk.imgod.knowgirl.utils.StringUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -54,48 +55,44 @@ import okhttp3.Call;
  * 修改备注：
  */
 public class GifGroupFragment extends NormalRecyclerViewFragment {
-    public final static String IMGCLASSID = "imgclassid";
-    private String imgclassid;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     private CommonAdapter pictureAdapter;
     LoadMoreWrapper loadMoreWrapper;
-    private List<ImageBean> imgList;
-
+    private List<GifGroupBean> imgList;
     private RequestCall requestCall;
     //当前的页码
     private int page = 1;
 
     /**
-     * @param imgClassId 图片类别
-     * @return 返回一个LazyPictureFragment
+     * @return 返回一个GifGroupFragment
      */
-    public static GifGroupFragment newInstance(int imgClassId) {
+    public static GifGroupFragment newInstance() {
         GifGroupFragment pictureFragment = new GifGroupFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(IMGCLASSID, "" + imgClassId);
         pictureFragment.setArguments(bundle);
         return pictureFragment;
     }
 
+    @Override
     public void initValue() {
-        page = 1;
-        getPicture(page);
     }
 
+    @Override
     public void initEvent() {
+        initAdapter();
         srl_main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page = 1;
-                getPicture(page);
+                reFresh();
             }
         });
         pictureAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                PictureDetailActivity.detailImageBeanList = imgList;
-                PictureDetailActivity.actionStart(getActivity(), position);
+                String realUrl = imgList.get(position).getUrl();
+                realUrl = realUrl.replace("gallery", "scroll");
+                GifDetailActivity.actionStart(getActivity(), realUrl);
             }
 
             @Override
@@ -111,6 +108,11 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
                 getPicture(page);
             }
         });
+    }
+
+    private void reFresh() {
+        page = 1;
+        getPicture(page);
     }
 
     @Override
@@ -149,15 +151,18 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
         imgList = new ArrayList<>();
 
         //先从数据库取一下数据
-        List<ImageBean> tempImageList = MainActivity.realm.where(ImageBean.class).equalTo("cid", imgclassid).findAllSorted("id", Sort.DESCENDING);
+        List<GifGroupBean> tempImageList = MainActivity.realm.where(GifGroupBean.class).findAllSorted("gallery_id", Sort.DESCENDING);
         page = tempImageList.size() / 20 + 1;//初始化页面
         imgList.addAll(tempImageList);
 
-        pictureAdapter = new CommonAdapter<ImageBean>(getActivity(), R.layout.item_stag, imgList) {
+        pictureAdapter = new CommonAdapter<GifGroupBean>(getActivity(), R.layout.item_gif_stag, imgList) {
             @Override
-            protected void convert(final ViewHolder holder, final ImageBean imageBean, final int position) {
+            protected void convert(final ViewHolder holder, final GifGroupBean imageBean, final int position) {
                 ImageView img_stag = holder.getView(R.id.img_stag);
-                final String img_url = imageBean.getImg();
+                String title = StringUtils.subTitle(imageBean.getTitle());
+                holder.setText(R.id.txt_title, title);
+                holder.setText(R.id.txt_date, imageBean.getUpdated());
+                final String img_url = imageBean.getCover_url();
                 if (imageBean.getImg_height() == 0 || imageBean.getImg_width() == 0) {//没有尺寸信息的话就给一个固定的尺寸
                     ViewGroup.LayoutParams layoutParams = img_stag.getLayoutParams();
                     layoutParams.width = use_width;
@@ -173,12 +178,11 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
                     Glide.with(getActivity())//activty
                             .load(img_url)
                             .asBitmap()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
                                 @Override
                                 public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
                                     if (position > -1 && position < imgList.size()) {
-                                        ImageBean tempBean = imgList.get(position);
+                                        GifGroupBean tempBean = imgList.get(position);
                                         //在事务中进行设置
                                         MainActivity.realm.beginTransaction();
                                         tempBean.setImg_height(bitmap.getHeight());
@@ -206,9 +210,9 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
                     ImageLoader.load(getActivity(), img_url, img_stag);
                 }
 
-                ScaleInAnimation scaleInAnimation = new ScaleInAnimation();
-                Animator[] animators = scaleInAnimation.getAnimators(img_stag);
-                animators[0].start();
+//                ScaleInAnimation scaleInAnimation = new ScaleInAnimation();
+//                Animator[] animators = scaleInAnimation.getAnimators(img_stag);
+//                animators[0].start();
             }
         };
 
@@ -217,16 +221,6 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
         loadMoreWrapper.setLoadMoreView(loadMoreView);
         recyclerview.setAdapter(loadMoreWrapper);
     }
-
-//    @Override
-//    protected void initData() {
-//        super.initData();
-//        Bundle bundle = getArguments();
-//        imgclassid = bundle.getString(IMGCLASSID);
-//        initAdapter();
-//        initValue();
-//        initEvent();
-//    }
 
     /**
      * 隐藏加载的view
@@ -239,7 +233,7 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
 
 
     public void getPicture(final int temppage) {
-        final String useUrl = API.DBMEIZI_BASE_URL + imgclassid + "&pager_offset=" + temppage;
+        final String useUrl = API.GIF_URL + temppage;
         requestCall = OkHttpUtils.get().url(useUrl).build();
         requestCall.execute(new MyStringCallBack(getActivity(), ((MainActivity) getActivity()).getMainCoordinatorLayout()) {
             @Override
@@ -258,15 +252,22 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
                     if (page == 1) {
                         imgList.clear();
                     }
-                    List<ImageBean> tempImageList = JsoupUtils.getImgBeanListFromHtml(response, imgclassid);
-                    DBUtils.saveList(MainActivity.realm, tempImageList);
-                    imgList.addAll(tempImageList);
-                    if (page == 1) {
-                        recyclerview.getAdapter().notifyDataSetChanged();
-                    } else {
-                        recyclerview.getAdapter().notifyItemRangeInserted(imgList.size() - tempImageList.size(), tempImageList.size());
+                    String jsonContent = StringUtils.getJsonContentFromResponse(response);
+                    Lg.e("test", "content:" + jsonContent);
+                    if (!TextUtils.isEmpty(jsonContent)) {
+                        GifGroupResponse gifGroupResponse = GsonUtils.getGson().fromJson(jsonContent, GifGroupResponse.class);
+                        if (null != gifGroupResponse) {
+                            List<GifGroupBean> tempImageList = gifGroupResponse.getGallerys();
+                            DBUtils.saveList(MainActivity.realm, tempImageList);
+                            imgList.addAll(tempImageList);
+                            if (page == 1) {
+                                recyclerview.getAdapter().notifyDataSetChanged();
+                            } else {
+                                recyclerview.getAdapter().notifyItemRangeInserted(imgList.size() - tempImageList.size(), tempImageList.size());
+                            }
+                            page++;
+                        }
                     }
-                    page++;
                 }
             }
         });

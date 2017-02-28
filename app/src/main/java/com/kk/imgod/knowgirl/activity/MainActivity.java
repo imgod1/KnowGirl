@@ -23,6 +23,7 @@ import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
+import com.kk.imgod.knowgirl.fragment.GifGroupFragment;
 import com.kk.imgod.knowgirl.fragment.SatinFragment;
 import com.kk.imgod.knowgirl.fragment.SettingFragment;
 import com.kk.imgod.knowgirl.fragment.TabFragment;
@@ -71,6 +72,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private Fragment knowledgeFragment;
     private Fragment pictureFragment;
     private Fragment satinFragment;
+    private Fragment gifGroupFragment;
 
     public static void actionStart(Activity activity) {
         Intent intent = new Intent(activity, MainActivity.class);
@@ -148,6 +150,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 showCurrentFragment(pictureFragment);
                 break;
+            case R.id.menu_gif:
+                if (null == gifGroupFragment) {
+                    gifGroupFragment = GifGroupFragment.newInstance();
+                }
+                showCurrentFragment(gifGroupFragment);
+                break;
             case R.id.menu_share:
                 ShareUtils.shareText(mActivity, getString(R.string.share_app_description));
                 break;
@@ -181,6 +189,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         hideFragment(fragmentTransaction, knowledgeFragment);
         hideFragment(fragmentTransaction, pictureFragment);
         hideFragment(fragmentTransaction, satinFragment);
+        hideFragment(fragmentTransaction, gifGroupFragment);
     }
 
     /**
