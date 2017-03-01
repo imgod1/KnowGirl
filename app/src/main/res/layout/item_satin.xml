@@ -49,6 +49,7 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginTop="@dimen/dp_8"
             android:text="段子内容"
+            android:textIsSelectable="true"
             android:textSize="14sp" />
 
         <include layout="@layout/layout_line_vertical" />
