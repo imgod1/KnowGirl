@@ -8,19 +8,20 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.Target;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.MyApp;
 import com.kk.imgod.knowgirl.model.GifBean;
+import com.kk.imgod.knowgirl.utils.AssetsUtils;
 import com.kk.imgod.knowgirl.utils.BitmapUtil;
 import com.kk.imgod.knowgirl.utils.DateUtils;
+import com.kk.imgod.knowgirl.utils.Lg;
 import com.kk.imgod.knowgirl.utils.SPUtils;
 import com.kk.imgod.knowgirl.utils.ShareUtils;
 import com.kk.imgod.knowgirl.utils.SnackBarUtils;
@@ -29,7 +30,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 
@@ -44,8 +44,9 @@ import butterknife.BindView;
  * 修改备注：
  */
 public class GifDetailFragment extends BaseLazyFragment implements View.OnClickListener, View.OnLongClickListener {
-
-    @BindView(R.id.webview_main)
+    public static String html_content;
+    @BindView(R.id.rlayout_main)
+    RelativeLayout rlayout_main;
     WebView webview_main;
     public static final String IMAGE_HINT_FIRST = "gif_hint_first";
 
@@ -70,10 +71,18 @@ public class GifDetailFragment extends BaseLazyFragment implements View.OnClickL
 
     public void initView() {
         gifBean = (GifBean) getArguments().getSerializable(GIFBEAN);
+        webview_main = new WebView(MyApp.getAppContext());
+        rlayout_main.addView(webview_main);
+        webview_main.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webview_main.getSettings().setLoadWithOverviewMode(true);
     }
 
     public void initValue() {
-        webview_main.loadUrl(gifBean.getGif_url());
+        if (TextUtils.isEmpty(html_content)) {
+            html_content = AssetsUtils.getFromAssets(getContext(), "html/gif.html");
+        }
+        String real_html = html_content.replace("imgod_gif_url", gifBean.getGif_url());
+        webview_main.loadDataWithBaseURL("about:blank", real_html, "text/html", "UTF-8", null);
     }
 
     public void initEvent() {

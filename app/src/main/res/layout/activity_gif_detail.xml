@@ -20,7 +20,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:text="1/51"
             android:textColor="@color/white" />
 
         <TextView
@@ -30,7 +29,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="40dp"
             android:layout_marginLeft="20dp"
-            android:text="gif简介"
             android:textColor="@color/white" />
     </RelativeLayout>
 

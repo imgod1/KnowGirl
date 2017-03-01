@@ -25,6 +25,7 @@ import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.GifGroupBean;
 import com.kk.imgod.knowgirl.model.GifGroupResponse;
+import com.kk.imgod.knowgirl.utils.AssetsUtils;
 import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
