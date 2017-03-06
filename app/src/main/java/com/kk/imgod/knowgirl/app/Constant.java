@@ -59,4 +59,10 @@ public class Constant {
      * 安装包的后缀名字
      */
     public static final String APK_FILE_TYPE = ".apk";
+    public static final String GROUPID = "groupid";
+    public static final String GIFID = "gifid";
+    /**
+     * gif 分享出去的地址,groupid和 gifid要替换
+     */
+    public static final String GIF_SHARE_URL = "http://tu.duowan.com/gallery/groupid.html#pgifid";
 }

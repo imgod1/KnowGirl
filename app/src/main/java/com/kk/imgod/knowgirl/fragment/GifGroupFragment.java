@@ -20,12 +20,10 @@ import com.bumptech.glide.request.target.Target;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.activity.GifDetailActivity;
 import com.kk.imgod.knowgirl.activity.MainActivity;
-import com.kk.imgod.knowgirl.activity.PictureDetailActivity;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.GifGroupBean;
 import com.kk.imgod.knowgirl.model.GifGroupResponse;
-import com.kk.imgod.knowgirl.utils.AssetsUtils;
 import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
@@ -56,6 +54,8 @@ import okhttp3.Call;
  * 修改备注：
  */
 public class GifGroupFragment extends NormalRecyclerViewFragment {
+    public static final String Gallery = "gallery";
+    public static final String Scoll = "scroll";
     StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     private CommonAdapter pictureAdapter;
@@ -77,6 +77,7 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
 
     @Override
     public void initValue() {
+        reFresh();
     }
 
     @Override
@@ -92,7 +93,7 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 String realUrl = imgList.get(position).getUrl();
-                realUrl = realUrl.replace("gallery", "scroll");
+                realUrl = realUrl.replace(Gallery, Scoll);
                 GifDetailActivity.actionStart(getActivity(), realUrl);
             }
 
@@ -106,14 +107,16 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
         loadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                getPicture(page);
+                Lg.e("test", "onLoadMoreRequested");
+                getPicture();
             }
         });
     }
 
     private void reFresh() {
+        Lg.e("test", "reFresh");
         page = 1;
-        getPicture(page);
+        getPicture();
     }
 
     @Override
@@ -153,7 +156,7 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
 
         //先从数据库取一下数据
         List<GifGroupBean> tempImageList = MainActivity.realm.where(GifGroupBean.class).findAllSorted("gallery_id", Sort.DESCENDING);
-        page = tempImageList.size() / 20 + 1;//初始化页面
+        page = tempImageList.size() / 10 + 1;//初始化页面
         imgList.addAll(tempImageList);
 
         pictureAdapter = new CommonAdapter<GifGroupBean>(getActivity(), R.layout.item_gif_stag, imgList) {
@@ -233,8 +236,8 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
     }
 
 
-    public void getPicture(final int temppage) {
-        final String useUrl = API.GIF_URL + temppage;
+    public void getPicture() {
+        final String useUrl = API.GIF_URL + page;
         requestCall = OkHttpUtils.get().url(useUrl).build();
         requestCall.execute(new MyStringCallBack(getActivity(), ((MainActivity) getActivity()).getMainCoordinatorLayout()) {
             @Override
@@ -254,7 +257,6 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
                         imgList.clear();
                     }
                     String jsonContent = StringUtils.getJsonContentFromResponse(response);
-                    Lg.e("test", "content:" + jsonContent);
                     if (!TextUtils.isEmpty(jsonContent)) {
                         GifGroupResponse gifGroupResponse = GsonUtils.getGson().fromJson(jsonContent, GifGroupResponse.class);
                         if (null != gifGroupResponse) {

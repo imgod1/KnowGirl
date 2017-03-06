@@ -15,7 +15,6 @@ import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.fragment.GifDetailFragment;
 import com.kk.imgod.knowgirl.model.GifBean;
 import com.kk.imgod.knowgirl.utils.JsoupUtils;
-import com.kk.imgod.knowgirl.utils.Lg;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.request.RequestCall;
 
@@ -142,7 +141,6 @@ public class GifDetailActivity extends BaseActivity implements PullBackLayout.Ca
     private RequestCall requestCall;
 
     public void getPicture() {
-        Lg.e("test", "getPicture:" + gif_group_url);
         requestCall = OkHttpUtils.get().url(gif_group_url).build();
         requestCall.execute(new MyStringCallBack(this, flayout_picture_main) {
             @Override
@@ -158,7 +156,8 @@ public class GifDetailActivity extends BaseActivity implements PullBackLayout.Ca
 //                    DBUtils.saveList(MainActivity.realm, tempImageList);
                     gifList.clear();
                     gifList.addAll(gifBeanList);
-                    txt_title.setText("1/" + gifList.size());
+                    String title = getString(R.string.start_tag) + gifList.size();
+                    txt_title.setText(title);
                     txt_content.setText(gifList.get(0).getGif_content());
                     initFragment();
                     vp_pic_detail.getAdapter().notifyDataSetChanged();
