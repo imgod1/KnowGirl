@@ -77,12 +77,12 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
 
     @Override
     public void initValue() {
+        initAdapter();
         reFresh();
     }
 
     @Override
     public void initEvent() {
-        initAdapter();
         srl_main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -107,14 +107,12 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
         loadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                Lg.e("test", "onLoadMoreRequested");
                 getPicture();
             }
         });
     }
 
     private void reFresh() {
-        Lg.e("test", "reFresh");
         page = 1;
         getPicture();
     }
@@ -234,7 +232,6 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
             loadMoreView.setVisibility(View.GONE);
         }
     }
-
 
     public void getPicture() {
         final String useUrl = API.GIF_URL + page;
