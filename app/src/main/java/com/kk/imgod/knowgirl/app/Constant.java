@@ -62,7 +62,7 @@ public class Constant {
     public static final String GROUPID = "groupid";
     public static final String GIFID = "gifid";
     /**
-     * gif 分享出去的地址,groupid和 gifid要替换
+     * 是不是私密模式
      */
-    public static final String GIF_SHARE_URL = "http://tu.duowan.com/gallery/groupid.html#pgifid";
+    public static final String PRIVATE_MODE = "private_mode";
 }

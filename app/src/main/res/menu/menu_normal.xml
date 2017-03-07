@@ -5,19 +5,19 @@
         <item
             android:id="@+id/menu_news"
             android:icon="@drawable/icon_knowledge"
-            android:title="@string/knowledge"></item>
+            android:title="@string/knowledge" />
         <item
             android:id="@+id/menu_satin"
             android:icon="@drawable/icon_satin"
-            android:title="@string/satin"></item>
+            android:title="@string/satin" />
         <item
             android:id="@+id/menu_girl"
             android:icon="@drawable/icon_girl"
-            android:title="@string/girl"></item>
+            android:title="@string/girl" />
         <item
             android:id="@+id/menu_gif"
             android:icon="@drawable/icon_gif"
-            android:title="@string/bx_gif"></item>
+            android:title="@string/bx_gif" />
     </group>
 
     <item android:title="@string/app">
@@ -25,15 +25,15 @@
             <item
                 android:id="@+id/menu_share"
                 android:icon="@drawable/icon_share"
-                android:title="@string/share"></item>
+                android:title="@string/share" />
             <item
                 android:id="@+id/menu_setting"
                 android:icon="@drawable/icon_setting"
-                android:title="@string/setting"></item>
+                android:title="@string/setting" />
             <item
                 android:id="@+id/menu_about"
                 android:icon="@drawable/icon_about"
-                android:title="@string/about"></item>
+                android:title="@string/about" />
         </menu>
     </item>
 </menu>

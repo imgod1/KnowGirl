@@ -36,4 +36,8 @@ public class API {
      * Gif接口地址
      */
     public static final String GIF_URL = "http://tu.duowan.com/index.php?r=api/ajaxgallerys&pageSize=10&tag=9031&t=0.2791717125460571&callback=jsonp1&page=";
+    /**
+     * gif 分享出去的地址,groupid和 gifid要替换
+     */
+    public static final String GIF_SHARE_URL = "http://tu.duowan.com/gallery/groupid.html#pgifid";
 }

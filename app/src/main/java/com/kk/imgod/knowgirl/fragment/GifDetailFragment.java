@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.app.MyApp;
 import com.kk.imgod.knowgirl.model.GifBean;
@@ -94,7 +95,7 @@ public class GifDetailFragment extends BaseLazyFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.flb_share:
-                String share_url = Constant.GIF_SHARE_URL.replace(Constant.GROUPID, "" + gifBean.getGroup_id());
+                String share_url = API.GIF_SHARE_URL.replace(Constant.GROUPID, "" + gifBean.getGroup_id());
                 share_url = share_url.replace(Constant.GIFID, "" + gifBean.getReal_id());
                 ShareUtils.shareText(getContext(), share_url);
                 break;

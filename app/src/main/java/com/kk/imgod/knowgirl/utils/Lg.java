@@ -13,7 +13,7 @@ public class Lg {
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
-    public static boolean isDebug = false;// 是否要打印bug，可以在application的onCreate函数里面初始�?
+    public static boolean isDebug = true;// 是否要打印bug，可以在application的onCreate函数里面初始�?
     private static final String TAG = "Lg";
 
     // 下面四个是默认tag的函数
