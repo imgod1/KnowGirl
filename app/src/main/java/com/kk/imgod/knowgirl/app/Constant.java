@@ -20,7 +20,14 @@ public class Constant {
      * swiprefreshlayout 延迟消逝的毫秒数
      */
     public static final int DELAYTIME = 600;
-
+    /**
+     * 1秒所对应的毫秒数
+     */
+    public static final int ONE_SECOND = 1000;
+    /**
+     * 进入隐私模式需要7秒
+     */
+    public static final int NEED_CLICK_TIME = 7;
     /**
      * 一天包含的毫秒数
      */

@@ -23,6 +23,8 @@
     <string name="set_current_cache">当前缓存为 </string>
     <string name="original_splash">启动图设置</string>
     <string name="set_original_splash">使用网络启动图</string>
+    <string name="original_night_mode">夜间模式</string>
+    <string name="set_original_night_mode">夜间模式更护眼哟</string>
     <string name="set_check_version">检查更新</string>
     <string name="set_feedback">应用反馈</string>
     <string name="set_post_feedback">提建议或反馈bug</string>
@@ -67,4 +69,10 @@
     <string name="download_progress">下载进度</string>
     <string name="refresh_satin">知妹已经帮你替换了一波.好笑记得分享^_^</string>
     <string name="start_tag">1/</string>
+    <string name="not_install_qq_app">当前设备没有安装QQ</string>
+    <string name="already_in_private_mode">你已经处于私密模式,无需重复点击</string>
+    <string name="already_in_private_mode_go_to_look">已经进入私密模式,主界面看看侧滑看看吧</string>
+    <string name="already_cancel_private_mode_go_to_look">已经取消私密模式,主界面看看侧滑看看吧</string>
+    <string name="just_surplus">还差</string>
+    <string name="times_into_private_mode">步操作进入私密模式</string>
 </resources>

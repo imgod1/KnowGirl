@@ -2,9 +2,13 @@ package com.kk.imgod.knowgirl.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.kk.imgod.knowgirl.R;
+
+import butterknife.BindView;
+
 /**
  * 项目名称：KnowGirl
  * 类描述：设置界面
@@ -15,6 +19,8 @@ import com.kk.imgod.knowgirl.R;
  * 修改备注：
  */
 public class SettingActivity extends BaseActivity {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     public static void actionStart(Activity activity) {
         Intent intent = new Intent(activity, SettingActivity.class);
@@ -28,6 +34,7 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -49,5 +56,9 @@ public class SettingActivity extends BaseActivity {
                 break;
         }
         return true;
+    }
+
+    public void onResumeCall() {
+        onResume();
     }
 }

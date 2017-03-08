@@ -14,7 +14,7 @@ public class Lg {
     }
 
     public static boolean isDebug = true;// 是否要打印bug，可以在application的onCreate函数里面初始�?
-    private static final String TAG = "Lg";
+    private static final String TAG = "debug_model";
 
     // 下面四个是默认tag的函数
     public static void i(String msg) {

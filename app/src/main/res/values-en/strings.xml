@@ -66,4 +66,12 @@
     <string name="satin">Stain</string>
     <string name="bx_gif">Gif</string>
     <string name="start_tag">1/</string>
+    <string name="already_cancel_private_mode_go_to_look">The private mode has been cancelled, the main interface to see see sideslip</string>
+    <string name="already_in_private_mode">You are already in private mode, no longer need to click</string>
+    <string name="already_in_private_mode_go_to_look">Has entered the private mode, the main interface to see see sideslip</string>
+    <string name="not_install_qq_app">The current device is not installed QQ</string>
+    <string name="original_night_mode">Night mode</string>
+    <string name="set_original_night_mode">Night mode more eye care yo</string>
+    <string name="times_into_private_mode">click to enter private mode</string>
+    <string name="just_surplus">Even worse</string>
 </resources>

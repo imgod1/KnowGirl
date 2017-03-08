@@ -2,6 +2,7 @@ package com.kk.imgod.knowgirl.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -11,7 +12,6 @@ import android.widget.Toast;
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.utils.AppUtils;
-import com.kk.imgod.knowgirl.utils.Lg;
 import com.kk.imgod.knowgirl.utils.QQUtils;
 import com.kk.imgod.knowgirl.utils.SPUtils;
 
@@ -27,8 +27,12 @@ import butterknife.BindView;
  * 修改备注：
  */
 public class AboutActivity extends BaseActivity implements View.OnClickListener {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.llayout_about)
     LinearLayout llayout_about;
+    @BindView(R.id.txt_about_app)
+    TextView txt_about_app;
     @BindView(R.id.txt_qq)
     TextView txt_qq;
     @BindView(R.id.versionName)
@@ -60,12 +64,13 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
         try {
             QQUtils.goQQ2Chat(mActivity, getString(R.string.my_qq));
         } catch (Exception e) {
-            Toast.makeText(this, "当前设备没有安装QQ", Toast.LENGTH_SHORT).show();
+            showToast(getString(R.string.not_install_qq_app));
         }
     }
 
     @Override
     public void initView() {
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         String qqTitle = getString(R.string.qq_title) + getString(R.string.my_qq);
@@ -82,10 +87,11 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void initEvent() {
         llayout_about.setOnClickListener(this);
+        txt_about_app.setOnClickListener(this);
         txt_qq.setOnClickListener(this);
     }
 
-    private int clickTimes = 0;//已经连续点击的次数
+    private int alerdyClickTimes = 0;//已经连续点击的次数
     private long lastClickTime = 0;//上次点击的时间
 
     @Override
@@ -95,23 +101,29 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
                 boolean private_mode = (boolean) SPUtils.get(this, Constant.PRIVATE_MODE, false);
                 if (private_mode) {
                     //已经处于私密模式
-                    showToast("你已经处于私密模式,无需重复点击");
+                    showToast(getString(R.string.already_in_private_mode));
                 } else {
                     //尚未处于私密模式
                     long clickTime = System.currentTimeMillis();
-                    if (clickTime - lastClickTime > 1000) {//距离上次点击已经很久.不是连续点击
-                        clickTime = 1;
+                    if (clickTime - lastClickTime > Constant.ONE_SECOND) {//距离上次点击已经很久.不是连续点击
+                        alerdyClickTimes = 1;
                     } else {
-                        clickTimes++;
+                        alerdyClickTimes++;
                     }
                     lastClickTime = clickTime;
-                    if (clickTimes >= 7) {
+                    if (alerdyClickTimes >= Constant.NEED_CLICK_TIME) {
                         SPUtils.put(this, Constant.PRIVATE_MODE, true);
-                        showToast("已经进入私密模式,主界面看看侧滑看看吧");
+                        showToast(getString(R.string.already_in_private_mode_go_to_look));
                     } else {
-                        showToast("还差" + (7 - clickTimes) + "步操作进入私密模式");
+                        if (alerdyClickTimes > 1) {
+                            showToast(getString(R.string.just_surplus) + (Constant.NEED_CLICK_TIME - alerdyClickTimes) + getString(R.string.times_into_private_mode));
+                        }
                     }
                 }
+                break;
+            case R.id.txt_about_app:
+                SPUtils.put(this, Constant.PRIVATE_MODE, false);
+                showToast(getString(R.string.already_cancel_private_mode_go_to_look));
                 break;
             case R.id.txt_qq:
                 goQQ2Chat();

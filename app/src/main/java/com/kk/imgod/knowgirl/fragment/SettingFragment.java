@@ -1,30 +1,42 @@
 package com.kk.imgod.knowgirl.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Toast;
 
 import com.kk.imgod.knowgirl.R;
+import com.kk.imgod.knowgirl.activity.SettingActivity;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.app.MyApp;
 import com.kk.imgod.knowgirl.utils.DataCleanManager;
 import com.kk.imgod.knowgirl.utils.Lg;
 import com.kk.imgod.knowgirl.utils.Ts;
 
+import org.polaric.colorful.Colorful;
+
 public class SettingFragment extends PreferenceFragment {
     public static final String CLEAR_CACHE = "clear_cache";//清除缓存
     public static final String ORIGINAL_SPLASH = "original_splash";//开屏设置
+    public static final String ORIGINAL_NIGHT_MODE = "original_night_mode";//夜间模式
     public static final String CHECK_VERSION = "check_version";//检查版本
     public static final String FEEDBACK = "feedback";//反馈
     private Preference clear_cache;
     private Preference original_splash;
+    private Preference original_night_mode;
     private Preference check_version;
     private Preference feedback;
+    private SettingActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +45,7 @@ public class SettingFragment extends PreferenceFragment {
         initPreference();
         initPreferenceTitle();
         initPreferenceEvent();
+        activity = (SettingActivity) getActivity();
     }
 
     private void initPreferenceEvent() {
@@ -47,6 +60,27 @@ public class SettingFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean isSelect = (Boolean) newValue;
+                return true;
+            }
+        });
+
+        original_night_mode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean isSelect = (Boolean) newValue;
+                if (isSelect) {
+                    Colorful.config(activity).primaryColor(Colorful.ThemeColor.BLACK).accentColor(Colorful.ThemeColor.BLACK).dark(isSelect).apply();
+                } else {
+                    Colorful.config(activity).primaryColor(Colorful.ThemeColor.PINK).accentColor(Colorful.ThemeColor.PINK).dark(isSelect).apply();
+                }
+
+
+//                Animator animator = createCheckoutRevealAnimator(getView(), 200, 200, 10, 1000);
+//                if (null != animator) {
+//                    animator.start();
+//                } else {
+                activity.onResumeCall();
+//                }
                 return true;
             }
         });
@@ -73,6 +107,7 @@ public class SettingFragment extends PreferenceFragment {
     private void initPreference() {
         clear_cache = findPreference(CLEAR_CACHE);
         original_splash = findPreference(ORIGINAL_SPLASH);
+        original_night_mode = findPreference(ORIGINAL_NIGHT_MODE);
         check_version = findPreference(CHECK_VERSION);
         feedback = findPreference(FEEDBACK);
     }
@@ -91,7 +126,7 @@ public class SettingFragment extends PreferenceFragment {
     }
 
     private void goQQ2Chat() {
-        String url = "mqqwpa://im/chat?chat_type=wpa&uin="+getString(R.string.my_qq);
+        String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + getString(R.string.my_qq);
         try {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         } catch (Exception e) {
@@ -148,4 +183,21 @@ public class SettingFragment extends PreferenceFragment {
 
     }
 
+    protected Animator createCheckoutRevealAnimator(final View view, int x, int y, float startRadius, float endRadius) {
+        setMenuVisibility(false);
+        Animator retAnimator = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            retAnimator = ViewAnimationUtils.createCircularReveal(view, x, y, startRadius, endRadius);
+            retAnimator.setDuration(300);
+            retAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    activity.onResumeCall();
+                }
+            });
+            retAnimator.setInterpolator(new AccelerateInterpolator(2.0f));
+        }
+
+        return retAnimator;
+    }
 }

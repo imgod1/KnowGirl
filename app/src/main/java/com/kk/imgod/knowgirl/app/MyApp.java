@@ -4,8 +4,12 @@ import android.app.Application;
 import android.content.Context;
 
 import com.bugtags.library.Bugtags;
+import com.kk.imgod.knowgirl.BuildConfig;
+import com.kk.imgod.knowgirl.utils.Lg;
 import com.squareup.leakcanary.LeakCanary;
 import com.umeng.analytics.MobclickAgent;
+
+import org.polaric.colorful.Colorful;
 
 /**
  * 项目名称：KnowGirl
@@ -15,7 +19,6 @@ import com.umeng.analytics.MobclickAgent;
  * 修改人：imgod
  * 修改时间：2016/4/23 16:34
  * 修改备注：
- * @version
  */
 public class MyApp extends Application {
     private static Context appContext;
@@ -25,12 +28,23 @@ public class MyApp extends Application {
         super.onCreate();
         appContext = getApplicationContext();
         initAllSdk();
+        Lg.isDebug = BuildConfig.ISDEBUG;
     }
 
     private void initAllSdk() {
+        initColorful();
         initLeakCanary();
         initBugTags();
         initUmeng();
+    }
+
+    private void initColorful() {
+        Colorful.defaults()
+                .primaryColor(Colorful.ThemeColor.PINK)
+                .accentColor(Colorful.ThemeColor.PINK)
+                .translucent(false)
+                .dark(false);
+        Colorful.init(this);
     }
 
     private void initLeakCanary() {

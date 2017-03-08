@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -18,6 +21,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.API;
@@ -32,6 +37,7 @@ import com.kk.imgod.knowgirl.utils.AppUtils;
 import com.kk.imgod.knowgirl.utils.DialogUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.IntentUtils;
+import com.kk.imgod.knowgirl.utils.Lg;
 import com.kk.imgod.knowgirl.utils.SPUtils;
 import com.kk.imgod.knowgirl.utils.ShareUtils;
 import com.kk.imgod.knowgirl.utils.SnackBarUtils;
@@ -40,7 +46,10 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.request.RequestCall;
 
+import org.polaric.colorful.Colorful;
+
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import io.realm.Realm;
@@ -68,15 +77,42 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     NavigationView nview_left;
     @BindView(R.id.cLayout_main)
     CoordinatorLayout cLayout_main;
-
+    @BindView(R.id.flayout_content)
+    FrameLayout flayout_content;
     private Fragment knowledgeFragment;
     private Fragment pictureFragment;
     private Fragment satinFragment;
     private Fragment gifGroupFragment;
+    ImageView img_header;
 
     public static void actionStart(Activity activity) {
         Intent intent = new Intent(activity, MainActivity.class);
         activity.startActivity(intent);
+    }
+
+    @Override
+    public void recreate() {
+        nview_left.getMenu().getItem(0).setChecked(true);
+        removeOldFragment();
+        super.recreate();
+    }
+
+    private void removeOldFragment() {
+        try {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            List<Fragment> fragments = fragmentManager.getFragments();
+            if (null != fragments) {
+                Lg.e("test", "dead fragment size:" + fragments.size());
+                for (Fragment fragment : fragments) {
+                    fragmentTransaction.remove(fragment);
+                }
+            }
+            fragmentTransaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -88,6 +124,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void initView() {
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(MainActivity.this).name(Constant.REALMNAME).build());
         realm = Realm.getDefaultInstance();
+        img_header = (ImageView) nview_left.getHeaderView(0).findViewById(R.id.img_header);
         initAppBar();
         knowledgeFragment = TabFragment.newInstance(MainActivity.KNOWLEDGE_FRAGMENT);
         showCurrentFragment(knowledgeFragment);
@@ -114,6 +151,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         dlayout_main.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         nview_left.getMenu().getItem(0).setChecked(true);
+        if (Colorful.getThemeDelegate().isDark()) {
+            img_header.setImageResource(R.drawable.img_header_night);
+        } else {
+            img_header.setImageResource(R.drawable.splash);
+        }
+
+    }
+
+    public static final int GIRL_PHOTO_POSITION = 2;//妹子图片在menu中的下标
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean isPrivateMode = (boolean) SPUtils.get(mActivity, Constant.PRIVATE_MODE, false);
+        nview_left.getMenu().getItem(GIRL_PHOTO_POSITION).setVisible(isPrivateMode);
     }
 
     @Override

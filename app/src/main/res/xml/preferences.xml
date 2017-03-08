@@ -10,7 +10,11 @@
             android:key="original_splash"
             android:summary="@string/set_original_splash"
             android:title="@string/original_splash" />
-
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="original_night_mode"
+            android:summary="@string/set_original_night_mode"
+            android:title="@string/original_night_mode" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/action_about">
         <SwitchPreference

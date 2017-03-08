@@ -10,6 +10,8 @@ import com.bugtags.library.Bugtags;
 import com.kk.imgod.knowgirl.interf.initInterFace;
 import com.umeng.analytics.MobclickAgent;
 
+import org.polaric.colorful.ColorfulActivity;
+
 import butterknife.ButterKnife;
 
 /**
@@ -22,7 +24,7 @@ import butterknife.ButterKnife;
  * 修改备注：
  * @version
  */
-public abstract class BaseActivity extends AppCompatActivity implements initInterFace {
+public abstract class BaseActivity extends ColorfulActivity implements initInterFace {
 
     public Activity mActivity;
 

@@ -4,9 +4,10 @@ apply plugin: 'realm-android'
 //应用 Bugtags 插件
 apply plugin: 'com.bugtags.library.plugin'
 android {
+    signingConfigs {
+    }
     compileSdkVersion 25
     buildToolsVersion "24.0.0"
-
     defaultConfig {
         applicationId "com.kk.imgod.knowgirl"
         minSdkVersion 15
@@ -14,17 +15,15 @@ android {
         versionCode 1
         versionName "1.0"
     }
-
     productFlavors {
         qq {}
         baidu {}
         c360 {}
+        ali {}
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
     }
-
-
     buildTypes {
         release {
             minifyEnabled true
@@ -80,7 +79,7 @@ bugtags {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -110,4 +109,6 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     //从网页抓取数据用到的工具
     compile 'org.jsoup:jsoup:1.10.2'
+    //多彩主题以及夜间模式
+    compile 'com.github.garretyoder:Colorful:1.3'
 }
