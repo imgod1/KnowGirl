@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -159,13 +156,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
-    public static final int GIRL_PHOTO_POSITION = 2;//妹子图片在menu中的下标
+    public static final int MENU_GIRL_POSITION = 2;//妹子图片在menu中的下标
+    public static final int MENU_GIF_POSITION = 3;//Gif妹子图片在menu中的下标
 
     @Override
     protected void onResume() {
         super.onResume();
         boolean isPrivateMode = (boolean) SPUtils.get(mActivity, Constant.PRIVATE_MODE, false);
-        nview_left.getMenu().getItem(GIRL_PHOTO_POSITION).setVisible(isPrivateMode);
+        nview_left.getMenu().getItem(MENU_GIRL_POSITION).setVisible(isPrivateMode);
+//        nview_left.getMenu().getItem(MENU_GIF_POSITION).setVisible(isPrivateMode);
     }
 
     @Override
