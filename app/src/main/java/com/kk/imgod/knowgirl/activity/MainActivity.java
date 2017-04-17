@@ -165,7 +165,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onResume();
         boolean isPrivateMode = (boolean) SPUtils.get(mActivity, Constant.PRIVATE_MODE, false);
         nview_left.getMenu().getItem(MENU_GIRL_POSITION).setVisible(isPrivateMode);
-//        nview_left.getMenu().getItem(MENU_GIF_POSITION).setVisible(isPrivateMode);
+        nview_left.getMenu().getItem(MENU_GIF_POSITION).setVisible(isPrivateMode);
+        if (!isPrivateMode) {
+            if ((null != pictureFragment && pictureFragment.isVisible()) || (null != gifGroupFragment && gifGroupFragment.isVisible())) {
+                nview_left.getMenu().getItem(0).setChecked(true);
+                showCurrentFragment(knowledgeFragment);
+            }
+        }
     }
 
     @Override
