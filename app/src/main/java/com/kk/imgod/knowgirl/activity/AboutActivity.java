@@ -122,8 +122,11 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
                 }
                 break;
             case R.id.txt_about_app:
-                SPUtils.put(this, Constant.PRIVATE_MODE, false);
-                showToast(getString(R.string.already_cancel_private_mode_go_to_look));
+                boolean private_mode_temp = (boolean) SPUtils.get(this, Constant.PRIVATE_MODE, false);
+                if (private_mode_temp) {
+                    SPUtils.put(this, Constant.PRIVATE_MODE, false);
+                    showToast(getString(R.string.already_cancel_private_mode_go_to_look));
+                }
                 break;
             case R.id.txt_qq:
                 goQQ2Chat();

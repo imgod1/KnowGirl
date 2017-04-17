@@ -61,6 +61,7 @@ import okhttp3.Call;
  * 修改人：imgod
  * 修改时间：2016/4/24 16:20
  * 修改备注：
+ * 关于界面 版本号连点5下开启隐藏模式,关于应用那里点一下关闭隐藏模式
  */
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int KNOWLEDGE_FRAGMENT = 0x00;//知乎日报
