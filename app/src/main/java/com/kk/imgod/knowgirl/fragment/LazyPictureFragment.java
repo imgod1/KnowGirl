@@ -53,7 +53,7 @@ import okhttp3.Call;
  * 修改时间：2016/4/24 16:20
  * 修改备注：
  */
-public class LazyPictureFragmentLazy extends LazyRecyclerViewFragment {
+public class LazyPictureFragment extends LazyRecyclerViewFragment {
     public final static String IMGCLASSID = "imgclassid";
     private String imgclassid;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
@@ -70,8 +70,8 @@ public class LazyPictureFragmentLazy extends LazyRecyclerViewFragment {
      * @param imgClassId 图片类别
      * @return 返回一个LazyPictureFragment
      */
-    public static LazyPictureFragmentLazy newInstance(int imgClassId) {
-        LazyPictureFragmentLazy pictureFragment = new LazyPictureFragmentLazy();
+    public static LazyPictureFragment newInstance(int imgClassId) {
+        LazyPictureFragment pictureFragment = new LazyPictureFragment();
         Bundle bundle = new Bundle();
         bundle.putString(IMGCLASSID, "" + imgClassId);
         pictureFragment.setArguments(bundle);

@@ -22,7 +22,7 @@ import com.kk.imgod.knowgirl.anim.SlideInLeftAnimation;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
-import com.kk.imgod.knowgirl.model.ZhihuResponse;
+import com.kk.imgod.knowgirl.model.response.ZhihuResponse;
 import com.kk.imgod.knowgirl.model.ZhihuStory;
 import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.DateUtils;

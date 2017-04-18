@@ -15,7 +15,7 @@ import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.FreshBean;
-import com.kk.imgod.knowgirl.model.FreshResponse;
+import com.kk.imgod.knowgirl.model.response.FreshResponse;
 import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;

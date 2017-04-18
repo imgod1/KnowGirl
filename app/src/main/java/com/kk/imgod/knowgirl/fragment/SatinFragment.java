@@ -16,7 +16,7 @@ import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.SatinBean;
-import com.kk.imgod.knowgirl.model.SatinResponse;
+import com.kk.imgod.knowgirl.model.response.SatinResponse;
 import com.kk.imgod.knowgirl.utils.DBUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;

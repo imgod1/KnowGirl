@@ -1,4 +1,6 @@
-package com.kk.imgod.knowgirl.model;
+package com.kk.imgod.knowgirl.model.response;
+
+import com.kk.imgod.knowgirl.model.GifGroupBean;
 
 import java.util.List;
 
