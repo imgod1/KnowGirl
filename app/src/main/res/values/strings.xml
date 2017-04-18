@@ -7,6 +7,7 @@
     <string name="knowledge">知识</string>
     <string name="satin">段子</string>
     <string name="girl">妹子</string>
+    <string name="welfare">福利</string>
     <string name="bx_gif">G i f</string>
     <string name="app">应用</string>
     <string name="share">分享</string>
@@ -49,6 +50,7 @@
     <string name="big_hip">悬崖翘臀</string>
     <string name="sex_stock">诱惑丝袜</string>
     <string name="view_img_hint">向下拉图片退出浏览；长按图片可以保存到手机~</string>
+    <string name="go_in_private_hint">因市场审核原因.隐藏了一些东西,联系作者解锁更多姿势哟~</string>
     <string name="title_activity_zhi_hu_detail">ZhiHuDetailActivity</string>
     <string name="zhihu_detail_share_title">该文太赞,强烈推荐</string>
     <string name="action_zhihu_detail_share">该文太赞,我要分享</string>

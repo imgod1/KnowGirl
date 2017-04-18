@@ -26,10 +26,10 @@ import com.kk.imgod.knowgirl.anim.ScaleInAnimation;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.model.GankGrilBean;
-import com.kk.imgod.knowgirl.model.ImageBean;
+import com.kk.imgod.knowgirl.model.response.GankGirlResponse;
 import com.kk.imgod.knowgirl.utils.DBUtils;
+import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
-import com.kk.imgod.knowgirl.utils.JsoupUtils;
 import com.kk.imgod.knowgirl.utils.ScreenUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -47,39 +47,36 @@ import okhttp3.Call;
 
 /**
  * 项目名称：KnowGirl
- * 类描述：懒加载的图片Fragment
+ * 类描述：正常girl图片Fragment
  * 创建人：imgod
  * 创建时间：2016/4/24 16:20
  * 修改人：imgod
  * 修改时间：2016/4/24 16:20
  * 修改备注：
  */
-public class LazyPictureFragment extends LazyRecyclerViewFragment {
-    public final static String IMGCLASSID = "imgclassid";
-    private String imgclassid;
+public class GankGirlPicturePictureFragment extends NormalRecyclerViewFragment {
     StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     private CommonAdapter pictureAdapter;
     LoadMoreWrapper loadMoreWrapper;
-    private List<ImageBean> imgList;
+    private List<GankGrilBean> imgList;
 
     private RequestCall requestCall;
     //当前的页码
     private int page = 1;
 
     /**
-     * @param imgClassId 图片类别
-     * @return 返回一个LazyPictureFragment
+     * @return GankGirlPicturePictureFragment
      */
-    public static LazyPictureFragment newInstance(int imgClassId) {
-        LazyPictureFragment pictureFragment = new LazyPictureFragment();
+    public static GankGirlPicturePictureFragment newInstance() {
+        GankGirlPicturePictureFragment pictureFragment = new GankGirlPicturePictureFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(IMGCLASSID, "" + imgClassId);
         pictureFragment.setArguments(bundle);
         return pictureFragment;
     }
 
     public void initValue() {
+        initAdapter();
         page = 1;
         getPicture(page);
     }
@@ -150,15 +147,15 @@ public class LazyPictureFragment extends LazyRecyclerViewFragment {
         imgList = new ArrayList<>();
 
         //先从数据库取一下数据
-        List<ImageBean> tempImageList = MainActivity.realm.where(ImageBean.class).equalTo("cid", imgclassid).findAllSorted("id", Sort.DESCENDING);
-        page = tempImageList.size() / 20 + 1;//初始化页面
+        List<GankGrilBean> tempImageList = MainActivity.realm.where(GankGrilBean.class).findAllSorted("_id", Sort.DESCENDING);
+        page = tempImageList.size() / 10 + 1;//初始化页面
         imgList.addAll(tempImageList);
 
-        pictureAdapter = new CommonAdapter<ImageBean>(getActivity(), R.layout.item_stag, imgList) {
+        pictureAdapter = new CommonAdapter<GankGrilBean>(getActivity(), R.layout.item_stag, imgList) {
             @Override
-            protected void convert(final ViewHolder holder, final ImageBean imageBean, final int position) {
+            protected void convert(final ViewHolder holder, final GankGrilBean imageBean, final int position) {
                 ImageView img_stag = holder.getView(R.id.img_stag);
-                final String img_url = imageBean.getImg();
+                final String img_url = imageBean.getUrl();
                 if (imageBean.getImg_height() == 0 || imageBean.getImg_width() == 0) {//没有尺寸信息的话就给一个固定的尺寸
                     ViewGroup.LayoutParams layoutParams = img_stag.getLayoutParams();
                     layoutParams.width = use_width;
@@ -179,7 +176,7 @@ public class LazyPictureFragment extends LazyRecyclerViewFragment {
                                 @Override
                                 public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
                                     if (position > -1 && position < imgList.size()) {
-                                        ImageBean tempBean = imgList.get(position);
+                                        GankGrilBean tempBean = imgList.get(position);
                                         //在事务中进行设置
                                         MainActivity.realm.beginTransaction();
                                         tempBean.setImg_height(bitmap.getHeight());
@@ -219,16 +216,6 @@ public class LazyPictureFragment extends LazyRecyclerViewFragment {
         recyclerview.setAdapter(loadMoreWrapper);
     }
 
-    @Override
-    protected void initData() {
-        super.initData();
-        Bundle bundle = getArguments();
-        imgclassid = bundle.getString(IMGCLASSID);
-        initAdapter();
-        initValue();
-        initEvent();
-    }
-
     /**
      * 隐藏加载的view
      */
@@ -240,7 +227,7 @@ public class LazyPictureFragment extends LazyRecyclerViewFragment {
 
 
     public void getPicture(final int temppage) {
-        final String useUrl = API.DBMEIZI_BASE_URL + imgclassid + "&pager_offset=" + temppage;
+        final String useUrl = API.GANK_GIRL_URL + temppage;
         requestCall = OkHttpUtils.get().url(useUrl).build();
         requestCall.execute(new MyStringCallBack(getActivity(), ((MainActivity) getActivity()).getMainCoordinatorLayout()) {
             @Override
@@ -259,7 +246,8 @@ public class LazyPictureFragment extends LazyRecyclerViewFragment {
                     if (page == 1) {
                         imgList.clear();
                     }
-                    List<ImageBean> tempImageList = JsoupUtils.getImgBeanListFromHtml(response, imgclassid);
+                    GankGirlResponse gankGirlResponse = GsonUtils.getGson().fromJson(response, GankGirlResponse.class);
+                    List<GankGrilBean> tempImageList = gankGirlResponse.getResults();
                     DBUtils.saveList(MainActivity.realm, tempImageList);
                     imgList.addAll(tempImageList);
                     if (page == 1) {
@@ -279,11 +267,11 @@ public class LazyPictureFragment extends LazyRecyclerViewFragment {
      * @param imgList 原数据
      * @return 简单集合数据
      */
-    public List<String> getImgUrlListFromModelList(List<ImageBean> imgList) {
+    public List<String> getImgUrlListFromModelList(List<GankGrilBean> imgList) {
         List<String> imgUrlList = new ArrayList<>();
         if (null != imgList && imgList.size() != 0) {
-            for (ImageBean imageBean : imgList) {
-                imgUrlList.add(imageBean.getImg());
+            for (GankGrilBean gankGrilBean : imgList) {
+                imgUrlList.add(gankGrilBean.getUrl());
             }
         }
         return imgUrlList;

@@ -11,9 +11,13 @@
             android:icon="@drawable/icon_satin"
             android:title="@string/satin" />
         <item
+            android:id="@+id/menu_girl_normal"
+            android:icon="@drawable/icon_girl"
+            android:title="@string/girl" />
+        <item
             android:id="@+id/menu_girl_private"
             android:icon="@drawable/icon_welfare"
-            android:title="@string/girl" />
+            android:title="@string/welfare" />
         <item
             android:id="@+id/menu_gif_private"
             android:icon="@drawable/icon_gif"

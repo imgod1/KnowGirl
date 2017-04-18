@@ -30,7 +30,7 @@ public class PictureDetailActivity extends BaseActivity implements PullBackLayou
     /**
      * 静态的变量来存储详情界面需要的数据
      */
-    public static List<ImageBean> detailImageBeanList;
+    public static List<String> detailImageBeanList;
     @BindView(R.id.flayout_picture_main)
     PullBackLayout flayout_picture_main;
     @BindView(R.id.vp_pic_detail)
@@ -66,8 +66,7 @@ public class PictureDetailActivity extends BaseActivity implements PullBackLayou
     public void initValue() {
         List<Fragment> fragmentList = new ArrayList<>();
         for (int i = 0; i < PictureDetailActivity.detailImageBeanList.size(); i++) {
-            ImageBean imageBean = PictureDetailActivity.detailImageBeanList.get(i);
-            Fragment fragment = PictureDetailFragment.newInstance(imageBean.getImg());
+            Fragment fragment = PictureDetailFragment.newInstance(detailImageBeanList.get(i));
             fragmentList.add(fragment);
         }
         FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), null, fragmentList);

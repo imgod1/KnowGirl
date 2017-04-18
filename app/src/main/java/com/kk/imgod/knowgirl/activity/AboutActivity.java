@@ -1,11 +1,14 @@
 package com.kk.imgod.knowgirl.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,7 +84,10 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initValue() {
-
+        boolean private_mode = (boolean) SPUtils.get(this, Constant.PRIVATE_MODE, false);
+        if (!private_mode) {
+            showHint();
+        }
     }
 
     @Override
@@ -144,5 +150,19 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     private void showToast(String content) {
         toast.setText(content);
         toast.show();
+    }
+
+    private void showHint() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.hint).
+                setMessage(R.string.go_in_private_hint).
+                setPositiveButton(R.string.i_see, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        goQQ2Chat();
+                    }
+                }).
+                create().show();
     }
 }

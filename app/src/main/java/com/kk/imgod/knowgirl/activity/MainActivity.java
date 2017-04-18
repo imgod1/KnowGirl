@@ -25,6 +25,7 @@ import com.kk.imgod.knowgirl.R;
 import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
+import com.kk.imgod.knowgirl.fragment.GankGirlPicturePictureFragment;
 import com.kk.imgod.knowgirl.fragment.GifGroupFragment;
 import com.kk.imgod.knowgirl.fragment.SatinFragment;
 import com.kk.imgod.knowgirl.fragment.SettingFragment;
@@ -78,6 +79,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @BindView(R.id.flayout_content)
     FrameLayout flayout_content;
     private Fragment knowledgeFragment;
+    private Fragment gankGirlFragment;
     private Fragment pictureFragment;
     private Fragment satinFragment;
     private Fragment gifGroupFragment;
@@ -157,8 +159,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
-    public static final int MENU_GIRL_POSITION = 2;//妹子图片在menu中的下标
-    public static final int MENU_GIF_POSITION = 3;//Gif妹子图片在menu中的下标
+    public static final int MENU_GIRL_POSITION = 3;//妹子图片在menu中的下标
+    public static final int MENU_GIF_POSITION = 4;//Gif妹子图片在menu中的下标
 
     @Override
     protected void onResume() {
@@ -201,6 +203,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     satinFragment = SatinFragment.newInstance();
                 }
                 showCurrentFragment(satinFragment);
+                break;
+            case R.id.menu_girl_normal:
+                if (null == gankGirlFragment) {
+                    gankGirlFragment = GankGirlPicturePictureFragment.newInstance();
+                }
+                showCurrentFragment(gankGirlFragment);
                 break;
             case R.id.menu_girl_private:
                 if (null == pictureFragment) {
@@ -248,6 +256,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         hideFragment(fragmentTransaction, pictureFragment);
         hideFragment(fragmentTransaction, satinFragment);
         hideFragment(fragmentTransaction, gifGroupFragment);
+        hideFragment(fragmentTransaction, gankGirlFragment);
     }
 
     /**
