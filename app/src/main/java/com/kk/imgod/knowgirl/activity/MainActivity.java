@@ -202,13 +202,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 showCurrentFragment(satinFragment);
                 break;
-            case R.id.menu_girl:
+            case R.id.menu_girl_private:
                 if (null == pictureFragment) {
                     pictureFragment = TabFragment.newInstance(MainActivity.PICTURE_FRAGMENT);
                 }
                 showCurrentFragment(pictureFragment);
                 break;
-            case R.id.menu_gif:
+            case R.id.menu_gif_private:
                 if (null == gifGroupFragment) {
                     gifGroupFragment = GifGroupFragment.newInstance();
                 }
