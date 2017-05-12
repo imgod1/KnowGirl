@@ -253,6 +253,7 @@ public class LazyPictureFragment extends LazyRecyclerViewFragment {
 
             @Override
             public void onResponse(String response) {
+                super.onResponse(response);
                 srl_main.setRefreshing(false);
                 hideLoadingMoreView();
                 if (!TextUtils.isEmpty(response)) {

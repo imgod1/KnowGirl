@@ -151,6 +151,7 @@ public class SatinFragment extends NormalRecyclerViewFragment {
 
             @Override
             public void onResponse(String response) {
+                super.onResponse(response);
                 srl_main.setRefreshing(false);
                 if (!TextUtils.isEmpty(response)) {
                     SatinResponse satinResponse = GsonUtils.getGson().fromJson(response, SatinResponse.class);

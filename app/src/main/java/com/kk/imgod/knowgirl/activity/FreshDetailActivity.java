@@ -141,7 +141,7 @@ public class FreshDetailActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onResponse(String response) {
-                Log.e("getLastData", "response:" + response);
+                super.onResponse(response);
                 if (!TextUtils.isEmpty(response)) {
                     freshDetail = GsonUtils.getGson().fromJson(response, FreshDetail.class);
                     if (freshDetail != null) {

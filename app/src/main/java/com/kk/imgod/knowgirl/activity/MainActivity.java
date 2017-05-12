@@ -343,6 +343,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         requestCall.execute(new MyStringCallBack(MainActivity.this, dlayout_main) {
             @Override
             public void onResponse(String response) {
+                super.onResponse(response);
                 if (!TextUtils.isEmpty(response)) {
                     AppVersion appVersion = GsonUtils.getGson().fromJson(response, AppVersion.class);
                     int localVersion = AppUtils.getVersionCode(MainActivity.this);

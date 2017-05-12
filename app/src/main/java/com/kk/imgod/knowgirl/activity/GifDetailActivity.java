@@ -15,6 +15,7 @@ import com.kk.imgod.knowgirl.customerclass.MyStringCallBack;
 import com.kk.imgod.knowgirl.fragment.GifDetailFragment;
 import com.kk.imgod.knowgirl.model.GifBean;
 import com.kk.imgod.knowgirl.utils.JsoupUtils;
+import com.kk.imgod.knowgirl.utils.Lg;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.request.RequestCall;
 
@@ -151,6 +152,7 @@ public class GifDetailActivity extends BaseActivity implements PullBackLayout.Ca
 
             @Override
             public void onResponse(String response) {
+                super.onResponse(response);
                 if (!TextUtils.isEmpty(response)) {
                     List<GifBean> gifBeanList = JsoupUtils.getGifBeanListFromHtml(response);
 //                    DBUtils.saveList(MainActivity.realm, tempImageList);

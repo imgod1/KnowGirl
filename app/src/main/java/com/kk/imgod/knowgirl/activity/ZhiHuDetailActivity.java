@@ -151,6 +151,7 @@ public class ZhiHuDetailActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onResponse(String response) {
+                super.onResponse(response);
                 if (!TextUtils.isEmpty(response)) {
                     zhihuDetail = GsonUtils.getGson().fromJson(response, ZhihuDetail.class);
                     if (zhihuDetail != null) {

@@ -32,12 +32,14 @@ public class JsoupUtils {
         List<String> imgUrlList = getImgUrlListFromHtml(html);
         List<String> imgIdList = getImgIdListFromHtml(html);
         List<ImageBean> imageBeanList = new ArrayList<>();
-        for (int i = 0; i < imgUrlList.size(); i++) {
-            ImageBean imageBean = new ImageBean();
-            imageBean.setImg(imgUrlList.get(i));
-            imageBean.setCid(cid);
-            imageBean.setId(Integer.parseInt(imgIdList.get(i)));
-            imageBeanList.add(imageBean);
+        if (imgUrlList.size() == imgIdList.size()) {//数量相等的话 才是正确的,不然会崩溃的
+            for (int i = 0; i < imgUrlList.size(); i++) {
+                ImageBean imageBean = new ImageBean();
+                imageBean.setImg(imgUrlList.get(i));
+                imageBean.setCid(cid);
+                imageBean.setId(Integer.parseInt(imgIdList.get(i)));
+                imageBeanList.add(imageBean);
+            }
         }
         return imageBeanList;
     }
@@ -92,6 +94,8 @@ public class JsoupUtils {
         return imageBeanList;
     }
 
+    public static String GIF_IMG_URL_PATH = "div.pic-box>a>span.pic-box-item";//gif图的路径
+
     /**
      * 从html网页中得到想要的图片集合数据
      *
@@ -101,14 +105,16 @@ public class JsoupUtils {
     public static List<String> getGifUrlListFromHtml(String html) {
         List<String> list = new ArrayList();
         Document document = Jsoup.parse(html);
-        Elements elements = document.select("div.pic-box>a>img");
+        Elements elements = document.select(GIF_IMG_URL_PATH);
         for (int i = 0; i < elements.size(); i++) {
-            String imgUrl = elements.get(i).attr("src");
+            String imgUrl = elements.get(i).attr("data-img");
             Lg.e("test", "getGifUrlListFromHtml:" + imgUrl);
             list.add(imgUrl);
         }
         return list;
     }
+
+    public static String GIF_TEXT_PATH = "div.pic-box>p.comment";//gif文字的路径
 
     /**
      * 从html网页中得到想要的图片内容说明文字
@@ -119,7 +125,7 @@ public class JsoupUtils {
     public static List<String> getGifTextListFromHtml(String html) {
         List<String> list = new ArrayList();
         Document document = Jsoup.parse(html);
-        Elements elements = document.select("div.pic-box>p.comment");
+        Elements elements = document.select(GIF_TEXT_PATH);
         for (int i = 0; i < elements.size(); i++) {
             String content = elements.get(i).text();
             Lg.e("test", "getGifTextListFromHtml:" + content);
@@ -127,6 +133,8 @@ public class JsoupUtils {
         }
         return list;
     }
+
+    public static String GIF_ID_PATH = "div.pic-box>a";//gif id的路径
 
     /**
      * 从html网页中得到想要的图片指向连接的集合数据
@@ -137,7 +145,7 @@ public class JsoupUtils {
     public static List<GifBean> getGifListFromHtml(String html) {
         List<GifBean> list = new ArrayList();
         Document document = Jsoup.parse(html);
-        Elements elements = document.select("div.pic-box>a");
+        Elements elements = document.select(GIF_ID_PATH);
         for (int i = 0; i < elements.size(); i++) {
             String imgUrl = elements.get(i).attr("href");
             //http://tu.duowan.com/gallery/131802.html#p3 从中分别拿到131802 和 3

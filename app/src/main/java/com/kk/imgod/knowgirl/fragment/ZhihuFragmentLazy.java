@@ -168,6 +168,7 @@ public class ZhihuFragmentLazy extends LazyRecyclerViewFragment {
 
             @Override
             public void onResponse(String response) {
+                super.onResponse(response);
                 srl_main.setRefreshing(false);
                 if (!TextUtils.isEmpty(response)) {
                     ZhihuResponse zhihuResponse = GsonUtils.getGson().fromJson(response, ZhihuResponse.class);
@@ -199,6 +200,7 @@ public class ZhihuFragmentLazy extends LazyRecyclerViewFragment {
 
             @Override
             public void onResponse(String response) {
+                super.onResponse(response);
                 showOrHideRefresh(false);
                 if (!TextUtils.isEmpty(response)) {
                     ZhihuResponse zhihuResponse = GsonUtils.getGson().fromJson(response, ZhihuResponse.class);

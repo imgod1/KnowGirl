@@ -121,6 +121,7 @@ public class FreshFragmentLazy extends LazyRecyclerViewFragment {
 
             @Override
             public void onResponse(String response) {
+                super.onResponse(response);
                 showOrHideRefresh(false);
                 if (!TextUtils.isEmpty(response)) {
                     FreshResponse freshResponse = GsonUtils.getGson().fromJson(response, FreshResponse.class);

@@ -246,6 +246,7 @@ public class GifGroupFragment extends NormalRecyclerViewFragment {
 
             @Override
             public void onResponse(String response) {
+                super.onResponse(response);
                 srl_main.setRefreshing(false);
                 hideLoadingMoreView();
                 if (!TextUtils.isEmpty(response)) {
