@@ -20,6 +20,8 @@ import com.kk.imgod.knowgirl.app.API;
 import com.kk.imgod.knowgirl.app.Constant;
 import com.kk.imgod.knowgirl.fragment.SettingFragment;
 import com.kk.imgod.knowgirl.model.BooHeeModel;
+import com.kk.imgod.knowgirl.model.GankGrilBean;
+import com.kk.imgod.knowgirl.model.response.GankGirlResponse;
 import com.kk.imgod.knowgirl.utils.DateUtils;
 import com.kk.imgod.knowgirl.utils.GsonUtils;
 import com.kk.imgod.knowgirl.utils.ImageLoader;
@@ -110,25 +112,26 @@ public class SplashActivity extends BaseActivity {
 
 
     private RequestCall requestCall;
-    private BooHeeModel booHeeModel;
 
     private void getData() {
-        requestCall = OkHttpUtils.get().url(API.BOOHEE_WELCOME_IMG).build();
+        requestCall = OkHttpUtils.get().url(API.GANK_GIRL_URL + "1").build();//第一页
         requestCall.execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e) {
-                Log.e("pictureFragment", "onError:" + e.getMessage());
+                Log.e("splashFragment", "onError:" + e.getMessage());
             }
 
             @Override
             public void onResponse(String response) {
                 if (!TextUtils.isEmpty(response)) {
-                    booHeeModel = GsonUtils.getGson().fromJson(response, BooHeeModel.class);
-                    if (booHeeModel != null) {
-                        BooHeeModel.WelcomeImgBean.WeekImagesBean imagesBean = booHeeModel.getWelcome_img().getWeek_images().get(booHeeModel.getWelcome_img().getWeek_images().size() - 1);
-                        SPUtils.put(mActivity, Constant.SPLASHDATE, imagesBean.getDate());
-                        SPUtils.put(mActivity, Constant.SPLASHIMGURL, imagesBean.getBack_img());
-                        cacheImage(mActivity, imagesBean.getBack_img());
+                    GankGirlResponse gankGirlResponse = GsonUtils.getGson().fromJson(response, GankGirlResponse.class);
+                    if (gankGirlResponse != null) {
+                        if (null != gankGirlResponse.getResults() && gankGirlResponse.getResults().size() > 0) {
+                            GankGrilBean gankGrilBean = gankGirlResponse.getResults().get(0);
+                            SPUtils.put(mActivity, Constant.SPLASHDATE, DateUtils.parseStandardDateWith_(new Date()));
+                            SPUtils.put(mActivity, Constant.SPLASHIMGURL, gankGrilBean.getUrl());
+                            cacheImage(mActivity, gankGrilBean.getUrl());
+                        }
                     }
                 }
             }
